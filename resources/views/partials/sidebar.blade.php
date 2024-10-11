@@ -5,8 +5,7 @@
             style="opacity: .8"> --}}
         {{-- <span class="brand-text font-weight-light">AdminLTE 3</span> --}}
 
-        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="brand-image " width="30"
-            style="">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="brand-image " width="30" style="">
         <span class="brand-text font-weight-light">
             {{ config('app.name') }}
         </span>
@@ -77,20 +76,39 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                        <a href="{{ route('log-activity') }}"
-                            class="nav-link {{ request()->routeIs('log-activity') ? 'active' : '' }}">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Aktivitas</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('log') }}"
-                            class="nav-link {{ request()->routeIs('log') ? 'active' : '' }}">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Sistem</p>
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a href="{{ route('log-activity') }}"
+                                class="nav-link {{ request()->routeIs('log-activity') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Aktivitas</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('log') }}"
+                                class="nav-link {{ request()->routeIs('log') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Sistem</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#"
+                        class="nav-link {{ request()->is('settings*') || request()->is('settings*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-cogs"></i>
+                        <p>
+                            Pengaturan
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('settings.index') }}"
+                                class="nav-link {{ request()->routeIs('settings.index') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Sistem</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-item mt-3">
