@@ -5,9 +5,11 @@
             style="opacity: .8"> --}}
         {{-- <span class="brand-text font-weight-light">AdminLTE 3</span> --}}
 
-        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="brand-image img-circle elevation-3" width="30"
+        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="brand-image " width="30"
             style="">
-        <span class="brand-text font-weight-light">{{ config('app.name') }}</span>
+        <span class="brand-text font-weight-light">
+            {{ config('app.name') }}
+        </span>
     </a>
 
     <!-- Sidebar -->
@@ -64,14 +66,6 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('peraturan.index') }}" class="nav-link">
-                        <i class="nav-icon fas fa-file"></i>
-                        <p>
-                            Peraturan
-                        </p>
-                    </a>
-                </li>
                 </li>
                 <li class="nav-item">
                     <a href="#"
@@ -83,20 +77,20 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('log-activity') }}"
-                                class="nav-link {{ request()->routeIs('log-activity') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Aktivitas</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('log') }}"
-                                class="nav-link {{ request()->routeIs('log') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Sistem</p>
-                            </a>
-                        </li>
+                    <li class="nav-item">
+                        <a href="{{ route('log-activity') }}"
+                            class="nav-link {{ request()->routeIs('log-activity') ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Aktivitas</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('log') }}"
+                            class="nav-link {{ request()->routeIs('log') ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Sistem</p>
+                        </a>
+                    </li>
                     </ul>
                 </li>
                 <li class="nav-item mt-3">
