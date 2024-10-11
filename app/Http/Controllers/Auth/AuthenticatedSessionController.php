@@ -16,7 +16,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-        return view('auth.login');
+        return view('pages.auth.login');
     }
 
     /**
@@ -27,6 +27,8 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+
+        activity()->event('login')->log('User logged in');
 
         return redirect()->intended(route('dashboard', absolute: false));
     }
