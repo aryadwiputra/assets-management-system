@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Spatie\Activitylog\Models\Activity;
 
 class LogActivityController extends Controller
@@ -13,4 +14,5 @@ class LogActivityController extends Controller
 
         return view('pages.dashboard.log.index', compact('logs'));
     }
+
 }

@@ -17,7 +17,7 @@ class User extends Authenticatable
 
     protected static $logAttributes = ['name', 'email'];
 
-    protected static $ignoreChangedAttributes = ['password'];
+    protected static $ignoreChangedAttributes = ['password', 'updated_at'];
 
     protected static $logName = 'user';
 
