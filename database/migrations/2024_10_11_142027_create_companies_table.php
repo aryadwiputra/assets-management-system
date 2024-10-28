@@ -13,18 +13,18 @@ return new class extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
-            $table->string('company_name');
+            $table->string('name');
             $table->string('slug');
-            $table->string('company_description');
+            $table->string('description');
             $table->boolean('set_prefix_asset');
-            $table->string('prefix_asset');
+            $table->string('prefix_asset')->nullable();
             $table->boolean('set_prefix_document_asset');
-            $table->string('prefix_document_asset');
+            $table->string('prefix_document_asset')->nullable();
             $table->boolean('set_prefix_mutation_asset');
-            $table->string('prefix_mutation_asset');
+            $table->string('prefix_mutation_asset')->nullable();
             $table->boolean('set_prefix_disposal_asset');
-            $table->string('prefix_disposal_asset');
-            $table->string('logo');
+            $table->string('prefix_disposal_asset')->nullable();
+            $table->string('logo')->nullable();
             $table->timestamps();
         });
     }

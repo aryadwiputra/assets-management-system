@@ -40,6 +40,15 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('dashboard.companies.index') }}"
+                        class="nav-link {{ request()->routeIs('company') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-building"></i>
+                        <p>
+                            Company
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="#"
                         class="nav-link {{ request()->is('users*') || request()->is('roles*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-users"></i>
@@ -50,14 +59,14 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('users.index') }}"
+                            <a href="{{ route('dashboard.users.index') }}"
                                 class="nav-link {{ request()->routeIs('users.index') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Data Pengguna</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('roles.index') }}"
+                            <a href="{{ route('dashboard.roles.index') }}"
                                 class="nav-link {{ request()->routeIs('roles.index') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Data Role</p>
@@ -77,14 +86,14 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('log-activity') }}"
+                            <a href="{{ route('dashboard.log-activity') }}"
                                 class="nav-link {{ request()->routeIs('log-activity') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Aktivitas</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('log') }}"
+                            <a href="{{ route('dashboard.log') }}"
                                 class="nav-link {{ request()->routeIs('log') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Sistem</p>
@@ -103,7 +112,7 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('settings.index') }}"
+                            <a href="{{ route('dashboard.settings.index') }}"
                                 class="nav-link {{ request()->routeIs('settings.index') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Sistem</p>
