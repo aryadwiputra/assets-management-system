@@ -6,6 +6,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\LogActivityController;
 use App\Http\Controllers\LogController;
+use App\Http\Controllers\PersonInChargeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RoleController;
@@ -37,6 +38,7 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::resource('assets-status', AssetStatusController::class);
     Route::resource('unit-of-measurement', UnitOfMeasurementController::class);
     Route::resource('department', DepartmentController::class);
+    Route::resource('person-in-charge', PersonInChargeController::class);
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('settings', SettingController::class);

@@ -94,6 +94,12 @@
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Department</p>
                             </a>
+                        </li><li class="nav-item">
+                            <a href="{{ route('dashboard.person-in-charge.index') }}"
+                                class="nav-link {{ request()->routeIs('dashboard.person-in-charge.index') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Person in Charge</p>
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('dashboard.users.index') }}"
