@@ -94,7 +94,8 @@
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Department</p>
                             </a>
-                        </li><li class="nav-item">
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('dashboard.person-in-charge.index') }}"
                                 class="nav-link {{ request()->routeIs('dashboard.person-in-charge.index') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
@@ -102,6 +103,13 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('dashboard.assets-users.index') }}"
+                                class="nav-link {{ request()->routeIs('dashboard.assets-users.*') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Pengguna</p>
+                            </a>
+                        </li>
+                        {{-- <li class="nav-item">
                             <a href="{{ route('dashboard.users.index') }}"
                                 class="nav-link {{ request()->routeIs('users.index') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
@@ -114,7 +122,7 @@
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Data Role</p>
                             </a>
-                        </li>
+                        </li> --}}
                     </ul>
                 </li>
                 </li>
