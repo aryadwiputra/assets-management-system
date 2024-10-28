@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AssetClassController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\LogActivityController;
 use App\Http\Controllers\LogController;
@@ -29,6 +30,7 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
 
     Route::resource('companies', CompanyController::class);
     Route::resource('projects', ProjectController::class);
+    Route::resource('assets-class', AssetClassController::class);
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('settings', SettingController::class);
