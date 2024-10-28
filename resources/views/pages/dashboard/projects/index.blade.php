@@ -12,7 +12,7 @@
         <div class="d-flex justify-content-between">
             <h5>Data</h5>
             {{-- button add with modal --}}
-            <a href="{{ route('dashboard.companies.create') }}"
+            <a href="{{ route('dashboard.projects.create') }}"
                 class="btn d-sm-block d-md-block d-lg-block d-xl-block d-none btn-primary mb-2">
                 Tambah Proyek
             </a>
@@ -32,10 +32,36 @@
                         <th>Nama</th>
                         <th>Deskripsi</th>
                         <th>Lokasi</th>
+                        <th>Status</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach ($projects as $project)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $project->name }}</td>
+                            <td>{{ $project->description }}</td>
+                            <td>{{ $project->address }}</td>
+                            <td>
+                                @if ($project->is_active == 1)
+                                    <span class="badge badge-primary">Aktif</span>
+                                @else
+                                    <span class="badge badge-danger">Tidak Aktif</span>
+                                @endif
+                            </td>
+                            <td>
+                                <a href="{{ route('dashboard.projects.edit', $project->id) }}"
+                                    class="btn btn-primary btn">Edit</a>
+                                <form action="{{ route('dashboard.projects.destroy', $project->id) }}" method="post"
+                                    class="delete-form d-inline">
+                                    @csrf
+                                    @method('delete')
+                                    <button type="button" class="btn btn-danger btn-delete-data">Hapus</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
