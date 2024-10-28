@@ -41,10 +41,19 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('dashboard.companies.index') }}"
-                        class="nav-link {{ request()->routeIs('company') ? 'active' : '' }}">
+                        class="nav-link {{ request()->routeIs('dashboard.companies.*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-building"></i>
                         <p>
                             Company
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('dashboard.projects.index') }}"
+                        class="nav-link {{ request()->routeIs('dashboard.projects.*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-bullseye"></i>
+                        <p>
+                            Project
                         </p>
                     </a>
                 </li>
