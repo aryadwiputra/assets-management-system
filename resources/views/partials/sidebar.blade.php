@@ -30,6 +30,7 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
+                <li class="nav-header">DASHBOARD</li>
                 <li class="nav-item">
                     <a href="{{ route('dashboard') }}"
                         class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
@@ -39,6 +40,7 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-header">CORE</li>
                 <li class="nav-item">
                     <a href="{{ route('dashboard.companies.index') }}"
                         class="nav-link {{ request()->routeIs('dashboard.companies.*') ? 'active' : '' }}">
@@ -57,6 +59,7 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-header">DATA ASSETS</li>
                 <li class="nav-item">
                     <a href="#"
                         class="nav-link {{ request()->is('users*') || request()->is('roles*') ? 'active' : '' }}">
@@ -132,7 +135,7 @@
                         </li> --}}
                     </ul>
                 </li>
-                </li>
+                <li class="nav-header">SYSTEMS</li>
                 <li class="nav-item">
                     <a href="#"
                         class="nav-link {{ request()->is('log*') || request()->is('log*') ? 'active' : '' }}">
