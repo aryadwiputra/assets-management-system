@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AssetStatus;
+use App\Models\Status;
 use Illuminate\Http\Request;
 
-class AssetStatusController extends Controller
+class StatusController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $class = AssetStatus::all();
+        $class = Status::all();
 
-        return view('pages.dashboard.asset-status.index', compact('class'));
+        return view('pages.dashboard.status.index', compact('class'));
     }
 
     /**
@@ -22,7 +22,7 @@ class AssetStatusController extends Controller
      */
     public function create()
     {
-        return view('pages.dashboard.asset-status.create');
+        return view('pages.dashboard.status.create');
     }
 
     /**
@@ -35,18 +35,18 @@ class AssetStatusController extends Controller
             'description' => 'required|string',
         ]);
 
-        AssetStatus::create([
+        Status::create([
             'name' => $request->name,
             'description' => $request->description,
         ]);
 
-        return redirect()->route('dashboard.assets-status.index')->with('success', 'Asset Status berhasil dibuat.');
+        return redirect()->route('dashboard.status.index')->with('success', 'Asset Status berhasil dibuat.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(AssetStatus $AssetStatus)
+    public function show(Status $Status)
     {
         //
     }
@@ -56,9 +56,9 @@ class AssetStatusController extends Controller
      */
     public function edit($id)
     {
-        $asset = AssetStatus::find($id);
+        $asset = Status::find($id);
 
-        return view('pages.dashboard.asset-status.edit', compact('asset'));
+        return view('pages.dashboard.status.edit', compact('asset'));
     }
 
     /**
@@ -71,12 +71,12 @@ class AssetStatusController extends Controller
             'description' => 'required|string',
         ]);
 
-        AssetStatus::find($id)->update([
+        Status::find($id)->update([
             'name' => $request->name,
             'description' => $request->description,
         ]);
 
-        return redirect()->route('dashboard.assets-status.index')->with('success', 'Asset Status berhasil diperbarui.');
+        return redirect()->route('dashboard.status.index')->with('success', 'Asset Status berhasil diperbarui.');
     }
 
     /**
@@ -84,13 +84,13 @@ class AssetStatusController extends Controller
      */
     public function destroy($id)
     {
-        $data = AssetStatus::find($id);
+        $data = Status::find($id);
 
         if ($data) {
             $data->delete();
-            return redirect()->route('dashboard.assets-status.index')->with('success', 'Asset Status berhasil dihapus.');
+            return redirect()->route('dashboard.status.index')->with('success', 'Asset Status berhasil dihapus.');
         } else {
-            return redirect()->route('dashboard.assets-status.index')->with('error', 'Asset Status gagal dihapus.');
+            return redirect()->route('dashboard.status.index')->with('error', 'Asset Status gagal dihapus.');
         }
     }
 }

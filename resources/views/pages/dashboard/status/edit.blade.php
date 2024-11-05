@@ -5,7 +5,7 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <form id="add-data-form" action="{{ route('dashboard.assets-status.update', $asset->id) }}" method="POST"
+            <form id="add-data-form" action="{{ route('dashboard.status.update', $asset->id) }}" method="POST"
                 enctype="multipart/form-data">
                 <div class="row">
                     @method('PUT')

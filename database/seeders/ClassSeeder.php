@@ -2,7 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\AssetClass;
+use App\Models\Classes;
+use App\Models\Class;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,7 +14,7 @@ class ClassSeeder extends Seeder
      */
     public function run(): void
     {
-        AssetClass::insert([
+        Classes::insert([
             [
                 'name' => 'Kelas 1',
                 'description' => 'Aset kelas 1 adalah seluruh aset yang memiliki nilai di atas Rp. 50.000.000'

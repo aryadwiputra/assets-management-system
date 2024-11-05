@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Employee;
 use App\Models\Location;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -26,7 +27,7 @@ class DatabaseSeeder extends Seeder
             DepartmentSeeder::class,
             UnitOfMeasuerementSeeder::class,
             PersonInChargeSeeder::class,
-            UserAssetSeeder::class,
+            EmployeeSeeder::class,
             LocationSeeder::class,
             WarrantySeeder::class,
         ]);

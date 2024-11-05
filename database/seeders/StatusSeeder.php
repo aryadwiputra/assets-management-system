@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\AssetStatus;
+use App\Models\Status;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,7 +13,7 @@ class StatusSeeder extends Seeder
      */
     public function run(): void
     {
-        AssetStatus::insert([[
+        Status::insert([[
             'name' => 'Aktif',
             'description' => 'Status Asset',
         ],

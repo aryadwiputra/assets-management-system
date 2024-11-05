@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AssetUser;
+use App\Models\Classes;
 use Illuminate\Http\Request;
 
-class AssetUserController extends Controller
+class ClassController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $class = AssetUser::all();
+        $class = Classes::all();
 
-        return view('pages.dashboard.asset-users.index', compact('class'));
+        return view('pages.dashboard.class.index', compact('class'));
     }
 
     /**
@@ -22,7 +22,7 @@ class AssetUserController extends Controller
      */
     public function create()
     {
-        return view('pages.dashboard.asset-users.create');
+        return view('pages.dashboard.class.create');
     }
 
     /**
@@ -35,18 +35,18 @@ class AssetUserController extends Controller
             'description' => 'required|string',
         ]);
 
-        AssetUser::create([
+        Classes::create([
             'name' => $request->name,
             'description' => $request->description,
         ]);
 
-        return redirect()->route('dashboard.assets-users.index')->with('success', 'Asset Class berhasil dibuat.');
+        return redirect()->route('dashboard.class.index')->with('success', 'Asset Class berhasil dibuat.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(AssetUser $assetUser)
+    public function show(Classes $assetClass)
     {
         //
     }
@@ -56,9 +56,9 @@ class AssetUserController extends Controller
      */
     public function edit($id)
     {
-        $asset = AssetUser::find($id);
+        $asset = Classes::find($id);
 
-        return view('pages.dashboard.asset-users.edit', compact('asset'));
+        return view('pages.dashboard.class.edit', compact('asset'));
     }
 
     /**
@@ -71,12 +71,12 @@ class AssetUserController extends Controller
             'description' => 'required|string',
         ]);
 
-        AssetUser::find($id)->update([
+        Classes::find($id)->update([
             'name' => $request->name,
             'description' => $request->description,
         ]);
 
-        return redirect()->route('dashboard.assets-users.index')->with('success', 'Asset Class berhasil diperbarui.');
+        return redirect()->route('dashboard.class.index')->with('success', 'Asset Class berhasil diperbarui.');
     }
 
     /**
@@ -84,13 +84,13 @@ class AssetUserController extends Controller
      */
     public function destroy($id)
     {
-        $data = AssetUser::find($id);
+        $data = Classes::find($id);
 
         if ($data) {
             $data->delete();
-            return redirect()->route('dashboard.assets-users.index')->with('success', 'Asset Class berhasil dihapus.');
+            return redirect()->route('dashboard.class.index')->with('success', 'Asset Class berhasil dihapus.');
         } else {
-            return redirect()->route('dashboard.assets-users.index')->with('error', 'Asset Class gagal dihapus.');
+            return redirect()->route('dashboard.class.index')->with('error', 'Asset Class gagal dihapus.');
         }
     }
 }

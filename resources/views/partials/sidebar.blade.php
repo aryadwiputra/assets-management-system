@@ -71,45 +71,45 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('dashboard.assets-status.index') }}"
-                                class="nav-link {{ request()->routeIs('dashboard.assets-status.*') ? 'active' : '' }}">
+                            <a href="{{ route('dashboard.status.index') }}"
+                                class="nav-link {{ request()->routeIs('dashboard.status.*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Status Aset</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('dashboard.assets-class.index') }}"
-                                class="nav-link {{ request()->routeIs('users.index') ? 'active' : '' }}">
+                            <a href="{{ route('dashboard.class.index') }}"
+                                class="nav-link {{ request()->routeIs('dashboard.class.*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Kelas Aset</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('dashboard.unit-of-measurement.index') }}"
-                                class="nav-link {{ request()->routeIs('users.index') ? 'active' : '' }}">
+                                class="nav-link {{ request()->routeIs('dashboard.unit-of-measurement.*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Satuan Unit Aset</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('dashboard.department.index') }}"
-                                class="nav-link {{ request()->routeIs('dashboard.department.index') ? 'active' : '' }}">
+                                class="nav-link {{ request()->routeIs('dashboard.department.*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Department</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('dashboard.person-in-charge.index') }}"
-                                class="nav-link {{ request()->routeIs('dashboard.person-in-charge.index') ? 'active' : '' }}">
+                                class="nav-link {{ request()->routeIs('dashboard.person-in-charge.*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Person in Charge</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('dashboard.assets-users.index') }}"
-                                class="nav-link {{ request()->routeIs('dashboard.assets-users.*') ? 'active' : '' }}">
+                            <a href="{{ route('dashboard.employee.index') }}"
+                                class="nav-link {{ request()->routeIs('dashboard.employee.*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Pengguna</p>
+                                <p>Karyawan</p>
                             </a>
                         </li>
                         <li class="nav-item">

@@ -1,20 +1,19 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Edit Data Kelas Aset')
+@section('title', 'Tambah Data Status Aset')
 
 @section('content')
     <div class="card">
         <div class="card-body">
-            <form id="add-data-form" action="{{ route('dashboard.assets-class.update', $asset->id) }}" method="POST"
+            <form id="add-data-form" action="{{ route('dashboard.status.store') }}" method="POST"
                 enctype="multipart/form-data">
                 <div class="row">
-                    @method('PUT')
                     @csrf
                     <div class="col-md-12">
                         <div class="form-group">
                             <label for="name">Nama</label>
                             <input type="text" name="name" class="form-control" id="name"
-                                placeholder="Masukkan Nama Kelas Aset" value="{{ $asset->name }}">
+                                placeholder="Masukkan Nama Status Aset" value="{{ old('name') }}">
                             @error('name')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -23,8 +22,8 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label for="description">Deskripsi</label>
-                            <textarea name="description" placeholder="Masukkan Deskripsi Kelas Aset" class="form-control" id="description"
-                                cols="2" rows="2">{{ $asset->description }}</textarea>
+                            <textarea name="description" placeholder="Masukkan Deskripsi Status Aset" class="form-control" id="description"
+                                cols="2" rows="2">{{ old('description') }}</textarea>
                             @error('description')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror

@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AssetClass;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 
-class AssetClassController extends Controller
+class EmployeeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $class = AssetClass::all();
+        $class = Employee::all();
 
-        return view('pages.dashboard.asset-class.index', compact('class'));
+        return view('pages.dashboard.employee.index', compact('class'));
     }
 
     /**
@@ -22,7 +22,7 @@ class AssetClassController extends Controller
      */
     public function create()
     {
-        return view('pages.dashboard.asset-class.create');
+        return view('pages.dashboard.employee.create');
     }
 
     /**
@@ -35,18 +35,18 @@ class AssetClassController extends Controller
             'description' => 'required|string',
         ]);
 
-        AssetClass::create([
+        Employee::create([
             'name' => $request->name,
             'description' => $request->description,
         ]);
 
-        return redirect()->route('dashboard.assets-class.index')->with('success', 'Asset Class berhasil dibuat.');
+        return redirect()->route('dashboard.employee.index')->with('success', 'Asset Class berhasil dibuat.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(AssetClass $assetClass)
+    public function show(Employee $Employee)
     {
         //
     }
@@ -56,9 +56,9 @@ class AssetClassController extends Controller
      */
     public function edit($id)
     {
-        $asset = AssetClass::find($id);
+        $asset = Employee::find($id);
 
-        return view('pages.dashboard.asset-class.edit', compact('asset'));
+        return view('pages.dashboard.employee.edit', compact('asset'));
     }
 
     /**
@@ -71,12 +71,12 @@ class AssetClassController extends Controller
             'description' => 'required|string',
         ]);
 
-        AssetClass::find($id)->update([
+        Employee::find($id)->update([
             'name' => $request->name,
             'description' => $request->description,
         ]);
 
-        return redirect()->route('dashboard.assets-class.index')->with('success', 'Asset Class berhasil diperbarui.');
+        return redirect()->route('dashboard.employee.index')->with('success', 'Asset Class berhasil diperbarui.');
     }
 
     /**
@@ -84,13 +84,13 @@ class AssetClassController extends Controller
      */
     public function destroy($id)
     {
-        $data = AssetClass::find($id);
+        $data = Employee::find($id);
 
         if ($data) {
             $data->delete();
-            return redirect()->route('dashboard.assets-class.index')->with('success', 'Asset Class berhasil dihapus.');
+            return redirect()->route('dashboard.employee.index')->with('success', 'Asset Class berhasil dihapus.');
         } else {
-            return redirect()->route('dashboard.assets-class.index')->with('error', 'Asset Class gagal dihapus.');
+            return redirect()->route('dashboard.employee.index')->with('error', 'Asset Class gagal dihapus.');
         }
     }
 }

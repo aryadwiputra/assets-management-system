@@ -5,7 +5,7 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <form id="add-data-form" action="{{ route('dashboard.assets-class.store') }}" method="POST"
+            <form id="add-data-form" action="{{ route('dashboard.class.store') }}" method="POST"
                 enctype="multipart/form-data">
                 <div class="row">
                     @csrf

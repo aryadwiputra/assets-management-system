@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Kelas Aset')
+@section('title', 'Status Aset')
 
 @push('style')
     @include('style.datatable')
@@ -12,13 +12,13 @@
         <div class="d-flex justify-content-between">
             <h5>Data</h5>
             {{-- button add with modal --}}
-            <a href="{{ route('dashboard.assets-class.create') }}"
+            <a href="{{ route('dashboard.status.create') }}"
                 class="btn d-sm-block d-md-block d-lg-block d-xl-block d-none btn-primary mb-2">
-                Tambah Kelas Aset
+                Tambah Status Aset
             </a>
         </div>
         <a href="#" class="btn d-md-none d-lg-none d-xl-none d-block btn-primary mb-2">
-            Tambah Kelas Aset
+            Tambah Status Aset
         </a>
     </div>
 
@@ -41,12 +41,11 @@
                             <td>{{ $data->name }}</td>
                             <td>{{ $data->description }}</td>
                             <td>
-                                <a href="{{ route('dashboard.assets-class.edit', $data->id) }}"
+                                <a href="{{ route('dashboard.status.edit', $data->id) }}"
                                     class="btn btn-primary btn">Edit</a>
-                                <form action="{{ route('dashboard.assets-class.destroy', $data->id) }}" method="post"
+                                <form action="{{ route('dashboard.status.destroy', $data->id) }}" method="post"
                                     class="delete-form d-inline">
                                     @csrf
-                                    
                                     @method('delete')
                                     <button type="button" class="btn btn-danger btn-delete-data">Hapus</button>
                                 </form>
