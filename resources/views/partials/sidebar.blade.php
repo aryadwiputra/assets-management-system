@@ -126,6 +126,13 @@
                                 <p>Lokasi</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.warranties.index') }}"
+                                class="nav-link {{ request()->routeIs('dashboard.warranties.*') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Garansi</p>
+                            </a>
+                        </li>
                         {{-- <li class="nav-item">
                             <a href="{{ route('dashboard.users.index') }}"
                                 class="nav-link {{ request()->routeIs('users.index') ? 'active' : '' }}">
