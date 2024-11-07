@@ -152,8 +152,8 @@
                 <li class="nav-header">Manage Assets</li>
 
                 <li class="nav-item">
-                    <a href="{{ route('dashboard.projects.index') }}"
-                        class="nav-link {{ request()->routeIs('dashboard.projects.*') ? 'active' : '' }}">
+                    <a href="{{ route('dashboard.assets.index') }}"
+                        class="nav-link {{ request()->routeIs('dashboard.assets.*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-box"></i>
                         <p>
                             Data Assets

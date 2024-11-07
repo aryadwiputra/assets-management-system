@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AssetClassController;
+use App\Http\Controllers\AssetController;
 use App\Http\Controllers\AssetStatusController;
 use App\Http\Controllers\AssetUserController;
 use App\Http\Controllers\CategoryController;
@@ -52,6 +53,7 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('warranties', WarrantyController::class);
+    Route::resource('assets', AssetController::class);
     Route::resource('settings', SettingController::class);
 
     Route::get('/log', LogController::class)->name('log');
