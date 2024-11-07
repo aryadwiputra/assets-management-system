@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Company extends Model
+class Location extends Model
 {
     use HasFactory;
 
     protected $guarded = ['id'];
 
-    public function person_in_charge()
+    public function project()
     {
-        return $this->hasMany(PersonInCharge::class);
+        return $this->belongsTo(Project::class);
     }
 }

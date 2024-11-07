@@ -1,66 +1,99 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Asset Management System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Asset Management System adalah aplikasi berbasis Laravel untuk manajemen aset perusahaan, dilengkapi dengan fitur pengelolaan data pengguna, data master aset, manajemen aset, dan transaksi aset. Aplikasi ini menyediakan alur kerja lengkap untuk mengelola aset mulai dari registrasi, pelacakan, hingga disposisi.
 
-## About Laravel
+## Fitur Utama
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### 1. **User Management**
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+-   **Data Roles**: Mengelola peran (roles) dengan akses dan hak berbeda.
+-   **Data Users**: Mengelola pengguna dengan profil, autentikasi, dan otorisasi.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 2. **Master Data**
 
-## Learning Laravel
+Menyediakan data referensi yang penting untuk mendukung manajemen aset.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+-   **Status Aset**: Mengelola status aset untuk penanda kondisi atau status.
+-   **Kelas Aset (Class)**: Klasifikasi aset sesuai jenis atau kategori tertentu.
+-   **Satuan Unit Aset (Unit of Measurement)**: Mengelola satuan unit seperti pcs, kg, dll.
+-   **Departemen (Cost Center)**: Mengelola departemen yang bertanggung jawab atas aset.
+-   **Penanggung Jawab (Person in Charge)**: Mengelola data penanggung jawab aset.
+-   **Pengguna Aset (User)**: Mengelola data pengguna aset.
+-   **Kategori Aset (Category)**: Mengelola kategori atau klasifikasi aset.
+-   **Lokasi Aset (Location)**: Menentukan lokasi aset.
+-   **Masa Garansi (Warranty)**: Mengatur informasi masa garansi untuk aset.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### 3. **Manajemen Asset**
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Fitur inti untuk mencatat dan melacak aset fisik.
 
-## Laravel Sponsors
+-   **Data Asset**: Merekam semua data penting terkait aset.
+-   **QR Asset**: Menyediakan QR code untuk setiap aset, memudahkan pelacakan dan identifikasi.
+-   **Historical Asset**: Melihat riwayat perubahan atau pergerakan aset.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 4. **Transaksi Asset**
 
-### Premium Partners
+Menyediakan modul transaksi terkait perubahan status atau lokasi aset.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+-   **Movement**: Melakukan pergerakan atau mutasi aset antar lokasi atau departemen.
+-   **Disposal**: Melakukan penghapusan atau pelepasan aset yang sudah tidak digunakan.
+-   **Reverse Disposal**: Mengembalikan aset yang sebelumnya telah didisposisi.
 
-## Contributing
+## Instalasi
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+1. **Clone Repository**
 
-## Code of Conduct
+    ```bash
+    git clone https://github.com/username/repo-name.git
+    cd repo-name
+    ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+2. **Instal Dependensi**
 
-## Security Vulnerabilities
+    ```bash
+    composer install
+    npm install && npm run dev
+    ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+3. **Konfigurasi Environment**
 
-## License
+    Salin file `.env.example` menjadi `.env` dan lakukan pengaturan database.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+    ```bash
+    cp .env.example .env
+    php artisan key:generate
+    ```
+
+4. **Migrasi Database**
+
+    ```bash
+    php artisan migrate --seed
+    ```
+
+5. **Jalankan Server Lokal**
+
+    ```bash
+    php artisan serve
+    ```
+
+6. **Akses Aplikasi**
+
+    Buka [http://localhost:8000](http://localhost:8000) di browser Anda.
+
+## Kontribusi
+
+Kami menyambut kontribusi dari siapa saja yang ingin mengembangkan proyek ini lebih lanjut. Silakan ikuti langkah berikut untuk memulai:
+
+1. Fork repository ini.
+2. Buat branch untuk fitur yang ingin Anda tambahkan (`git checkout -b feature-name`).
+3. Commit perubahan Anda (`git commit -m 'Add feature name'`).
+4. Push ke branch (`git push origin feature-name`).
+5. Buat Pull Request ke branch `main`.
+
+## Lisensi
+
+Proyek ini dilisensikan di bawah [MIT License](LICENSE).
+
+---
+
+**Asset Management System** adalah solusi berbasis Laravel yang memudahkan pengelolaan aset perusahaan. Kami berharap proyek ini dapat membantu Anda dalam mengelola aset secara efisien.

@@ -30,6 +30,7 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
+                <li class="nav-header">DASHBOARD</li>
                 <li class="nav-item">
                     <a href="{{ route('dashboard') }}"
                         class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
@@ -39,15 +40,26 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-header">CORE</li>
                 <li class="nav-item">
                     <a href="{{ route('dashboard.companies.index') }}"
-                        class="nav-link {{ request()->routeIs('company') ? 'active' : '' }}">
+                        class="nav-link {{ request()->routeIs('dashboard.companies.*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-building"></i>
                         <p>
                             Company
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('dashboard.projects.index') }}"
+                        class="nav-link {{ request()->routeIs('dashboard.projects.*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-bullseye"></i>
+                        <p>
+                            Project
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-header">DATA ASSETS</li>
                 <li class="nav-item">
                     <a href="#"
                         class="nav-link {{ request()->is('users*') || request()->is('roles*') ? 'active' : '' }}">
@@ -59,6 +71,69 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
+                            <a href="{{ route('dashboard.status.index') }}"
+                                class="nav-link {{ request()->routeIs('dashboard.status.*') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Status Aset</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.class.index') }}"
+                                class="nav-link {{ request()->routeIs('dashboard.class.*') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Kelas Aset</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.unit-of-measurement.index') }}"
+                                class="nav-link {{ request()->routeIs('dashboard.unit-of-measurement.*') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Satuan Unit Aset</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.department.index') }}"
+                                class="nav-link {{ request()->routeIs('dashboard.department.*') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Department</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.person-in-charge.index') }}"
+                                class="nav-link {{ request()->routeIs('dashboard.person-in-charge.*') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Person in Charge</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.employee.index') }}"
+                                class="nav-link {{ request()->routeIs('dashboard.employee.*') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Karyawan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.categories.index') }}"
+                                class="nav-link {{ request()->routeIs('dashboard.categories.*') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Kategori</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.locations.index') }}"
+                                class="nav-link {{ request()->routeIs('dashboard.locations.*') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Lokasi</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.warranties.index') }}"
+                                class="nav-link {{ request()->routeIs('dashboard.warranties.*') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Garansi</p>
+                            </a>
+                        </li>
+                        {{-- <li class="nav-item">
                             <a href="{{ route('dashboard.users.index') }}"
                                 class="nav-link {{ request()->routeIs('users.index') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
@@ -71,10 +146,21 @@
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Data Role</p>
                             </a>
-                        </li>
+                        </li> --}}
                     </ul>
                 </li>
+                <li class="nav-header">Manage Assets</li>
+
+                <li class="nav-item">
+                    <a href="{{ route('dashboard.assets.index') }}"
+                        class="nav-link {{ request()->routeIs('dashboard.assets.*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-box"></i>
+                        <p>
+                            Data Assets
+                        </p>
+                    </a>
                 </li>
+                <li class="nav-header">SYSTEMS</li>
                 <li class="nav-item">
                     <a href="#"
                         class="nav-link {{ request()->is('log*') || request()->is('log*') ? 'active' : '' }}">
