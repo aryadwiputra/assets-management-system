@@ -12,7 +12,7 @@
         <div class="d-flex justify-content-between">
             <h5>Data</h5>
             {{-- button add with modal --}}
-        <a href="{{ route('dashboard.class.create') }}"
+            <a href="{{ route('dashboard.class.create') }}"
                 class="btn d-sm-block d-md-block d-lg-block d-xl-block d-none btn-primary mb-2">
                 Tambah Kelas Aset
             </a>
@@ -31,6 +31,8 @@
                         <th>No</th>
                         <th>Nama</th>
                         <th>Deskripsi</th>
+                        <th>Harga Dari</th>
+                        <th>Harga Sampai</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -40,10 +42,12 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $data->name }}</td>
                             <td>{{ $data->description }}</td>
+                            <td>{{ formatRupiah($data->from) }}</td>
+                            <td>{{ formatRupiah($data->to) }}</td>
                             <td>
-                            <a href="{{ route('dashboard.class.edit', $data->id) }}"
+                                <a href="{{ route('dashboard.class.edit', $data->id) }}"
                                     class="btn btn-primary btn">Edit</a>
-                            <form action="{{ route('dashboard.class.destroy', $data->id) }}" method="post"
+                                <form action="{{ route('dashboard.class.destroy', $data->id) }}" method="post"
                                     class="delete-form d-inline">
                                     @csrf
 

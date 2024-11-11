@@ -34,3 +34,11 @@ if (!function_exists('get_setting')) {
         return $setting->value;
     }
 }
+
+if(!function_exists('format_rupiah')){ 
+    function formatRupiah($number)
+    {
+        return "Rp " . number_format($number, 0, ',', '.');
+        
+    }
+}

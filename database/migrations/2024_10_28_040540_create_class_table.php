@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('description');
+            $table->bigInteger('from');
+            $table->bigInteger('to');
             $table->timestamps();
         });
     }
