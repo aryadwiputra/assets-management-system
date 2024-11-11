@@ -30,7 +30,6 @@
                     <tr>
                         <th>No</th>
                         <th>Nama</th>
-                        <th>Deskripsi</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -39,7 +38,6 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $data->name }}</td>
-                            <td>{{ $data->description }}</td>
                             <td>
                                 <a href="{{ route('dashboard.department.edit', $data->id) }}"
                                     class="btn btn-primary btn">Edit</a>

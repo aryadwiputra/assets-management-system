@@ -32,12 +32,10 @@ class DepartmentController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'required|string',
         ]);
 
         Department::create([
             'name' => $request->name,
-            'description' => $request->description,
         ]);
 
         return redirect()->route('dashboard.department.index')->with('success', 'Department berhasil dibuat.');
@@ -68,12 +66,10 @@ class DepartmentController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'required|string',
         ]);
 
         Department::find($id)->update([
             'name' => $request->name,
-            'description' => $request->description,
         ]);
 
         return redirect()->route('dashboard.department.index')->with('success', 'Department berhasil diperbarui.');
