@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
+use App\Models\Department;
 use App\Models\Employee;
+use App\Models\Project;
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
@@ -22,7 +25,10 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        return view('pages.dashboard.employee.create');
+        $projects = Project::all();
+        $companies = Company::all();
+        $departments = Department::all();
+        return view('pages.dashboard.employee.create', compact('companies','projects','departments'));
     }
 
     /**
@@ -31,13 +37,15 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'project_id' => 'required',
+            'department_id'=> 'required',
             'name' => 'required|string|max:255',
-            'description' => 'required|string',
         ]);
 
         Employee::create([
+            'project_id' => $request->project_id,
+            'department_id'=> $request->department_id,
             'name' => $request->name,
-            'description' => $request->description,
         ]);
 
         return redirect()->route('dashboard.employee.index')->with('success', 'Asset Class berhasil dibuat.');
@@ -57,8 +65,11 @@ class EmployeeController extends Controller
     public function edit($id)
     {
         $asset = Employee::find($id);
+        $companies = Company::all();
+        $departments = Department::all();
+        $projects = Project::all();
 
-        return view('pages.dashboard.employee.edit', compact('asset'));
+        return view('pages.dashboard.employee.edit', compact('asset','companies','projects','departments'));
     }
 
     /**
@@ -67,13 +78,15 @@ class EmployeeController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
+            'project_id' => 'required',
+            'department_id'=> 'required',
+            'name' => 'required|string|max:255'
         ]);
 
         Employee::find($id)->update([
+            'project_id'=> $request->project_id,
+            'department_id'=> $request->department_id,
             'name' => $request->name,
-            'description' => $request->description,
         ]);
 
         return redirect()->route('dashboard.employee.index')->with('success', 'Asset Class berhasil diperbarui.');

@@ -29,6 +29,8 @@
                 <thead>
                     <tr>
                         <th>No</th>
+                        <th>Proyek</th>
+                        <th>Department</th>
                         <th>Nama</th>
                         <th>Deskripsi</th>
                         <th>Aksi</th>
@@ -38,6 +40,8 @@
                     @foreach ($class as $data)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
+                            <td>{{ $data->project->name }}</td>
+                            <td>{{ $data->department->name }}</td>
                             <td>{{ $data->name }}</td>
                             <td>{{ $data->description }}</td>
                             <td>
