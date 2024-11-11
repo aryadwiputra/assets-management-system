@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\Project;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::all();
+        $projects = Project::with('company')->get();
 
         return view('pages.dashboard.projects.index', compact('projects'));
     }
@@ -22,7 +23,8 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('pages.dashboard.projects.create');
+        $companies = Company::all();
+        return view('pages.dashboard.projects.create', compact('companies'));
     }
 
     /**
@@ -31,12 +33,14 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'company_id' => 'required',
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'address' => 'required|string',
         ]);
 
         Project::create([
+            'company_id' => $request->company_id,
             'name' => $request->name,
             'description' => $request->description,
             'address' => $request->address,
@@ -61,8 +65,9 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
         $project = Project::find($project->id);
+        $companies = Company::all();
 
-        return view("pages.dashboard.projects.edit", compact("project"));
+        return view("pages.dashboard.projects.edit", compact("project", "companies"));
     }
 
     /**
@@ -71,12 +76,14 @@ class ProjectController extends Controller
     public function update(Request $request, Project $project)
     {
         $request->validate([
+            'company_id' => 'required',
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'address' => 'required|string',
         ]);
 
         $project->update([
+            'company_id' => $request->company_id,
             'name' => $request->name,
             'description' => $request->description,
             'address' => $request->address,

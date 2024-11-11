@@ -29,6 +29,7 @@
                 <thead>
                     <tr>
                         <th>No</th>
+                        <th>Perusahaan</th>
                         <th>Nama</th>
                         <th>Deskripsi</th>
                         <th>Lokasi</th>
@@ -40,6 +41,7 @@
                     @foreach ($projects as $project)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
+                            <td>{{ $project->company->name }}</td>
                             <td>{{ $project->name }}</td>
                             <td>{{ $project->description }}</td>
                             <td>{{ $project->address }}</td>
