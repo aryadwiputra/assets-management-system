@@ -15,6 +15,7 @@ use App\Models\Status;
 use App\Models\UnitOfMeasurement;
 use App\Models\Warranty;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AssetController extends Controller
 {
@@ -23,30 +24,33 @@ class AssetController extends Controller
      */
     public function index()
     {
-        $categories = Category::all("id","name");
-        $companies = Company::all();
-        $classes = Classes::all("id","name");
-        $departments = Department::all("id","name");
-        $employees = Employee::all("id","name");
-        $locations = Location::all("id","name");
-        $person_in_charges = PersonInCharge::all("id","name");
-        $projects = Project::all("id","name");
-        $statuses = Status::all("id","name");
-        $unit_of_measurements = UnitOfMeasurement::all("id","name");
-        $warranties = Warranty::all("id","name");
+        // $categories = Category::all("id","name");
+        // $companies = Company::all();
+        // $classes = Classes::all("id","name");
+        // $departments = Department::all("id","name");
+        // $employees = Employee::all("id","name");
+        // $locations = Location::all("id","name");
+        // $person_in_charges = PersonInCharge::all("id","name");
+        // $projects = Project::all("id","name");
+        // $statuses = Status::all("id","name");
+        // $unit_of_measurements = UnitOfMeasurement::all("id","name");
+        // $warranties = Warranty::all("id","name");
+
+        $assets = Asset::with(['category', 'company', 'class', 'department', 'employee', 'location', 'person_in_charge', 'project', 'status', 'unit_of_measurement', 'warranty'])->get();
 
         return view('pages.dashboard.assets.index', compact(
-            'categories',
-            'companies',
-            'classes',
-            'departments',
-            'employees',
-            'locations',
-            'person_in_charges',
-            'projects',
-            'statuses',
-            'unit_of_measurements',
-            'warranties',
+            'assets',
+            // 'categories',
+            // 'companies',
+            // 'classes',
+            // 'departments',
+            // 'employees',
+            // 'locations',
+            // 'person_in_charges',
+            // 'projects',
+            // 'statuses',
+            // 'unit_of_measurements',
+            // 'warranties',
         ));
     }
 
@@ -99,39 +103,44 @@ class AssetController extends Controller
             'price'=> 'required',
             'purchase_date'=> 'required',
             'description' => 'required',
-            'thubmnail'=> 'required',
+            'thumbnail'=> 'required',
         ]);
         
         $file = $request->file('thumbnail');
 
         $filename = time().'.'.$file->getClientOriginalExtension();
 
-        $request->thumbnail->move(public_path('images'), $filename);
+        // $request->thumbnail->move(public_path('images'), $filename);
+
+        // Storage
+        Storage::putFileAs('public', $file, $filename);
         
         Asset::create([
             'category_id' => $request->category_id,
             'company_id' => $request->company_id,
             'class_id' => $request->class_id,
-            'department_id'=> $request->class_id,
-            'employee_id'=> $request->class_id,
-            'location_id'=> $request->class_id,
-            'project_id'=> $request->class_id,
-            'status_id'=> $request->class_id,
-            'pic_id'=> $request->class_id,
-            'unit_of_measurement_id'=> $request->class_id,
-            'warranty_id'=> $request->class_id,
-            'number'=> $request->class_id,
-            'name'=> $request->class_id,
-            'serial_number'=> $request->class_id,
-            'slug'=> $request->class_id,
-            'price'=> $request->class_id,
-            'purchase_date'=> $request->class_id,
-            'origin_of_purchase'=> $request->class_id,
-            'purchase_number'=> $request->class_id,
-            'description'=> $request->class_id,
-            'status_information'=> $request->class_id,
-            'thumbnail'=> $request->class_id,
+            'department_id'=> $request->department_id,
+            'employee_id'=> $request->employee_id,
+            'location_id'=> $request->location_id,
+            'project_id'=> $request->project_id,
+            'status_id'=> $request->status_id,
+            'pic_id'=> $request->pic_id,
+            'unit_of_measurement_id'=> $request->unit_of_measurement_id,
+            'warranty_id'=> $request->warranty_id,
+            'number'=> $request->number,
+            'name'=> $request->name,
+            'serial_number'=> $request->serial_number,
+            'slug'=> \Illuminate\Support\Str::slug($request->name),
+            'price'=> $request->price,
+            'purchase_date'=> $request->purchase_date,
+            'origin_of_purchase'=> $request->origin_of_purchase,
+            'purchase_number'=> $request->purchase_number,
+            'description'=> $request->description,
+            'status_information'=> $request->status_information,
+            'thumbnail'=> $filename,
         ]);
+
+        return redirect()->route('dashboard.assets.index')->with('success','Asset berhasil dibuat');
     }
 
     /**
@@ -163,6 +172,10 @@ class AssetController extends Controller
      */
     public function destroy(Asset $asset)
     {
-        //
+        // Delete File
+        Storage::delete('public/'.$asset->thumbnail);
+        $asset->delete();
+
+        return redirect()->route('dashboard.assets.index')->with('success', 'Asset berhasil dihapus.');
     }
 }

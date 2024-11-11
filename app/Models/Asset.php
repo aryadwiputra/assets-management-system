@@ -9,6 +9,8 @@ class Asset extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id'];
+
     public function company()
     {
         return $this->belongsTo(Company::class);
@@ -23,6 +25,11 @@ class Asset extends Model
         return $this->belongsTo(Classes::class);
     }
 
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
+
     public function employee()
     {
         return $this->belongsTo(Employee::class);
@@ -33,7 +40,7 @@ class Asset extends Model
         return $this->belongsTo(Location::class);
     }
 
-    public function pic()
+    public function person_in_charge()
     {
         return $this->belongsTo(PersonInCharge::class);
     }
@@ -48,7 +55,7 @@ class Asset extends Model
         return $this->belongsTo(Status::class);
     }
 
-    public function uom()
+    public function unit_of_measurement()
     {
         return $this->belongsTo(UnitOfMeasurement::class);
     }
