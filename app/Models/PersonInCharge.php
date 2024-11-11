@@ -11,8 +11,13 @@ class PersonInCharge extends Model
 
     protected $guarded = ['id'];
 
-    public function company()
+    public function project()
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Project::class);
+    }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
     }
 }

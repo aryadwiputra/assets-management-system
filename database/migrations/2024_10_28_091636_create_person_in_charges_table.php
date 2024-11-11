@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('person_in_charges', function (Blueprint $table) {
             $table->id();
-            // foreign to company
-            $table->unsignedBigInteger('company_id');
-            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+            $table->unsignedBigInteger('project_id');
+            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
+            $table->unsignedBigInteger('department_id');
+            $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
             $table->string('name');
             $table->timestamps();
         });

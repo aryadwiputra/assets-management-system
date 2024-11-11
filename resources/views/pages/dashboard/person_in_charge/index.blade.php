@@ -30,15 +30,19 @@
                     <tr>
                         <th>No</th>
                         <th>Perusahaan</th>
+                        <th>Proyek</th>
+                        <th>Department</th>
                         <th>Nama</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($class as $data)
+                    @foreach ($pics as $data)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $data->company->name }}</td>
+                            <td>{{ $data->project->company->name }}</td>
+                            <td>{{ $data->project->name }}</td>
+                            <td>{{ $data->department->name }}</td>
                             <td>{{ $data->name }}</td>
                             <td>
                                 <a href="{{ route('dashboard.person-in-charge.edit', $data->id) }}"

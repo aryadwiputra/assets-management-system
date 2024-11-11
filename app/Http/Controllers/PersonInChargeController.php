@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\Department;
 use App\Models\PersonInCharge;
+use App\Models\Project;
 use Illuminate\Http\Request;
 
 class PersonInChargeController extends Controller
@@ -13,9 +15,9 @@ class PersonInChargeController extends Controller
      */
     public function index()
     {
-        $class = PersonInCharge::all();
+        $pics = PersonInCharge::with(['project', 'department'])->get();
 
-        return view('pages.dashboard.person_in_charge.index', compact('class'));
+        return view('pages.dashboard.person_in_charge.index', compact('pics'));
     }
 
     /**
@@ -24,7 +26,9 @@ class PersonInChargeController extends Controller
     public function create()
     {
         $companies = Company::all();
-        return view('pages.dashboard.person_in_charge.create', compact('companies'));
+        $projects = Project::all();
+        $departments = Department::all();
+        return view('pages.dashboard.person_in_charge.create', compact('companies', 'projects', 'departments'));
     }
 
     /**
@@ -34,10 +38,13 @@ class PersonInChargeController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'project_id' => 'required',
+            'department_id' => 'required',
         ]);
 
         PersonInCharge::create([
-            'company_id' => $request->company_id,
+            'project_id' => $request->project_id,
+            'department_id' => $request->department_id,
             'name' => $request->name,
         ]);
 
@@ -59,8 +66,10 @@ class PersonInChargeController extends Controller
     {
         $pic = PersonInCharge::find($id);
         $companies = Company::all();
+        $projects = Project::all();
+        $departments = Department::all();
 
-        return view('pages.dashboard.person_in_charge.edit', compact('pic', 'companies'));
+        return view('pages.dashboard.person_in_charge.edit', compact('pic', 'companies', 'projects', 'departments'));
     }
 
     /**
@@ -70,10 +79,12 @@ class PersonInChargeController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'project_id' => 'required',
         ]);
 
         PersonInCharge::find($id)->update([
-            'company_id' => $request->company_id,
+            'project_id' => $request->project_id,
+            'department_id' => $request->department_id,
             'name' => $request->name,
         ]);
 

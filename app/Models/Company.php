@@ -11,8 +11,11 @@ class Company extends Model
 
     protected $guarded = ['id'];
 
-    public function person_in_charge()
+    public function projects()
     {
-        return $this->hasMany(PersonInCharge::class);
+        return $this->hasMany(Project::class);
     }
+
+    
+    
 }

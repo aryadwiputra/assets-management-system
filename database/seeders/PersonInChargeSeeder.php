@@ -14,10 +14,12 @@ class PersonInChargeSeeder extends Seeder
     public function run(): void
     {
         PersonInCharge::insert([[
-            'company_id' => '1',
+            'project_id' => '1',
+            'department_id' => '1',
             'name' => 'PIC IT',
         ], [
-            'company_id'=> '1',
+            'project_id'=> '1',
+            'department_id' => '1',
             'name'=> 'PIC Marketing',
         ]]);
     }
