@@ -5,11 +5,25 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <form id="add-data-form" action="{{ route('dashboard.projects.update', $project->id) }}" onsubmit="return confirm('Apakah Anda yakin ingin mengubah data ini?') }}" method="POST"
+            <form id="add-data-form" action="{{ route('dashboard.projects.update', $project->id) }}"
+                onsubmit="return confirm('Apakah Anda yakin ingin mengubah data ini?') }}" method="POST"
                 enctype="multipart/form-data">
                 <div class="row">
                     @method('PUT')
                     @csrf
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="company_id">Perusahaan</label>
+                            <select name="company_id" class="form-control" id="company_id">
+                                @foreach ($companies as $company)
+                                    <option value="{{ $company->id }}" {{ $company->id == $project->company_id ? 'selected' : '' }}>{{ $company->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('company_id')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
                     <div class="col-md-12">
                         <div class="form-group">
                             <label for="name">Nama Proyek</label>
@@ -23,7 +37,8 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label for="description">Deskripsi</label>
-                            <textarea name="description" placeholder="Deskripsi Proyek" class="form-control" id="description" cols="2" rows="2">{{ $project->description }}</textarea>
+                            <textarea name="description" placeholder="Deskripsi Proyek" class="form-control" id="description" cols="2"
+                                rows="2">{{ $project->description }}</textarea>
                             @error('description')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror

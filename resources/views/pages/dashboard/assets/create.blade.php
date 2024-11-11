@@ -57,6 +57,21 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
+                            <label for="unit_of_measurement_id">Satuan<span class="text-danger">*</span></label>
+                            {{-- Select2 --}}
+                            <select name="unit_of_measurement_id" class="form-control select2" id="unit_of_measurement_id">
+                                @foreach ($unit_of_measurements as $unit_of_measurement)
+                                    <option value="{{ $unit_of_measurement->id }}">{{ $unit_of_measurement->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('unit_of_measurement_id')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <label for="pic_id">Penanggung Jawab<span class="text-danger">*</span></label>
                             {{-- Select2 --}}
                             <select name="pic_id" class="form-control select2" id="pic_id">
@@ -129,7 +144,8 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="serial_number">Nomor Seri</label>
-                            <input type="text" name="serial_number" class="form-control" id="serial_number">
+                            <input type="text" name="serial_number" class="form-control"
+                                value="{{ old('serial_number') }}" placeholder="Masukkan Nomor Seri" id="serial_number">
                             @error('serial_number')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -142,8 +158,8 @@
                                 <div class="input-group-prepend" id="section_assets_number" style="display: none">
                                     <span class="input-group-text" id="assets_number"></span>
                                 </div>
-                                <input type="number" name="number" class="form-control" placeholder="Masukkan Nomor Aset"
-                                    value="{{ old('number') }}">
+                                <input type="number" name="number" class="form-control"
+                                    placeholder="Masukkan Nomor Aset" value="{{ old('number') }}">
                             </div>
                             @error('number')
                                 <span class="text-danger">{{ $message }}</span>
@@ -189,7 +205,7 @@
                         <div class="form-group">
                             <label for="origin_of_purchase">Asal Pembelian</label>
                             <input type="string" name="origin_of_purchase" class="form-control" id="origin_of_purchase"
-                                placeholder="Masukkan Tanggal Pembelian" value="{{ old('origin_of_purchase') }}">
+                                placeholder="Masukkan Nama Asal Pembelian" value="{{ old('origin_of_purchase') }}">
                             @error('origin_of_purchase')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -198,7 +214,6 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="number_of_purchase">Nomor Pembelian</label>
-
                             <input type="number" name="number_of_purchase" class="form-control"
                                 placeholder="Masukkan Nomor Pembelian Aset" value="{{ old('number_of_purchase') }}">
                             @error('number_of_purchase')
@@ -234,7 +249,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label for="status_information">Keterangan Status</label>
-                            <textarea name="status_information" placeholder="Masukkan Deskripsi Pengguna Aset" class="form-control"
+                            <textarea name="status_information" placeholder="Masukkan Keterangan Status" class="form-control"
                                 id="status_information" cols="2" rows="2">{{ old('status_information') }}</textarea>
                             @error('status_information')
                                 <span class="text-danger">{{ $message }}</span>

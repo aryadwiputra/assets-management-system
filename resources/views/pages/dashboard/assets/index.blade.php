@@ -29,14 +29,20 @@
                 <thead>
                     <tr>
                         <th>No</th>
+                        <th>Lokasi</th>
+                        <th>Kategori</th>
+                        <th>Nomor Aset</th>
                         <th>Nama</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- @foreach ($class as $data)
+                    @foreach ($assets as $data)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
+                            <td>{{ $data->location->name }}</td>
+                            <td>{{ $data->category->name }}</td>
+                            <td>{{ $data->company->prefix_asset }}{{ $data->number }}</td>
                             <td>{{ $data->name }}</td>
                             <td>
                                 <a href="{{ route('dashboard.assets.edit', $data->id) }}"
@@ -50,7 +56,7 @@
                                 </form>
                             </td>
                         </tr>
-                    @endforeach --}}
+                    @endforeach
                 </tbody>
             </table>
         </div>
