@@ -34,9 +34,9 @@ return new class extends Migration
             $table->foreign('unit_of_measurement_id')->references('id')->on('unit_of_measurements')->onDelete('cascade');
             $table->unsignedBigInteger('warranty_id')->nullable();
             $table->foreign('warranty_id')->references('id')->on('warranties')->onDelete('cascade');
-            $table->string('number');
+            $table->string('number')->nullable();
             $table->string('name');
-            $table->string('serial_number');
+            $table->string('serial_number')->nullable();
             $table->string('slug')->unique();
             $table->integer('price');
             $table->date('purchase_date');
