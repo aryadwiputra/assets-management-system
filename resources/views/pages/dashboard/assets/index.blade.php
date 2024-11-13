@@ -29,6 +29,7 @@
                 <thead>
                     <tr>
                         <th>No</th>
+                        <th>Thumbnail</th>
                         <th>Lokasi</th>
                         <th>Kategori</th>
                         <th>Nomor Aset</th>
@@ -40,9 +41,15 @@
                     @foreach ($assets as $data)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
+                            <td>
+                                @if ($data->thumbnail)
+                                    <img src="{{ asset('storage/asset/thumbnails/' . $data->thumbnail) }}" alt="thumbnail"
+                                        class="img-fluid" width="150">
+                                @endif
+                            </td>
                             <td>{{ $data->location->name }}</td>
                             <td>{{ $data->category->name }}</td>
-                            <td>{{ $data->company->prefix_asset }}{{ $data->number }}</td>
+                            <td>{{ $data->number }}</td>
                             <td>{{ $data->name }}</td>
                             <td>
                                 <a href="{{ route('dashboard.assets.edit', $data->id) }}"

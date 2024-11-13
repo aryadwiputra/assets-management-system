@@ -24,33 +24,10 @@ class AssetController extends Controller
      */
     public function index()
     {
-        // $categories = Category::all("id","name");
-        // $companies = Company::all();
-        // $classes = Classes::all("id","name");
-        // $departments = Department::all("id","name");
-        // $employees = Employee::all("id","name");
-        // $locations = Location::all("id","name");
-        // $person_in_charges = PersonInCharge::all("id","name");
-        // $projects = Project::all("id","name");
-        // $statuses = Status::all("id","name");
-        // $unit_of_measurements = UnitOfMeasurement::all("id","name");
-        // $warranties = Warranty::all("id","name");
-
         $assets = Asset::with(['category', 'company', 'class', 'department', 'employee', 'location', 'person_in_charge', 'project', 'status', 'unit_of_measurement', 'warranty'])->get();
 
         return view('pages.dashboard.assets.index', compact(
             'assets',
-            // 'categories',
-            // 'companies',
-            // 'classes',
-            // 'departments',
-            // 'employees',
-            // 'locations',
-            // 'person_in_charges',
-            // 'projects',
-            // 'statuses',
-            // 'unit_of_measurements',
-            // 'warranties',
         ));
     }
 
@@ -59,17 +36,17 @@ class AssetController extends Controller
      */
     public function create()
     {
-        $categories = Category::all("id","name");
+        $categories = Category::all("id", "name");
         $companies = Company::all();
-        $classes = Classes::all("id","name");
-        $departments = Department::all("id","name");
-        $employees = Employee::all("id","name");
-        $locations = Location::all("id","name");
-        $person_in_charges = PersonInCharge::all("id","name");
-        $projects = Project::all("id","name");
-        $statuses = Status::all("id","name");
-        $unit_of_measurements = UnitOfMeasurement::all("id","name");
-        $warranties = Warranty::all("id","name");
+        $classes = Classes::all("id", "name", "from", "to");
+        $departments = Department::all("id", "name");
+        $employees = Employee::all("id", "name");
+        $locations = Location::all("id", "name");
+        $person_in_charges = PersonInCharge::all("id", "name");
+        $projects = Project::all("id", "name");
+        $statuses = Status::all("id", "name");
+        $unit_of_measurements = UnitOfMeasurement::all("id", "name");
+        $warranties = Warranty::all("id", "name");
 
         return view('pages.dashboard.assets.create', compact(
             'categories',
@@ -92,55 +69,73 @@ class AssetController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'location_id'=> 'required',
-            'status_id'=> 'required',
-            'pic_id'=> 'required',
-            'department_id'=> 'required',
-            'class_id'=> 'required',
-            'category_id'=> 'required',
-            'name'=> 'required',
-            'number'=> 'required',
-            'price'=> 'required',
-            'purchase_date'=> 'required',
+            'location_id' => 'required',
+            'status_id' => 'required',
+            'pic_id' => 'required',
+            'department_id' => 'required',
+            'category_id' => 'required',
+            'name' => 'required',
+            'price' => 'required',
+            'purchase_date' => 'required',
             'description' => 'required',
-            'thumbnail'=> 'required',
+            'thumbnail' => 'required',
         ]);
-        
+
+        // Generate a unique slug
+        $slug = $request->name . '-' .  \Illuminate\Support\Str::random(6);
+
+        // Check if the slug already exists
+        while (Asset::where('slug', $slug)->exists()) {
+            // Generate a new random slug if it already exists
+            $slug = $request->name . '-' . \Illuminate\Support\Str::random(6);
+        }
+
+        $classes = Classes::all('id', 'from', 'to');
+
+        // pengecekan apakah price berada between dari seluruh data $classes
+        foreach ($classes as $class) {
+            if ($request->price >= $class->from && $request->price <= $class->to) {
+                $class_id = $class->id;
+                break;
+            } else {
+                return back()->with('error', 'Harga tidak sesuai dengan Asset Class')->withInput();
+            }
+        }
+
         $file = $request->file('thumbnail');
 
-        $filename = time().'.'.$file->getClientOriginalExtension();
+        $filename = time() . '.' . $file->getClientOriginalExtension();
 
-        // $request->thumbnail->move(public_path('images'), $filename);
+        $file->storeAs('asset/thumbnails', $filename, 'public');
 
-        // Storage
-        Storage::putFileAs('public', $file, $filename);
-        
+        $prefix = Company::find($request->company_id)->prefix_asset;
+
         Asset::create([
             'category_id' => $request->category_id,
             'company_id' => $request->company_id,
-            'class_id' => $request->class_id,
-            'department_id'=> $request->department_id,
-            'employee_id'=> $request->employee_id,
-            'location_id'=> $request->location_id,
-            'project_id'=> $request->project_id,
-            'status_id'=> $request->status_id,
-            'pic_id'=> $request->pic_id,
-            'unit_of_measurement_id'=> $request->unit_of_measurement_id,
-            'warranty_id'=> $request->warranty_id,
-            'number'=> $request->number,
-            'name'=> $request->name,
-            'serial_number'=> $request->serial_number,
-            'slug'=> \Illuminate\Support\Str::slug($request->name),
-            'price'=> $request->price,
-            'purchase_date'=> $request->purchase_date,
-            'origin_of_purchase'=> $request->origin_of_purchase,
-            'purchase_number'=> $request->purchase_number,
-            'description'=> $request->description,
-            'status_information'=> $request->status_information,
-            'thumbnail'=> $filename,
+            'class_id' => $class_id,
+            'department_id' => $request->department_id,
+            'employee_id' => $request->employee_id,
+            'location_id' => $request->location_id,
+            'project_id' => $request->project_id,
+            'status_id' => $request->status_id,
+            'pic_id' => $request->pic_id,
+            'unit_of_measurement_id' => $request->unit_of_measurement_id,
+            'warranty_id' => $request->warranty_id,
+            'number' => $prefix . $request->number,
+            'name' => $request->name,
+            'serial_number' => $request->serial_number,
+            'slug' =>$slug,
+            'price' => $request->price,
+            'purchase_date' => $request->purchase_date,
+            'origin_of_purchase' => $request->origin_of_purchase,
+            'purchase_number' => $request->purchase_number,
+            'description' => $request->description,
+            'status_information' => $request->status_information,
+            'thumbnail' => $filename,
         ]);
 
-        return redirect()->route('dashboard.assets.index')->with('success','Asset berhasil dibuat');
+        return redirect()->route('dashboard.assets.index')->with('success', 'Asset berhasil dibuat');
     }
 
     /**
@@ -156,7 +151,37 @@ class AssetController extends Controller
      */
     public function edit(Asset $asset)
     {
-        //
+        $categories = Category::all("id", "name");
+        $companies = Company::all();
+        $classes = Classes::all("id", "name", "from", "to");
+        $departments = Department::all("id", "name");
+        $employees = Employee::all("id", "name");
+        $locations = Location::all("id", "name");
+        $person_in_charges = PersonInCharge::all("id", "name");
+        $projects = Project::all("id", "name");
+        $statuses = Status::all("id", "name");
+        $unit_of_measurements = UnitOfMeasurement::all("id", "name");
+        $warranties = Warranty::all("id", "name");
+
+        $asset->load('category', 'company', 'class', 'department', 'employee', 'location', 'person_in_charge', 'project', 'status', 'unit_of_measurement', 'warranty');
+
+        // Buang prefix pada asset number
+        $asset->number = str_replace($asset->prefix, '', $asset->number);
+
+        return view('pages.dashboard.assets.edit', compact(
+            'asset',
+            'categories',
+            'companies',
+            'classes',
+            'departments',
+            'employees',
+            'locations',
+            'person_in_charges',
+            'projects',
+            'statuses',
+            'unit_of_measurements',
+            'warranties',
+        ));
     }
 
     /**
@@ -164,7 +189,81 @@ class AssetController extends Controller
      */
     public function update(Request $request, Asset $asset)
     {
-        //
+        $request->validate([
+            'location_id' => 'required',
+            'status_id' => 'required',
+            'pic_id' => 'required',
+            'department_id' => 'required',
+            'category_id' => 'required',
+            'name' => 'required',
+            'price' => 'required',
+            'purchase_date' => 'required',
+            'description' => 'required',
+        ]);
+
+        // Generate a unique slug
+        $slug = $request->name . '-' .  \Illuminate\Support\Str::random(6);
+
+        // Check if the slug already exists
+        while (Asset::where('slug', $slug)->exists()) {
+            // Generate a new random slug if it already exists
+            $slug = $request->name . '-' . \Illuminate\Support\Str::random(6);
+        }
+
+        $classes = Classes::all('id', 'from', 'to');
+
+        // pengecekan apakah price berada between dari seluruh data $classes
+        foreach ($classes as $class) {
+            if ($request->price >= $class->from && $request->price <= $class->to) {
+                $class_id = $class->id;
+                break;
+            } else {
+                return back()->with('error', 'Harga tidak sesuai dengan Asset Class')->withInput();
+            }
+        }
+
+        if( $request->hasFile('thumbnail') ) {
+            Storage::disk('public')->delete('asset/thumbnails/'.$asset->thumbnail);
+
+            $file = $request->file('thumbnail');
+
+            $filename = time().'.'.$file->getClientOriginalExtension();
+            
+            $file->storeAs('asset/thumbnails', $filename, 'public');
+
+            $asset->update([
+                'thumbnail' => $filename,
+            ]);
+        }
+
+        $prefix = Company::find($request->company_id)->prefix_asset;
+
+        $asset->update([
+            'category_id' => $request->category_id,
+            'company_id' => $request->company_id,
+            'class_id' => $class_id,
+            'department_id' => $request->department_id,
+            'employee_id' => $request->employee_id,
+            'location_id' => $request->location_id,
+            'project_id' => $request->project_id,
+            'status_id' => $request->status_id,
+            'pic_id' => $request->pic_id,
+            'unit_of_measurement_id' => $request->unit_of_measurement_id,
+            'warranty_id' => $request->warranty_id,
+            'name' => $request->name,
+            'number' => $prefix . $request->number,
+            'serial_number' => $request->serial_number,
+            'slug' => $slug,
+            'price' => $request->price,
+            'purchase_date' => $request->purchase_date,
+            'origin_of_purchase' => $request->origin_of_purchase,
+            'purchase_number' => $request->purchase_number,
+            'description' => $request->description,
+            'status_information' => $request->status_information,
+            'thumbnail' => $asset->thumbnail
+        ]);
+
+        return redirect()->route('dashboard.assets.index')->with('success', 'Asset berhasil diubah');
     }
 
     /**
@@ -173,7 +272,7 @@ class AssetController extends Controller
     public function destroy(Asset $asset)
     {
         // Delete File
-        Storage::delete('public/'.$asset->thumbnail);
+        Storage::delete('public/' . $asset->thumbnail);
         $asset->delete();
 
         return redirect()->route('dashboard.assets.index')->with('success', 'Asset berhasil dihapus.');
