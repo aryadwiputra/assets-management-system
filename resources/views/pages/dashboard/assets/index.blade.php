@@ -11,17 +11,57 @@
     <div class="content-header">
         <div class="d-flex justify-content-between">
             <h5>Data</h5>
-            {{-- button add with modal --}}
-            <a href="{{ route('dashboard.assets.create') }}"
-                class="btn d-sm-block d-md-block d-lg-block d-xl-block d-none btn-primary mb-2">
-                Tambah Aset
-            </a>
+            <div class="d-flex justify-content-between mb-2">
+                <button type="button" class="btn btn-success mx-2" data-toggle="modal" data-target="#importModal">
+                    <i class="fas fa-file-import"></i> Import Data
+                </button>
+                {{-- Modal --}}
+                <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="importModalLabel">Import Data</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form action="{{ route('dashboard.assets.import') }}" method="POST"
+                                enctype="multipart/form-data">
+                                <div class="modal-body">
+                                    @csrf
+                                    <div class="form-group">
+                                        <label for="file">File Excel</label>
+                                        <input type="file" name="file" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Import</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <a href="{{ route('dashboard.assets.create') }}" class="btn btn-primary">
+                    Tambah Aset
+                </a>
+            </div>
         </div>
         <a href="#" class="btn d-md-none d-lg-none d-xl-none d-block btn-primary mb-2">
             Tambah Aset
         </a>
     </div>
 
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     <div class="card">
         <div class="card-body">
