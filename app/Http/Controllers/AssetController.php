@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\AssetImport;
 use App\Models\Asset;
 use App\Models\Category;
 use App\Models\Classes;
@@ -16,6 +17,7 @@ use App\Models\UnitOfMeasurement;
 use App\Models\Warranty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AssetController extends Controller
 {
@@ -276,5 +278,56 @@ class AssetController extends Controller
         $asset->delete();
 
         return redirect()->route('dashboard.assets.index')->with('success', 'Asset berhasil dihapus.');
+    }
+
+    /**
+     * Import data from excel
+     */
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls|max:2048',
+        ]);
+
+        $file = $request->file('file');
+        try {
+            Excel::import(new AssetImport, $file);
+            return redirect()->back()->with('success', 'Data aset berhasil diimpor.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengimpor data aset.');
+        }
+        // $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($request->file('file'));
+
+        // $worksheet = $spreadsheet->getActiveSheet();
+        // $worksheetArray = $worksheet->toArray();
+        // array_shift($worksheetArray);
+
+        // echo '<table style="width:100%"  border="1">';
+        // echo '<tr align="center">';
+        // echo '<td>Sno</td>';
+        // echo '<td>Name</td>';
+        // echo '<td>Image</td>';
+        // echo '</tr>';
+
+        // foreach ($worksheetArray as $key => $value) {
+
+        //     $worksheet = $spreadsheet->getActiveSheet();
+        //     $drawing = $worksheet->getDrawingCollection()[$key];
+
+        //     $zipReader = fopen($drawing->getPath(), 'r');
+        //     $imageContents = '';
+        //     while (!feof($zipReader)) {
+        //         $imageContents .= fread($zipReader, 1024);
+        //     }
+        //     fclose($zipReader);
+        //     $extension = $drawing->getExtension();
+
+        //     echo '<tr align="center">';
+        //     echo '<td>' . $value[0] . '</td>';
+        //     echo '<td>' . $value[1] . '</td>';
+        //     echo '<td><img  height="150px" width="150px"   src="data:image/jpeg;base64,' . base64_encode($imageContents) . '"/></td>';
+        //     echo '</tr>';
+
+        // }
     }
 }

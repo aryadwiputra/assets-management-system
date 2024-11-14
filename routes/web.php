@@ -53,6 +53,7 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('warranties', WarrantyController::class);
+    Route::post('assets/import', [AssetController::class, 'import'])->name('assets.import');
     Route::resource('assets', AssetController::class);
     Route::resource('settings', SettingController::class);
 
