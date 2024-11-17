@@ -9,17 +9,20 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <form id="add-data-form" action="{{ route('dashboard.mutations.store') }}" method="POST"
+            <form id="add-data-form" action="{{ route('dashboard.mutations.update', $mutation->id) }}" method="POST"
                 enctype="multipart/form-data">
                 <div class="row">
                     @csrf
+                    @method('PUT')
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="project_id">Proyek <span class="text-danger">*</span></label>
                             {{-- Select2 --}}
                             <select name="project_id" class="form-control select2" id="project_id">
                                 @foreach ($projects as $project)
-                                    <option value="{{ $project->id }}">{{ $project->name }}</option>
+                                    <option value="{{ $project->id }}"
+                                        {{ $project->id == $mutation->project_id ? 'selected' : '' }}>{{ $project->name }}
+                                    </option>
                                 @endforeach
                             </select>
                             @error('project_id')
@@ -33,7 +36,9 @@
                             {{-- Select2 --}}
                             <select name="to_location" class="form-control select2" id="to_location">
                                 @foreach ($locations as $location)
-                                    <option value="{{ $location->id }}">{{ $location->name }}</option>
+                                    <option value="{{ $location->id }}"
+                                        {{ $location->id == $mutation->to_location ? 'selected' : '' }}>
+                                        {{ $location->name }}</option>
                                 @endforeach
                             </select>
                             @error('to_location')
@@ -47,7 +52,9 @@
                             {{-- Select2 --}}
                             <select name="pic_id" class="form-control select2" id="pic_id">
                                 @foreach ($person_in_charges as $person_in_charge)
-                                    <option value="{{ $person_in_charge->id }}">{{ $person_in_charge->name }}</option>
+                                    <option value="{{ $person_in_charge->id }}"
+                                        {{ $person_in_charge->id == $mutation->pic_id ? 'selected' : '' }}>
+                                        {{ $person_in_charge->name }}</option>
                                 @endforeach
                             </select>
                             @error('pic_id')
@@ -59,10 +66,9 @@
                         <div class="form-group">
                             <label for="status">Status <span class="text-danger">*</span></label>
                             <select name="status" class="form-control" id="status">
-                                <option value="open">Open</option>
-                                <option value="done">Done</option>
-                                <option value="cancel">Cancel</option>
-
+                                <option value="open" {{ $mutation->status == 'open' ? 'selected' : '' }}>Open</option>
+                                <option value="done" {{ $mutation->status == 'done' ? 'selected' : '' }}>Done</option>
+                                <option value="cancel" {{ $mutation->status == 'cancel' ? 'selected' : '' }}>Cancel</option>
                             </select>
                         </div>
                     </div>
@@ -70,7 +76,7 @@
                         <div class="form-group">
                             <label for="name">Nama <span class="text-danger">*</span></label>
                             <input type="text" name="name" class="form-control" id="name"
-                                placeholder="Masukkan Nama Dokumen Mutasi Aset" value="{{ old('name') }}">
+                                placeholder="Masukkan Nama Dokumen Mutasi Aset" value="{{ $mutation->name }}">
                             @error('name')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -80,7 +86,7 @@
                         <div class="form-group">
                             <label for="description">Deskripsi</label>
                             <textarea name="description" placeholder="Masukkan Deskripsi  Mutasi Aset" class="form-control" id="description"
-                                cols="2" rows="2">{{ old('description') }}</textarea>
+                                cols="2" rows="2">{{ $mutation->description }}</textarea>
                             @error('description')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -90,7 +96,7 @@
                         <div class="form-group">
                             <label for="comment">Komentar</label>
                             <textarea name="comment" placeholder="Masukkan Komentar Mutasi Aset" class="form-control" id="comment" cols="2"
-                                rows="2">{{ old('comment') }}</textarea>
+                                rows="2">{{ $mutation->comment }}</textarea>
                             @error('comment')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror

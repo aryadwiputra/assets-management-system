@@ -13,9 +13,27 @@
                 <h3 class="card-title">
                     Detail Mutasi
                 </h3>
-                {{-- <a href="{{ route('dashboard.mutations.edit', $mutation) }}" class="btn btn-success ml-auto">
+                <a href="{{ route('dashboard.mutations.edit', $mutation) }}" class="btn btn-success ml-auto">
                     <i class="fas fa-pencil-alt"></i>
-                </a> --}}
+                </a>
+                {{-- If else status mutation open or close --}}
+                @if ($mutation->status == 'open')
+                    <form action="{{ route('dashboard.mutations.cancel', $mutation->id) }}" method="post"
+                        id="form-cancel-mutation">
+                        @csrf
+                        <button class="btn btn-danger ml-2" type="button" id="button-cancel-mutation">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </form>
+                @elseif($mutation->status == 'cancel')
+                    <form action="{{ route('dashboard.mutations.open', $mutation->id) }}" method="post"
+                        id="form-open-mutation">
+                        @csrf
+                        <button class="btn btn-primary ml-2" type="button" id="button-open-mutation">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </form>
+                @endif
             </div>
         </div>
         <div class="card-body">
@@ -46,6 +64,10 @@
                             <tr>
                                 <th>Komentar</th>
                                 <td>{{ $mutation->comment }}</td>
+                            </tr>
+                            <tr>
+                                <th>Status</th>
+                                <td>{{ strtoupper($mutation->status) }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -150,7 +172,8 @@
                         <tbody>
                             @foreach ($mutation->assets as $item)
                                 <tr>
-                                    <td><input type="checkbox" class="asset-checkbox-delete" value="{{ $item->id }}">
+                                    <td><input type="checkbox" class="asset-checkbox-delete"
+                                            value="{{ $item->id }}">
                                     </td>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->name }}</td>
@@ -308,6 +331,41 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $(this).closest('form').submit();
+                    }
+                })
+            })
+
+            $('#button-cancel-mutation').on('click', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Apakah anda yakin?',
+                    text: "Data yang dibatalkan tidak dapat dikembalikan!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Batalkan!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#form-cancel-mutation').submit();
+                    }
+                })
+            })
+
+            // Handle open mutation
+            $('#button-open-mutation').on('click', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Apakah anda yakin?',
+                    text: "Data yang dibuka tidak dapat dikembalikan!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Buka!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#form-open-mutation').submit();
                     }
                 })
             })

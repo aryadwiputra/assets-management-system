@@ -89,7 +89,12 @@ class MutationController extends Controller
      */
     public function edit(Mutation $mutation)
     {
-        //
+        
+        $projects = Project::all();
+        $locations = Location::all();
+        $person_in_charges = PersonInCharge::all();
+
+        return view('pages.dashboard.mutation.edit', compact('mutation', 'projects', 'locations', 'person_in_charges'));
     }
 
     /**
@@ -97,7 +102,26 @@ class MutationController extends Controller
      */
     public function update(Request $request, Mutation $mutation)
     {
-        //
+        $request->validate([
+            'project_id' => 'required',
+            'to_location' => 'required',
+            'name' => 'required',
+            'pic_id' => 'required',
+        ]);
+
+        $mutation->update([
+            'project_id' => $request->project_id,
+            'to_location' => $request->to_location,
+            'person_in_charge_id' => $request->person_in_charge_id,
+            'pic_id' => $request->pic_id,
+            'user_id' => Auth::user()->id,
+            'name' => $request->name,
+            'description' => $request->description,
+            'status'=> $request->status,
+            'comment'=> $request->comment
+        ]);
+
+        return redirect()->route('dashboard.mutations.show', $mutation->id)->with('success', 'Mutasi berhasil diperbarui.');
     }
 
     /**
@@ -108,6 +132,30 @@ class MutationController extends Controller
         $mutation->delete();
 
         return redirect()->route('dashboard.mutations.index')->with('success', 'Mutasi berhasil dihapus.');
+    }
+
+    /**
+     * Cancel status mutation
+     */
+    public function cancel(Mutation $mutation)
+    {
+        $mutation->update([
+            'status' => 'cancel'
+        ]);
+
+        return redirect()->route('dashboard.mutations.show', $mutation->id)->with('success', 'Mutasi berhasil dibatalkan.');
+    }
+
+    /**
+     * Open status mutation
+     */
+    public function open(Mutation $mutation)
+    {
+        $mutation->update([
+            'status' => 'open'
+        ]);
+
+        return redirect()->route('dashboard.mutations.show', $mutation->id)->with('success', 'Mutasi berhasil dibuka.');
     }
 
     /**
