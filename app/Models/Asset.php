@@ -42,7 +42,7 @@ class Asset extends Model
 
     public function person_in_charge()
     {
-        return $this->belongsTo(PersonInCharge::class);
+        return $this->belongsTo(PersonInCharge::class, 'pic_id');
     }
 
     public function project()
@@ -65,5 +65,8 @@ class Asset extends Model
         return $this->belongsTo(Warranty::class);
     }
     
-    
+    public function mutations()
+    {
+        return $this->belongsToMany(Mutation::class, 'asset_mutation');
+    }
 }

@@ -160,6 +160,17 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-header">Transactions Assets</li>
+
+                <li class="nav-item">
+                    <a href="{{ route('dashboard.mutations.index') }}"
+                        class="nav-link {{ request()->routeIs('dashboard.mutations.*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-arrows-alt"></i>
+                        <p>
+                            Mutasi
+                        </p>
+                    </a>
+                </li>
                 <li class="nav-header">SYSTEMS</li>
                 <li class="nav-item">
                     <a href="#"

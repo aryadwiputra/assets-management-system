@@ -12,6 +12,10 @@
         <div class="d-flex justify-content-between">
             <h5>Data</h5>
             <div class="d-flex justify-content-between mb-2">
+                <a href="{{ route('dashboard.mutations.create') }}" class="btn btn-secondary">
+                    {{-- Icon right --}}
+                    <i class="fas fa-arrows-alt"></i> Mutasi
+                </a>
                 <button type="button" class="btn btn-success mx-2" data-toggle="modal" data-target="#importModal">
                     <i class="fas fa-file-import"></i> Import Data
                 </button>
@@ -68,18 +72,21 @@
             <table class="table table-bordered" id="data-table">
                 <thead>
                     <tr>
+                        <th><input type="checkbox" id="select-all"></th>
                         <th>No</th>
                         <th>Thumbnail</th>
                         <th>Lokasi</th>
                         <th>Kategori</th>
                         <th>Nomor Aset</th>
                         <th>Nama</th>
+                        <th>PIC</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($assets as $data)
                         <tr>
+                            <td><input type="checkbox" class="asset-checkbox" value="{{ $data->id }}"></td>
                             <td>{{ $loop->iteration }}</td>
                             <td>
                                 @if ($data->thumbnail)
@@ -91,6 +98,7 @@
                             <td>{{ $data->category->name }}</td>
                             <td>{{ $data->number }}</td>
                             <td>{{ $data->name }}</td>
+                            <td>{{ $data->person_in_charge->name }}</td>
                             <td>
                                 <a href="{{ route('dashboard.assets.edit', $data->id) }}"
                                     class="btn btn-primary btn">Edit</a>
@@ -123,6 +131,10 @@
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
             }).buttons().container().appendTo('#data-table_wrapper .col-md-6:eq(0)');
 
+            // Select all checkboxes
+            $('#select-all').on('click', function() {
+                $('.asset-checkbox').prop('checked', $(this).is(':checked'));
+            });
 
             $('.btn-delete-data').on('click', function(e) {
                 e.preventDefault();

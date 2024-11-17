@@ -12,6 +12,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\LogActivityController;
 use App\Http\Controllers\LogController;
+use App\Http\Controllers\MutationController;
 use App\Http\Controllers\PersonInChargeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
@@ -55,6 +56,11 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::resource('warranties', WarrantyController::class);
     Route::post('assets/import', [AssetController::class, 'import'])->name('assets.import');
     Route::resource('assets', AssetController::class);
+    Route::post('mutations/add-asset', [MutationController::class, 'addAsset'])->name('mutations.add-asset');
+    Route::delete('mutations/remove-asset', [MutationController::class, 'removeAsset'])->name('mutations.remove-asset');    
+    Route::post('mutations/bulk-add-asset', [MutationController::class, 'bulkAddAsset'])->name('mutations.bulk-add-asset');
+    Route::post('mutations/bulk-remove-asset', [MutationController::class, 'bulkRemoveAsset'])->name('mutations.bulk-remove-asset');
+    Route::resource('mutations', MutationController::class);
     Route::resource('settings', SettingController::class);
 
     Route::get('/log', LogController::class)->name('log');
