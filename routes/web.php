@@ -12,6 +12,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\LogActivityController;
 use App\Http\Controllers\LogController;
+use App\Http\Controllers\MutationController;
 use App\Http\Controllers\PersonInChargeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
@@ -55,6 +56,17 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::resource('warranties', WarrantyController::class);
     Route::post('assets/import', [AssetController::class, 'import'])->name('assets.import');
     Route::resource('assets', AssetController::class);
+    Route::post('mutations/add-asset', [MutationController::class, 'addAsset'])->name('mutations.add-asset');
+    Route::delete('mutations/remove-asset', [MutationController::class, 'removeAsset'])->name('mutations.remove-asset');    
+    Route::post('mutations/bulk-add-asset', [MutationController::class, 'bulkAddAsset'])->name('mutations.bulk-add-asset');
+    Route::post('mutations/bulk-remove-asset', [MutationController::class, 'bulkRemoveAsset'])->name('mutations.bulk-remove-asset');
+    Route::post('mutations/{mutation}/cancel', [MutationController::class, 'cancel'])->name('mutations.cancel'); 
+    Route::post('mutations/{mutation}/open', [MutationController::class, 'open'])->name('mutations.open');
+    Route::get('mutations/{mutation}/print', [MutationController::class, 'print'])->name('mutations.print');
+    Route::post('mutations/{mutation}/done', [MutationController::class, 'done'])->name('mutations.done');
+    Route::post('mutations/{mutation}/upload-document', [MutationController::class, 'uploadDocument'])->name('mutations.upload-document');
+    Route::delete('mutations/{mutation}/delete-document/{file_id}', [MutationController::class, 'deleteDocument'])->name('mutations.delete-document');
+    Route::resource('mutations', MutationController::class);
     Route::resource('settings', SettingController::class);
 
     Route::get('/log', LogController::class)->name('log');
