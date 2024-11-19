@@ -7,6 +7,7 @@ use App\Models\Location;
 use App\Models\Mutation;
 use App\Models\PersonInCharge;
 use App\Models\Project;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -123,6 +124,7 @@ class MutationController extends Controller
 
         return redirect()->route('dashboard.mutations.show', $mutation->id)->with('success', 'Mutasi berhasil diperbarui.');
     }
+    
 
     /**
      * Remove the specified resource from storage.
@@ -132,6 +134,30 @@ class MutationController extends Controller
         $mutation->delete();
 
         return redirect()->route('dashboard.mutations.index')->with('success', 'Mutasi berhasil dihapus.');
+    }
+
+    /**
+     * Done status mutation
+     */
+    public function done(Mutation $mutation)
+    {
+        $mutation->update([
+            'status' => 'done'
+        ]);
+
+        return redirect()->route('dashboard.mutations.show', $mutation->id)->with('success', 'Mutasi berhasil diselesaikan.');
+    }
+
+    /**
+     * Open status mutation
+     */
+    public function open(Mutation $mutation)
+    {
+        $mutation->update([
+            'status' => 'open'
+        ]);
+
+        return redirect()->route('dashboard.mutations.show', $mutation->id)->with('success', 'Mutasi berhasil dibuka.');
     }
 
     /**
@@ -147,15 +173,17 @@ class MutationController extends Controller
     }
 
     /**
-     * Open status mutation
+     * Print to PDF
      */
-    public function open(Mutation $mutation)
+    public function print(Mutation $mutation)
     {
-        $mutation->update([
-            'status' => 'open'
-        ]);
+        $data = [
+            'mutation' => $mutation,
+        ];
 
-        return redirect()->route('dashboard.mutations.show', $mutation->id)->with('success', 'Mutasi berhasil dibuka.');
+        $pdf = Pdf::loadView('pages.dashboard.mutation.print', $data)->setPaper('a4', 'landscape');
+
+        return $pdf->download('mutasi.pdf');
     }
 
     /**

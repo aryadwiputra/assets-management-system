@@ -13,7 +13,10 @@
                 <h3 class="card-title">
                     Detail Mutasi
                 </h3>
-                <a href="{{ route('dashboard.mutations.edit', $mutation) }}" class="btn btn-success ml-auto">
+                <a href="{{ route('dashboard.mutations.print', $mutation->id) }}" class="btn btn-primary ml-auto">
+                    <i class="fas fa-print"></i> Cetak
+                </a>
+                <a href="{{ route('dashboard.mutations.edit', $mutation) }}" class="btn btn-success ml-2">
                     <i class="fas fa-pencil-alt"></i>
                 </a>
                 {{-- If else status mutation open or close --}}
@@ -72,6 +75,15 @@
                         </tbody>
                     </table>
                 </div>
+                @if ($mutation->status != 'done')
+                    <div class="col-md-12">
+                        <form action="{{ route('dashboard.mutations.done', $mutation->id) }}" method="post"
+                            id="form-done-mutation">
+                            @csrf
+                            <button type="submit" class="btn btn-success" id="button-done-mutation">Selesai</button>
+                        </form>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
@@ -86,7 +98,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home"
-                        role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Detail</a>
+                        role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Detail Assets</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill"
@@ -366,6 +378,24 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $('#form-open-mutation').submit();
+                    }
+                })
+            })
+
+            // Handle done mutation
+            $('#button-done-mutation').on('click', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Apakah anda yakin?',
+                    text: "Data yang selesai tidak dapat dikembalikan!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Selesai!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#form-done-mutation').submit();
                     }
                 })
             })

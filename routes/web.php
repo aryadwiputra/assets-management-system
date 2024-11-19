@@ -62,6 +62,8 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::post('mutations/bulk-remove-asset', [MutationController::class, 'bulkRemoveAsset'])->name('mutations.bulk-remove-asset');
     Route::post('mutations/{mutation}/cancel', [MutationController::class, 'cancel'])->name('mutations.cancel'); 
     Route::post('mutations/{mutation}/open', [MutationController::class, 'open'])->name('mutations.open');
+    Route::get('mutations/{mutation}/print', [MutationController::class, 'print'])->name('mutations.print');
+    Route::post('mutations/{mutation}/done', [MutationController::class, 'done'])->name('mutations.done');
     Route::resource('mutations', MutationController::class);
     Route::resource('settings', SettingController::class);
 
