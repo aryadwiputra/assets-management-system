@@ -64,6 +64,8 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::post('mutations/{mutation}/open', [MutationController::class, 'open'])->name('mutations.open');
     Route::get('mutations/{mutation}/print', [MutationController::class, 'print'])->name('mutations.print');
     Route::post('mutations/{mutation}/done', [MutationController::class, 'done'])->name('mutations.done');
+    Route::post('mutations/{mutation}/upload-document', [MutationController::class, 'uploadDocument'])->name('mutations.upload-document');
+    Route::delete('mutations/{mutation}/delete-document/{file_id}', [MutationController::class, 'deleteDocument'])->name('mutations.delete-document');
     Route::resource('mutations', MutationController::class);
     Route::resource('settings', SettingController::class);
 

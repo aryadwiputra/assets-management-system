@@ -15,6 +15,11 @@ class Mutation extends Model
     {
         return $this->belongsToMany(Asset::class, 'asset_mutation');
     }
+    
+    public function files()
+    {
+        return $this->hasMany(MutationFile::class);
+    }
 
     public function pic()
     {

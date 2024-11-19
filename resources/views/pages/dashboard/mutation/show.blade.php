@@ -210,21 +210,88 @@
                 </div>
                 <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel"
                     aria-labelledby="custom-tabs-one-messages-tab">
-                    Morbi turpis dolor, vulputate vitae felis non, tincidunt congue mauris. Phasellus volutpat augue id mi
-                    placerat mollis. Vivamus faucibus eu massa eget condimentum. Fusce nec hendrerit sem, ac tristique
-                    nulla. Integer vestibulum orci odio. Cras nec augue ipsum. Suspendisse ut velit condimentum, mattis urna
-                    a, malesuada nunc. Curabitur eleifend facilisis velit finibus tristique. Nam vulputate, eros non luctus
-                    efficitur, ipsum odio volutpat massa, sit amet sollicitudin est libero sed ipsum. Nulla lacinia, ex
-                    vitae gravida fermentum, lectus ipsum gravida arcu, id fermentum metus arcu vel metus. Curabitur eget
-                    sem eu risus tincidunt eleifend ac ornare magna.
+
+                    <div class="mb-3">
+                        {{-- Button modal to upload file --}}
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-upload">
+                            <i class="fas fa-cloud-upload-alt"></i> Upload File
+                        </button>
+
+                        {{-- Modal --}}
+                        <div class="modal fade" id="modal-upload" tabindex="-1" role="dialog"
+                            aria-labelledby="modal-upload" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modal-upload-title">Upload File</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{{ route('dashboard.mutations.upload-document', $mutation->id) }}"
+                                            method="post" enctype="multipart/form-data">
+                                            @csrf
+                                            <div class="form-group">
+                                                <label for="file">File</label>
+                                                <input type="file" name="file" class="form-control"
+                                                    id="file">
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-primary">Upload</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama</th>
+                                <th>File</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($mutation->files as $document)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $document->file_name }}</td>
+                                    {{-- Show url path to download directy --}}
+                                    <td><a href="{{ Storage::url('asset/document/' . $document->file_name) }}"
+                                            target="_blank">{{ $document->file_name }}</a></td>
+                                    <td>
+                                        <form
+                                            action="{{ route('dashboard.mutations.delete-document', [$mutation->id, $document->id]) }}"
+                                            method="post" class="d-inline" id="form-delete-document">
+                                            @csrf
+                                            @method('delete')
+                                            <button type="submit" class="btn btn-danger btn-sm button-delete-document">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
                 <div class="tab-pane fade" id="custom-tabs-one-settings" role="tabpanel"
                     aria-labelledby="custom-tabs-one-settings-tab">
-                    Pellentesque vestibulum commodo nibh nec blandit. Maecenas neque magna, iaculis tempus turpis ac, ornare
-                    sodales tellus. Mauris eget blandit dolor. Quisque tincidunt venenatis vulputate. Morbi euismod molestie
-                    tristique. Vestibulum consectetur dolor a vestibulum pharetra. Donec interdum placerat urna nec
-                    pharetra. Etiam eget dapibus orci, eget aliquet urna. Nunc at consequat diam. Nunc et felis ut nisl
-                    commodo dignissim. In hac habitasse platea dictumst. Praesent imperdiet accumsan ex sit amet facilisis.
+                    Pellentesque vestibulum commodo nibh nec blandit. Maecenas neque magna, iaculis
+                    tempus turpis ac, ornare
+                    sodales tellus. Mauris eget blandit dolor. Quisque tincidunt venenatis
+                    vulputate. Morbi euismod molestie
+                    tristique. Vestibulum consectetur dolor a vestibulum pharetra. Donec interdum
+                    placerat urna nec
+                    pharetra. Etiam eget dapibus orci, eget aliquet urna. Nunc at consequat diam.
+                    Nunc et felis ut nisl
+                    commodo dignissim. In hac habitasse platea dictumst. Praesent imperdiet accumsan
+                    ex sit amet facilisis.
                 </div>
             </div>
         </div>
@@ -396,6 +463,24 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $('#form-done-mutation').submit();
+                    }
+                })
+            })
+
+            // Handle delete document
+            $('.button-delete-document').on('click', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Apakah anda yakin?',
+                    text: "Data yang dihapus tidak dapat dikembalikan!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Hapus!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#form-delete-document').submit();
                     }
                 })
             })

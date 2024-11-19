@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Asset;
 use App\Models\Location;
 use App\Models\Mutation;
+use App\Models\MutationFile;
 use App\Models\PersonInCharge;
 use App\Models\Project;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class MutationController extends Controller
 {
@@ -282,5 +284,43 @@ class MutationController extends Controller
             $asset->mutations()->detach($mutation_id);
         }
         return redirect()->route('dashboard.mutations.show', $mutation_id)->with('success', 'Asset berhasil dihapus dari mutasi.');
+    }
+
+    /**
+     * Upload file document
+     */
+    public function uploadDocument($mutation_id, Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
+        ]);
+        
+        $file = $request->file('file');
+
+        $filename = time() . '.' . $file->getClientOriginalExtension();
+
+        $file->storeAs('asset/document', $filename, 'public');
+
+        MutationFile::create([
+            'mutation_id' => $mutation_id,
+            'file_name' => $filename,
+        ]);
+
+        return redirect()->route('dashboard.mutations.show', $mutation_id)->with('success', 'File berhasil diunggah.');
+    }
+
+    /**
+     * Delete file document
+     */
+    public function deleteDocument($mutation_id, $file_id)
+    {
+        $file = MutationFile::find($file_id);
+
+        // Remove from storage
+        Storage::delete('public/asset/document/' . $file->file_name);
+
+        $file->delete();
+
+        return redirect()->route('dashboard.mutations.show', $mutation_id)->with('success', 'File berhasil dihapus.');
     }
 }
