@@ -18,6 +18,7 @@ use App\Models\Warranty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class AssetController extends Controller
 {
@@ -136,6 +137,13 @@ class AssetController extends Controller
             'status_information' => $request->status_information,
             'thumbnail' => $filename,
         ]);
+
+        // Install imagick
+
+        // $qr = QrCode::format('png')->generate($slug);
+        // $qrImageName = $slug . ".png";
+
+        // Storage::put('asset/qr/' . $qrImageName, $qr, 'public');
 
         return redirect()->route('dashboard.assets.index')->with('success', 'Asset berhasil dibuat');
     }
