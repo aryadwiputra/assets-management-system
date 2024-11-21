@@ -89,11 +89,15 @@
                         <tr>
                             <td><input type="checkbox" class="asset-checkbox" value="{{ $data->id }}"></td>
                             <td>{{ $loop->iteration }}</td>
-                            <td></td>
+                            <td>
+                                {{-- Show QR --}}
+                                <img src="{{ asset('storage/asset/qr/' . $data->slug . '.png') }}" alt="qr"
+                                    class="img-fluid" width="100">
+                            </td>
                             <td>
                                 @if ($data->thumbnail)
-                                    <img src="{{ Storage::url($data->thumbnail) }}" alt="thumbnail"
-                                        class="img-fluid" width="150">
+                                    <img src="{{ Storage::url($data->thumbnail) }}" alt="thumbnail" class="img-fluid"
+                                        width="150">
                                 @endif
                             </td>
                             <td>{{ $data->location->name }}</td>
