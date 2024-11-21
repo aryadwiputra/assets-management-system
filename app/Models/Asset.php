@@ -69,4 +69,9 @@ class Asset extends Model
     {
         return $this->belongsToMany(Mutation::class, 'asset_mutation');
     }
+
+    public function disposals()
+    {
+        return $this->belongsToMany(Disposal::class, 'asset_disposal');
+    }
 }

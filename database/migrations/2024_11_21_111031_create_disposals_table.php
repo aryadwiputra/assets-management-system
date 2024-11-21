@@ -19,6 +19,8 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedBigInteger('pic_id');
             $table->foreign('pic_id')->references('id')->on('person_in_charges')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('status_id');
+            $table->foreign('status_id')->references('id')->on('statuses')->onDelete('cascade')->onUpdate('cascade');
             $table->string('name');
             $table->string('status');
             $table->text('description')->nullable();
