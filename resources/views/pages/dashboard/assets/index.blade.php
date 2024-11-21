@@ -74,6 +74,7 @@
                     <tr>
                         <th><input type="checkbox" id="select-all"></th>
                         <th>No</th>
+                        <th>QR</th>
                         <th>Thumbnail</th>
                         <th>Lokasi</th>
                         <th>Kategori</th>
@@ -89,9 +90,14 @@
                             <td><input type="checkbox" class="asset-checkbox" value="{{ $data->id }}"></td>
                             <td>{{ $loop->iteration }}</td>
                             <td>
+                                {{-- Show QR --}}
+                                <img src="{{ asset('storage/asset/qr/' . $data->slug . '.png') }}" alt="qr"
+                                    class="img-fluid" width="100">
+                            </td>
+                            <td>
                                 @if ($data->thumbnail)
-                                    <img src="{{ asset('storage/asset/thumbnails/' . $data->thumbnail) }}" alt="thumbnail"
-                                        class="img-fluid" width="150">
+                                    <img src="{{ Storage::url($data->thumbnail) }}" alt="thumbnail" class="img-fluid"
+                                        width="150">
                                 @endif
                             </td>
                             <td>{{ $data->location->name }}</td>

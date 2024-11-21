@@ -15,9 +15,15 @@ use App\Models\Project;
 use App\Models\Status;
 use App\Models\UnitOfMeasurement;
 use App\Models\Warranty;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Str;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class AssetController extends Controller
 {
@@ -84,12 +90,12 @@ class AssetController extends Controller
         ]);
 
         // Generate a unique slug
-        $slug = $request->name . '-' .  \Illuminate\Support\Str::random(6);
+        $slug = Str::slug($request->name) . '-' .  \Illuminate\Support\Str::random(6);
 
         // Check if the slug already exists
         while (Asset::where('slug', $slug)->exists()) {
             // Generate a new random slug if it already exists
-            $slug = $request->name . '-' . \Illuminate\Support\Str::random(6);
+            $slug = Str::slug($request->name) . '-' . \Illuminate\Support\Str::random(6);
         }
 
         $classes = Classes::all('id', 'from', 'to');
@@ -136,6 +142,12 @@ class AssetController extends Controller
             'status_information' => $request->status_information,
             'thumbnail' => $filename,
         ]);
+
+        // QR Code
+        $qr = QrCode::format('png')->generate(route('assets.detail', $slug));
+        $qrImageName = $slug . ".png";
+
+        Storage::disk('public')->put('asset/qr/' . $qrImageName, $qr);
 
         return redirect()->route('dashboard.assets.index')->with('success', 'Asset berhasil dibuat');
     }
@@ -204,12 +216,12 @@ class AssetController extends Controller
         ]);
 
         // Generate a unique slug
-        $slug = $request->name . '-' .  \Illuminate\Support\Str::random(6);
+        $slug = Str::slug($request->name) . '-' .  \Illuminate\Support\Str::random(6);
 
         // Check if the slug already exists
         while (Asset::where('slug', $slug)->exists()) {
             // Generate a new random slug if it already exists
-            $slug = $request->name . '-' . \Illuminate\Support\Str::random(6);
+            $slug = Str::slug($request->name) . '-' . \Illuminate\Support\Str::random(6);
         }
 
         $classes = Classes::all('id', 'from', 'to');
@@ -240,6 +252,9 @@ class AssetController extends Controller
 
         $prefix = Company::find($request->company_id)->prefix_asset;
 
+        // Delete QR Code
+        Storage::disk('public')->delete('asset/qr/' . $asset->slug . ".png");
+
         $asset->update([
             'category_id' => $request->category_id,
             'company_id' => $request->company_id,
@@ -265,7 +280,14 @@ class AssetController extends Controller
             'thumbnail' => $asset->thumbnail
         ]);
 
-        return redirect()->route('dashboard.assets.index')->with('success', 'Asset berhasil diubah');
+        // Insert New QR Code
+        $qr = QrCode::format('png')->generate(route('assets.detail', $slug));
+
+        $qrImageName = $slug . ".png";
+
+        Storage::disk('public')->put('asset/qr/' . $qrImageName, $qr);
+
+        return redirect()->route('dashboard.assets.index')->with('success', 'Asset berhasil diupdate.');
     }
 
     /**
@@ -274,7 +296,9 @@ class AssetController extends Controller
     public function destroy(Asset $asset)
     {
         // Delete File
-        Storage::delete('public/' . $asset->thumbnail);
+        Storage::delete('public/' . $asset->thumbnail);        
+        // Delete QR Code
+        Storage::disk('public')->delete('asset/qr/' . $asset->slug . ".png");
         $asset->delete();
 
         return redirect()->route('dashboard.assets.index')->with('success', 'Asset berhasil dihapus.');
@@ -285,49 +309,128 @@ class AssetController extends Controller
      */
     public function import(Request $request)
     {
+        // Validate the file
         $request->validate([
             'file' => 'required|mimes:xlsx,xls|max:2048',
         ]);
 
         $file = $request->file('file');
         try {
-            Excel::import(new AssetImport, $file);
+            // Load the Excel file
+            $spreadsheet = IOFactory::load($file);
+            $worksheet = $spreadsheet->getActiveSheet();
+            $worksheetArray = $worksheet->toArray();
+            array_shift($worksheetArray);
+
+            foreach ($worksheetArray as $key => $value) {
+                // Skip empty rows
+                if (empty($value[0])) {
+                    continue;
+                }
+                $drawing = $worksheet->getDrawingCollection()[$key];
+
+                $thumbnailPath = null;
+                $thumbnailExtension = null;
+
+                if ($drawing) {
+                    $zipReader = fopen($drawing->getPath(), 'r');
+                    $imageContents = '';
+                    while (!feof($zipReader)) {
+                        $imageContents .= fread($zipReader, 1024);
+                    }
+                    fclose($zipReader);
+                    $thumbnailExtension = $drawing->getExtension();
+
+                    // Generate a unique filename
+                    $filename = 'thumbnail_' . time() . '.' . $thumbnailExtension;
+                    $thumbnailPath = "asset/thumbnails/{$filename}";
+
+                    // Save the image to the server
+                    Storage::disk('public')->put($thumbnailPath, $imageContents);
+
+                    // Log the result of the save operation
+                    if (Storage::disk('public')->exists($thumbnailPath)) {
+                        Log::info("Thumbnail saved successfully: " . $thumbnailPath);
+                    } else {
+                        Log::error("Failed to save thumbnail: " . $thumbnailPath);
+                    }
+                }
+
+                 // Generate a unique slug
+                $slug = Str::slug(isset($value[12]) ? $value[12] : null) . '-' .  \Illuminate\Support\Str::random(6);
+
+                // Check if the slug already exists
+                while (Asset::where('slug', $slug)->exists()) {
+                    // Generate a new random slug if it already exists
+                    $slug = Str::slug(isset($value[12]) ? $value[12] : null) . '-' . \Illuminate\Support\Str::random(6);
+                }
+
+                // Ensure all required keys are set
+                $data = [
+                    'company_id' => isset($value[0]) ? $value[0] : null,
+                    'category_id' => isset($value[1]) ? $value[1] : null,
+                    'class_id' => isset($value[2]) ? $value[2] : null,
+                    'department_id' => isset($value[3]) ? $value[3] : null,
+                    'employee_id' => isset($value[4]) ? $value[4] : null,
+                    'location_id' => isset($value[5]) ? $value[5] : null,
+                    'project_id' => isset($value[6]) ? $value[6] : null,
+                    'status_id' => isset($value[7]) ? $value[7] : null,
+                    'pic_id' => isset($value[8]) ? $value[8] : null,
+                    'unit_of_measurement_id' => isset($value[9]) ? $value[9] : null,
+                    'warranty_id' => isset($value[10]) ? $value[10] : null,
+                    'number' => isset($value[11]) ? $value[11] : null,
+                    'name' => isset($value[12]) ? $value[12] : null,
+                    'serial_number' => isset($value[13]) ? $value[13] : null,
+                    'slug' => $slug,
+                    'price' => isset($value[15]) ? $value[15] : null,
+                    'purchase_date' => isset($value[16]) ? $this->convertExcelDate($value[16]) : null,
+                    'origin_of_purchase' => isset($value[17]) ? $value[17] : null,
+                    'purchase_number' => isset($value[18]) ? $value[18] : null,
+                    'description' => isset($value[19]) ? $value[19] : null,
+                    'status_information' => isset($value[20]) ? $value[20] : null,
+                    'thumbnail' => $thumbnailPath,
+                    'thumbnail_extension' => $thumbnailExtension,
+                    'thumbnail_path' => $thumbnailPath,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ];
+
+                // Insert into database
+                DB::table('assets')->insert($data);
+
+                // QR Code
+                $qr = QrCode::format('png')->generate(route('assets.detail', $slug));
+                $qrImageName = $slug . ".png";
+
+                Storage::disk('public')->put('asset/qr/' . $qrImageName, $qr);
+            }
+
             return redirect()->back()->with('success', 'Data aset berhasil diimpor.');
         } catch (\Exception $e) {
+            Log::error("Error importing assets: " . $e->getMessage());
             return redirect()->back()->with('error', 'Terjadi kesalahan saat mengimpor data aset.');
         }
-        // $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($request->file('file'));
+    }
 
-        // $worksheet = $spreadsheet->getActiveSheet();
-        // $worksheetArray = $worksheet->toArray();
-        // array_shift($worksheetArray);
-
-        // echo '<table style="width:100%"  border="1">';
-        // echo '<tr align="center">';
-        // echo '<td>Sno</td>';
-        // echo '<td>Name</td>';
-        // echo '<td>Image</td>';
-        // echo '</tr>';
-
-        // foreach ($worksheetArray as $key => $value) {
-
-        //     $worksheet = $spreadsheet->getActiveSheet();
-        //     $drawing = $worksheet->getDrawingCollection()[$key];
-
-        //     $zipReader = fopen($drawing->getPath(), 'r');
-        //     $imageContents = '';
-        //     while (!feof($zipReader)) {
-        //         $imageContents .= fread($zipReader, 1024);
-        //     }
-        //     fclose($zipReader);
-        //     $extension = $drawing->getExtension();
-
-        //     echo '<tr align="center">';
-        //     echo '<td>' . $value[0] . '</td>';
-        //     echo '<td>' . $value[1] . '</td>';
-        //     echo '<td><img  height="150px" width="150px"   src="data:image/jpeg;base64,' . base64_encode($imageContents) . '"/></td>';
-        //     echo '</tr>';
-
-        // }
+    private function convertExcelDate($excelDate)
+    {
+        if (is_numeric($excelDate)) {
+            // Excel date starts from 1900-01-01, but Excel has a bug where it treats 1900 as a leap year
+            // So, we need to subtract 2 days to correct for this
+            $startDate = Carbon::create(1900, 1, 1);
+            return $startDate->addDays($excelDate - 2)->format('Y-m-d');
+        } elseif (is_string($excelDate)) {
+            // Try to parse the date string
+            $date = Carbon::createFromFormat('m/d/Y', $excelDate);
+            if ($date) {
+                return $date->format('Y-m-d');
+            }
+            // Fallback to default format
+            $date = Carbon::createFromFormat('Y-m-d', $excelDate);
+            if ($date) {
+                return $date->format('Y-m-d');
+            }
+        }
+        return null;
     }
 }

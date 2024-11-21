@@ -12,6 +12,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\LogActivityController;
 use App\Http\Controllers\LogController;
+use App\Http\Controllers\MainController;
 use App\Http\Controllers\MutationController;
 use App\Http\Controllers\PersonInChargeController;
 use App\Http\Controllers\ProfileController;
@@ -25,9 +26,10 @@ use App\Http\Controllers\WarrantyController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+Route::redirect('/', '/dashboard');
+
+Route::get('/assets/{slug}', [MainController::class, 'detail'])->name('assets.detail');
 
 Route::get('/dashboard', function () {
 
