@@ -92,7 +92,7 @@
                             <td></td>
                             <td>
                                 @if ($data->thumbnail)
-                                    <img src="{{ asset('storage/asset/thumbnails/' . $data->thumbnail) }}" alt="thumbnail"
+                                    <img src="{{ Storage::url($data->thumbnail) }}" alt="thumbnail"
                                         class="img-fluid" width="150">
                                 @endif
                             </td>

@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/dashboard');
 
-Route::get('/assets/{asset_id}', [MainController::class, 'detail'])->name('assets.detail');
+Route::get('/assets/{slug}', [MainController::class, 'detail'])->name('assets.detail');
 
 Route::get('/dashboard', function () {
 

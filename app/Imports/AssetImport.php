@@ -13,13 +13,11 @@ class AssetImport implements ToModel, WithHeadingRow
 {
     public function model(array $row)
     {
-        // 
-        $thumbnail = $row['thumbnail'];
-
+        // Handle thumbnail
         $thumbnailPath = null;
-        if ($thumbnail) {
-            $fileContents = base64_decode($thumbnail); // Jika base64, decode ke binary
-            $fileName = 'thumbnail_' . time() . '.jpg';
+        if (isset($row['thumbnail']) && !empty($row['thumbnail'])) {
+            $fileContents = base64_decode($row['thumbnail']); // Jika base64, decode ke binary
+            $fileName = 'thumbnail_' . time() . '.' . pathinfo($row['thumbnail_extension'], PATHINFO_EXTENSION);
             $thumbnailPath = "asset/thumbnails/{$fileName}";
             Storage::put($thumbnailPath, $fileContents);
         }
@@ -46,7 +44,9 @@ class AssetImport implements ToModel, WithHeadingRow
             'purchase_number' => $row['purchase_number'],
             'description' => $row['description'],
             'status_information' => $row['status_information'],
-            'thumbnail' => $thumbnailPath
+            'thumbnail' => $thumbnailPath,
+            'thumbnail_extension' => isset($row['thumbnail_extension']) ? $row['thumbnail_extension'] : null,
+            'thumbnail_path' => $thumbnailPath
         ]);
     }
 
