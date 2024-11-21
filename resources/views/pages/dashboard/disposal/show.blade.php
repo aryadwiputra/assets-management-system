@@ -71,7 +71,7 @@
                         </tbody>
                     </table>
                 </div>
-                @if ($disposal->status != 'done')
+                @if ($disposal->status == 'open')
                     <div class="col-md-12">
                         <form action="{{ route('dashboard.disposals.done', $disposal->id) }}" method="post"
                             id="form-done-mutation">

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Data Mutasi</title>
+    <title>Data Disposal</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -50,7 +50,7 @@
 </head>
 
 <body>
-    <h1>Data Mutasi</h1>
+    <h1>Data Disposal</h1>
     <p>{{ date('Y-m-d H:i') }}</p>
     <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Debitis suscipit explicabo corrupti quia neque beatae
         expedita inventore sint officiis! Sint.</p>
@@ -59,31 +59,27 @@
         <tbody>
             <tr>
                 <th>Nama Dokumen</th>
-                <td>{{ $mutation->name }}</td>
-            </tr>
-            <tr>
-                <th>Lokasi Tujuan</th>
-                <td>{{ $mutation->location->name }}</td>
+                <td>{{ $disposal->name }}</td>
             </tr>
             <tr>
                 <th>Proyek</th>
-                <td>{{ $mutation->project->name }}</td>
+                <td>{{ $disposal->project->name }}</td>
             </tr>
             <tr>
                 <th>Penanggung Jawab</th>
-                <td>{{ $mutation->pic->name }}</td>
+                <td>{{ $disposal->pic->name }}</td>
             </tr>
             <tr>
                 <th>Deskripsi</th>
-                <td>{{ $mutation->description }}</td>
+                <td>{{ $disposal->description }}</td>
             </tr>
             <tr>
                 <th>Komentar</th>
-                <td>{{ $mutation->comment }}</td>
+                <td>{{ $disposal->comment }}</td>
             </tr>
             <tr>
                 <th>Status</th>
-                <td>{{ strtoupper($mutation->status) }}</td>
+                <td>{{ strtoupper($disposal->status) }}</td>
             </tr>
         </tbody>
     </table>
@@ -101,7 +97,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($mutation->assets as $asset)
+            @foreach ($disposal->assets as $asset)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $asset->name }}</td>

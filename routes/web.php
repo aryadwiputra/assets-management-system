@@ -78,12 +78,12 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::delete('disposals/remove-asset', [DisposalController::class, 'removeAsset'])->name('disposals.remove-asset');    
     Route::post('disposals/bulk-add-asset', [DisposalController::class, 'bulkAddAsset'])->name('disposals.bulk-add-asset');
     Route::post('disposals/bulk-remove-asset', [DisposalController::class, 'bulkRemoveAsset'])->name('disposals.bulk-remove-asset');
-    Route::post('disposals/{mutation}/cancel', [DisposalController::class, 'cancel'])->name('disposals.cancel'); 
-    Route::post('disposals/{mutation}/open', [DisposalController::class, 'open'])->name('disposals.open');
-    Route::get('disposals/{mutation}/print', [DisposalController::class, 'print'])->name('disposals.print');
-    Route::post('disposals/{mutation}/done', [DisposalController::class, 'done'])->name('disposals.done');
-    Route::post('disposals/{mutation}/upload-document', [DisposalController::class, 'uploadDocument'])->name('disposals.upload-document');
-    Route::delete('disposals/{mutation}/delete-document/{file_id}', [DisposalController::class, 'deleteDocument'])->name('disposals.delete-document');
+    Route::post('disposals/{disposal}/cancel', [DisposalController::class, 'cancel'])->name('disposals.cancel'); 
+    Route::post('disposals/{disposal}/open', [DisposalController::class, 'open'])->name('disposals.open');
+    Route::get('disposals/{disposal}/print', [DisposalController::class, 'print'])->name('disposals.print');
+    Route::post('disposals/{disposal}/done', [DisposalController::class, 'done'])->name('disposals.done');
+    Route::post('disposals/{disposal}/upload-document', [DisposalController::class, 'uploadDocument'])->name('disposals.upload-document');
+    Route::delete('disposals/{disposal}/delete-document/{file_id}', [DisposalController::class, 'deleteDocument'])->name('disposals.delete-document');
     Route::resource('disposals', DisposalController::class);
     Route::resource('settings', SettingController::class);
 

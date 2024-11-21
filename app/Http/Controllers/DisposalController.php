@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Asset;
 use App\Models\Location;
 use App\Models\Disposal;
-use App\Models\MutationFile;
+use App\Models\disposalFile;
 use App\Models\PersonInCharge;
 use App\Models\Project;
 use App\Models\Status;
@@ -94,10 +94,10 @@ class DisposalController extends Controller
     {
         
         $projects = Project::all();
-        $locations = Location::all();
+        $statuses = Status::all();
         $person_in_charges = PersonInCharge::all();
 
-        return view('pages.dashboard.disposal.edit', compact('mutation', 'projects', 'locations', 'person_in_charges'));
+        return view('pages.dashboard.disposal.edit', compact('disposal', 'projects', 'statuses', 'person_in_charges'));
     }
 
     /**
@@ -107,14 +107,14 @@ class DisposalController extends Controller
     {
         $request->validate([
             'project_id' => 'required',
-            'to_location' => 'required',
+            'status_id' => 'required',
             'name' => 'required',
             'pic_id' => 'required',
         ]);
 
         $disposal->update([
             'project_id' => $request->project_id,
-            'to_location' => $request->to_location,
+            'status_id' => $request->status_id,
             'person_in_charge_id' => $request->person_in_charge_id,
             'pic_id' => $request->pic_id,
             'user_id' => Auth::user()->id,
@@ -139,7 +139,7 @@ class DisposalController extends Controller
     }
 
     /**
-     * Done status mutation
+     * Done status disposal
      */
     public function done(Disposal $disposal)
     {
@@ -151,7 +151,7 @@ class DisposalController extends Controller
     }
 
     /**
-     * Open status mutation
+     * Open status disposal
      */
     public function open(Disposal $disposal)
     {
@@ -163,7 +163,7 @@ class DisposalController extends Controller
     }
 
     /**
-     * Cancel status mutation
+     * Cancel status disposal
      */
     public function cancel(Disposal $disposal)
     {
@@ -180,80 +180,80 @@ class DisposalController extends Controller
     public function print(Disposal $disposal)
     {
         $data = [
-            'mutation' => $disposal,
+            'disposal' => $disposal->with(['project', 'pic', 'status', 'assets'])->first(),
         ];
 
         $pdf = Pdf::loadView('pages.dashboard.disposal.print', $data)->setPaper('a4', 'landscape');
 
-        return $pdf->download('mutasi.pdf');
+        return $pdf->download('disposal' . date('Y-m-d -H-i-s') . '.pdf');
     }
 
     /**
-     * Add an asset to the mutation
+     * Add an asset to the disposal
      */
     public function addAsset(Request $request)
     {
         $request->validate([
             'asset_id' => 'required',
-            'mutation_id' => 'required'
+            'disposal_id' => 'required'
         ]);
 
         $asset = Asset::find($request->asset_id);
 
-        $disposal_id = $request->mutation_id;
+        $disposal_id = $request->disposal_id;
 
         // Pengecekan apakah sudah ada di database atau belum
-        $cek = DB::table('asset_mutation')
+        $cek = DB::table('asset_disposal')
             ->where('asset_id', $request->asset_id)
-            ->where('mutation_id', $request->mutation_id)
+            ->where('disposal_id', $request->disposal_id)
             ->exists();
 
         if ($cek) {
             return redirect()->route('dashboard.disposals.show', $disposal_id)->with('error', 'Asset sudah ada di mutasi.');
         }
 
-        $asset->mutations()->attach($disposal_id); 
+        $asset->disposals()->attach($disposal_id); 
 
         return redirect()->route('dashboard.disposals.show', $disposal_id)->with('success', 'Asset berhasil ditambahkan ke mutasi.');
     }
 
     /**
-     * Remove an asset from the mutation
+     * Remove an asset from the disposal
      */
     public function removeAsset(Request $request)
     {
         $request->validate([
             'asset_id' => 'required',
-            'mutation_id' => 'required'
+            'disposal_id' => 'required'
         ]);
 
         $asset = Asset::find($request->asset_id);
 
-        $disposal_id = $request->mutation_id;
+        $disposal_id = $request->disposal_id;
 
-        $asset->mutations()->detach($disposal_id);
+        $asset->disposals()->detach($disposal_id);
 
         return redirect()->route('dashboard.disposals.show', $disposal_id)->with('success', 'Asset berhasil dihapus dari mutasi.');
     }
 
     /**
-     * Bulk add assets to the mutation
+     * Bulk add assets to the disposal
      */
     public function bulkAddAsset(Request $request)
     {
         $request->validate([
             'asset_ids' => 'required',
-            'mutation_id' => 'required'
+            'disposal_id' => 'required'
         ]);
 
         $asset_ids = $request->asset_ids;
-        $disposal_id = $request->mutation_id;
+        $disposal_id = $request->disposal_id;
 
         foreach ($asset_ids as $asset_id) {
 
-            $cek = DB::table('asset_mutation')
+            $cek = DB::table('asset_disposal')
             ->where('asset_id', $asset_id)
-            ->where('mutation_id', $disposal_id)
+            ->where('disposal_id', $disposal_id)
             ->exists();
 
             if ($cek) {
@@ -261,27 +261,27 @@ class DisposalController extends Controller
             }
 
             $asset = Asset::find($asset_id);
-            $asset->mutations()->attach($disposal_id);
+            $asset->disposals()->attach($disposal_id);
         }
         return redirect()->route('dashboard.disposals.show', $disposal_id)->with('success', 'Asset berhasil ditambahkan ke mutasi.');
     }
 
     /**
-     * Bulk remove assets from the mutation
+     * Bulk remove assets from the disposal
      */
     public function bulkRemoveAsset(Request $request)
     {
         $request->validate([
             'asset_ids' => 'required',
-            'mutation_id' => 'required'
+            'disposal_id' => 'required'
         ]);
 
         $asset_ids = $request->asset_ids;
-        $disposal_id = $request->mutation_id;
+        $disposal_id = $request->disposal_id;
 
         foreach ($asset_ids as $asset_id) {
             $asset = Asset::find($asset_id);
-            $asset->mutations()->detach($disposal_id);
+            $asset->disposals()->detach($disposal_id);
         }
         return redirect()->route('dashboard.disposals.show', $disposal_id)->with('success', 'Asset berhasil dihapus dari mutasi.');
     }
@@ -299,10 +299,10 @@ class DisposalController extends Controller
 
         $filename = time() . '.' . $file->getClientOriginalExtension();
 
-        $file->storeAs('asset/document', $filename, 'public');
+        $file->storeAs('asset/disposal', $filename, 'public');
 
-        MutationFile::create([
-            'mutation_id' => $disposal_id,
+        disposalFile::create([
+            'disposal_id' => $disposal_id,
             'file_name' => $filename,
         ]);
 
@@ -314,10 +314,10 @@ class DisposalController extends Controller
      */
     public function deleteDocument($disposal_id, $file_id)
     {
-        $file = MutationFile::find($file_id);
+        $file = disposalFile::find($file_id);
 
         // Remove from storage
-        Storage::delete('public/asset/document/' . $file->file_name);
+        Storage::delete('public/asset/disposal/' . $file->file_name);
 
         $file->delete();
 
