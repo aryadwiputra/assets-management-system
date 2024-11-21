@@ -11,5 +11,4 @@ class DisposalFile extends Model
 
     protected $guarded = ['id'];
 
-    protected $table = 'disposal_file';
 }
