@@ -169,6 +169,12 @@
                         <p>
                             Mutasi
                         </p>
+                    </a><a href="{{ route('dashboard.disposals.index') }}"
+                        class="nav-link {{ request()->routeIs('dashboard.disposals.*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-arrow-circle-left"></i>
+                        <p>
+                            Disposal
+                        </p>
                     </a>
                 </li>
                 <li class="nav-header">SYSTEMS</li>

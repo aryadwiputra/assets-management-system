@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\DisposalController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\LogActivityController;
@@ -58,6 +59,8 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::resource('warranties', WarrantyController::class);
     Route::post('assets/import', [AssetController::class, 'import'])->name('assets.import');
     Route::resource('assets', AssetController::class);
+
+    // Mutations
     Route::post('mutations/add-asset', [MutationController::class, 'addAsset'])->name('mutations.add-asset');
     Route::delete('mutations/remove-asset', [MutationController::class, 'removeAsset'])->name('mutations.remove-asset');    
     Route::post('mutations/bulk-add-asset', [MutationController::class, 'bulkAddAsset'])->name('mutations.bulk-add-asset');
@@ -69,6 +72,19 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::post('mutations/{mutation}/upload-document', [MutationController::class, 'uploadDocument'])->name('mutations.upload-document');
     Route::delete('mutations/{mutation}/delete-document/{file_id}', [MutationController::class, 'deleteDocument'])->name('mutations.delete-document');
     Route::resource('mutations', MutationController::class);
+
+    // Disposals
+    Route::post('disposals/add-asset', [DisposalController::class, 'addAsset'])->name('disposals.add-asset');
+    Route::delete('disposals/remove-asset', [DisposalController::class, 'removeAsset'])->name('disposals.remove-asset');    
+    Route::post('disposals/bulk-add-asset', [DisposalController::class, 'bulkAddAsset'])->name('disposals.bulk-add-asset');
+    Route::post('disposals/bulk-remove-asset', [DisposalController::class, 'bulkRemoveAsset'])->name('disposals.bulk-remove-asset');
+    Route::post('disposals/{mutation}/cancel', [DisposalController::class, 'cancel'])->name('disposals.cancel'); 
+    Route::post('disposals/{mutation}/open', [DisposalController::class, 'open'])->name('disposals.open');
+    Route::get('disposals/{mutation}/print', [DisposalController::class, 'print'])->name('disposals.print');
+    Route::post('disposals/{mutation}/done', [DisposalController::class, 'done'])->name('disposals.done');
+    Route::post('disposals/{mutation}/upload-document', [DisposalController::class, 'uploadDocument'])->name('disposals.upload-document');
+    Route::delete('disposals/{mutation}/delete-document/{file_id}', [DisposalController::class, 'deleteDocument'])->name('disposals.delete-document');
+    Route::resource('disposals', DisposalController::class);
     Route::resource('settings', SettingController::class);
 
     Route::get('/log', LogController::class)->name('log');
