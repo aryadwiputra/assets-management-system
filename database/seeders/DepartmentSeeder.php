@@ -15,10 +15,8 @@ class DepartmentSeeder extends Seeder
     {
         Department::insert([[
             'name' => 'IT',
-            'description'=> 'Departement yang berfokus pada IT',
         ], [
             'name'=> 'Marketing',
-            'description'=> 'Departement yang berfokus pada Marketing',
         ]]);
     }
 }

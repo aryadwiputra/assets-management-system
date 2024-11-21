@@ -15,4 +15,14 @@ class Location extends Model
     {
         return $this->belongsTo(Project::class);
     }
+
+    public function asset()
+    {
+        return $this->hasMany(Asset::class);
+    }
+
+    public function mutations()
+    {
+        return $this->hasMany(Mutation::class);
+    }
 }

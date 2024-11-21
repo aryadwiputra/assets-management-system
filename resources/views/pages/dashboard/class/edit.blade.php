@@ -30,6 +30,20 @@
                             @enderror
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="from">Dari</label>
+                            <input type="number" name="from" class="form-control" placeholder="Masukkan Harga Dari"
+                                value="{{ $asset->from }}" id="">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="to">Sampai</label>
+                            <input type="number" name="to" class="form-control" placeholder="Masukkan Harga Sampai"
+                                value="{{ $asset->to }}" id="">
+                        </div>
+                    </div>
                     <div class="col-md-12">
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary">Tambah Data</button>

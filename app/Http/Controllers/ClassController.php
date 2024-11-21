@@ -33,11 +33,15 @@ class ClassController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
+            'from' => 'required|number',
+            'to' => 'required|number',
         ]);
 
         Classes::create([
             'name' => $request->name,
             'description' => $request->description,
+            'from' => $request->from,
+            'to'=> $request->to
         ]);
 
         return redirect()->route('dashboard.class.index')->with('success', 'Asset Class berhasil dibuat.');
@@ -69,11 +73,15 @@ class ClassController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
+            'from' => 'required|number',
+            'to' => 'required|number',
         ]);
 
         Classes::find($id)->update([
             'name' => $request->name,
             'description' => $request->description,
+            'from' => $request->from,
+            'to'=> $request->to
         ]);
 
         return redirect()->route('dashboard.class.index')->with('success', 'Asset Class berhasil diperbarui.');

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreign('class_id')->references('id')->on('classes')->onDelete('cascade');
             $table->unsignedBigInteger('department_id');
             $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
-            $table->unsignedBigInteger('employee_id');
+            $table->unsignedBigInteger('employee_id')->nullable();
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
             $table->unsignedBigInteger('location_id')->nullable();
             $table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');
@@ -32,11 +32,11 @@ return new class extends Migration
             $table->foreign('pic_id')->references('id')->on('person_in_charges')->onDelete('cascade');
             $table->unsignedBigInteger('unit_of_measurement_id');
             $table->foreign('unit_of_measurement_id')->references('id')->on('unit_of_measurements')->onDelete('cascade');
-            $table->unsignedBigInteger('warranty_id');
+            $table->unsignedBigInteger('warranty_id')->nullable();
             $table->foreign('warranty_id')->references('id')->on('warranties')->onDelete('cascade');
-            $table->string('number');
+            $table->string('number')->nullable();
             $table->string('name');
-            $table->string('serial_number');
+            $table->string('serial_number')->nullable();
             $table->string('slug')->unique();
             $table->integer('price');
             $table->date('purchase_date');

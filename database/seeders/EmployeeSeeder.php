@@ -14,17 +14,9 @@ class EmployeeSeeder extends Seeder
     public function run(): void
     {
         Employee::insert([[
+            'project_id' => '1',
+            'department_id' => '1',
             'name' => 'Susi Susanti',
-            'description' => 'Susi susanti',
-        ], [
-            'name' => 'Budi Sudarsono',
-            'description' => 'Budi sudarsono',
-        ], [
-            'name' => 'Arya Dwi Putra',
-            'description' => 'Arya dwi putra',
-        ], [
-            'name' => 'Maulana',
-            'description' => 'Maulana',
-        ]]);
+        ],]);
     }
 }
