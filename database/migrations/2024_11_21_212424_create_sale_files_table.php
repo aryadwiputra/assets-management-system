@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('sale_files', function (Blueprint $table) {
             $table->id();
-            $table->id();
             $table->unsignedBigInteger('sale_id');
             $table->foreign('sale_id')->references('id')->on('sales')->onDelete('cascade')->onUpdate('cascade');
             $table->string('file_name');

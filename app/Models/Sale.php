@@ -15,7 +15,7 @@ class Sale extends Model
 
     public function assets()
     {
-        return $this->belongsToMany(Asset::class, 'asset_disposal');
+        return $this->belongsToMany(Asset::class, 'asset_sale');
     }
 
     public function pic()

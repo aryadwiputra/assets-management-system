@@ -180,6 +180,15 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('dashboard.sales.index') }}"
+                        class="nav-link {{ request()->routeIs('dashboard.sales.*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-balance-scale"></i>
+                        <p>
+                            Dijual
+                        </p>
+                    </a>
+                </li>
                 <li class="nav-header">SYSTEMS</li>
                 <li class="nav-item">
                     <a href="#"
