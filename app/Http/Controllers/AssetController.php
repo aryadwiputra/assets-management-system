@@ -15,6 +15,7 @@ use App\Models\Project;
 use App\Models\Status;
 use App\Models\UnitOfMeasurement;
 use App\Models\Warranty;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -432,5 +433,19 @@ class AssetController extends Controller
             }
         }
         return null;
+    }
+
+    public function printQR(Request $request)
+    {
+        $ids = $request->query('ids');
+        $assets = Asset::whereIn('id', explode(',', $ids))->get();
+
+        // Debugging: Cek path gambar
+        foreach ($assets as $asset) {
+            Log::info('QR Code Path: ' . url('storage/asset/qr/' . $asset->slug . '.png'));
+        }
+
+        $pdf = Pdf::loadView('pages.dashboard.assets.qr', compact('assets'));
+        return $pdf->download('qr-codes-' . date('Y-m-d -H-i-s') . '.pdf');
     }
 }

@@ -47,6 +47,9 @@
                         </div>
                     </div>
                 </div>
+                <button type="button" class="btn btn-info mx-2" id="print-qr-btn">
+                    <i class="fas fa-print"></i> Print QR
+                </button>
                 <a href="{{ route('dashboard.assets.create') }}" class="btn btn-primary">
                     Tambah Aset
                 </a>
@@ -132,9 +135,13 @@
         $(function() {
             let table = $("#data-table").DataTable({
                 "responsive": true,
-                "lengthChange": false,
+                "lengthChange": true,
                 "autoWidth": true,
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+                "lengthMenu": [
+                    [10, 25, 50, 100, -1],
+                    [10, 25, 50, 100, "All"]
+                ]
             }).buttons().container().appendTo('#data-table_wrapper .col-md-6:eq(0)');
 
             // Select all checkboxes
@@ -158,6 +165,26 @@
                     }
                 })
             })
+
+            // Print QR button
+            $('#print-qr-btn').on('click', function() {
+                let selectedIds = [];
+                $('.asset-checkbox:checked').each(function() {
+                    selectedIds.push($(this).val());
+                });
+
+                if (selectedIds.length === 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Tidak ada QR yang dipilih',
+                        text: 'Silakan pilih QR yang ingin Anda cetak.'
+                    });
+                    return;
+                }
+
+                window.location.href = "{{ route('dashboard.assets.print-qr') }}?ids=" + selectedIds.join(
+                    ',');
+            });
         });
     </script>
 @endpush
