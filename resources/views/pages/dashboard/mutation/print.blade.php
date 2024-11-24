@@ -106,7 +106,7 @@
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $asset->name }}</td>
                     <td>{{ $asset->location->name }}</td>
-                    <td>{{ $asset->employee->name }}</td>
+                    <td>{{ $asset->employee->name ?? '-' }}</td>
                 </tr>
             @endforeach
         </tbody>

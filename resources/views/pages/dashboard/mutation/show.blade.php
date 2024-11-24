@@ -16,16 +16,18 @@
                 <a href="{{ route('dashboard.mutations.print', $mutation->id) }}" class="btn btn-primary ml-auto">
                     <i class="fas fa-print"></i> Cetak
                 </a>
-                <a href="{{ route('dashboard.mutations.edit', $mutation) }}" class="btn btn-success ml-2">
-                    <i class="fas fa-pencil-alt"></i>
-                </a>
+                @if ($mutation->status == 'open')
+                    <a href="{{ route('dashboard.mutations.edit', $mutation) }}" class="btn btn-success ml-2">
+                        <i class="fas fa-pencil-alt"></i> Ubah Mutasi
+                    </a>
+                @endif
                 {{-- If else status mutation open or close --}}
                 @if ($mutation->status == 'open')
                     <form action="{{ route('dashboard.mutations.cancel', $mutation->id) }}" method="post"
                         id="form-cancel-mutation">
                         @csrf
                         <button class="btn btn-danger ml-2" type="button" id="button-cancel-mutation">
-                            <i class="fas fa-times"></i>
+                            <i class="fas fa-times"></i> Batalkan Mutasi
                         </button>
                     </form>
                 @elseif($mutation->status == 'cancel')
@@ -34,6 +36,7 @@
                         @csrf
                         <button class="btn btn-primary ml-2" type="button" id="button-open-mutation">
                             <i class="fas fa-check"></i>
+                            Buka Mutasi
                         </button>
                     </form>
                 @endif
@@ -80,7 +83,7 @@
                         <form action="{{ route('dashboard.mutations.done', $mutation->id) }}" method="post"
                             id="form-done-mutation">
                             @csrf
-                            <button type="submit" class="btn btn-success" id="button-done-mutation">Selesai</button>
+                            <button type="submit" class="btn btn-success" id="button-done-mutation">Selesaikan Mutasi</button>
                         </form>
                     </div>
                 @endif

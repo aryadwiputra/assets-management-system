@@ -34,6 +34,11 @@ class Asset extends Model
     {
         return $this->belongsTo(Employee::class);
     }
+    
+    public function histories()
+    {
+        return $this->hasMany(AssetHistory::class);
+    }
 
     public function location()
     {
