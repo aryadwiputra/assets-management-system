@@ -45,6 +45,11 @@ class Asset extends Model
         return $this->belongsTo(PersonInCharge::class, 'pic_id');
     }
 
+    public function photos()
+    {
+        return $this->hasMany(AssetPhoto::class);
+    }
+
     public function project()
     {
         return $this->belongsTo(Project::class);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Imports\AssetImport;
 use App\Models\Asset;
+use App\Models\AssetPhoto;
 use App\Models\Category;
 use App\Models\Classes;
 use App\Models\Company;
@@ -115,11 +116,13 @@ class AssetController extends Controller
 
         $filename = time() . '.' . $file->getClientOriginalExtension();
 
+        $thumbnailPath = 'asset/thumbnails/' . $filename;
+
         $file->storeAs('asset/thumbnails', $filename, 'public');
 
         $prefix = Company::find($request->company_id)->prefix_asset;
 
-        Asset::create([
+        $asset = Asset::create([
             'category_id' => $request->category_id,
             'company_id' => $request->company_id,
             'class_id' => $class_id,
@@ -141,14 +144,32 @@ class AssetController extends Controller
             'purchase_number' => $request->purchase_number,
             'description' => $request->description,
             'status_information' => $request->status_information,
-            'thumbnail' => $filename,
+            'thumbnail' => $thumbnailPath,
         ]);
 
-        // QR Code
-        $qr = QrCode::format('png')->generate(route('assets.detail', $slug));
-        $qrImageName = $slug . ".png";
+        // Foreach photos
+        if($asset)
+        {
+            if($request->photos)
+            {
+                foreach ($request->photos as $photo) {
+                    // Save photos to storage
+                    $filename = time() . '-' . $asset->name . '-' . \Illuminate\Support\Str::random(6) . '.' . $photo->getClientOriginalExtension();
 
-        Storage::disk('public')->put('asset/qr/' . $qrImageName, $qr);
+                    $photo->storeAs('asset/photos', $filename, 'public');
+
+                    $asset->photos()->create([
+                        'photo' => $filename
+                    ]);
+                }
+            }
+
+            // QR Code
+            $qr = QrCode::format('png')->generate(route('assets.detail', $slug));
+            $qrImageName = $slug . ".png";
+
+            Storage::disk('public')->put('asset/qr/' . $qrImageName, $qr);
+        }
 
         return redirect()->route('dashboard.assets.index')->with('success', 'Asset berhasil dibuat');
     }
@@ -281,6 +302,20 @@ class AssetController extends Controller
             'thumbnail' => $asset->thumbnail
         ]);
 
+        if($request->photos)
+        {
+            foreach ($request->photos as $photo) {
+                // Save photos to storage
+                $filename = time() . '-' . $asset->name . '-' . \Illuminate\Support\Str::random(6) . '.' . $photo->getClientOriginalExtension();
+
+                $photo->storeAs('asset/photos', $filename, 'public');
+
+                $asset->photos()->create([
+                    'photo' => $filename
+                ]);
+            }
+        }
+
         // Insert New QR Code
         $qr = QrCode::format('png')->generate(route('assets.detail', $slug));
 
@@ -304,7 +339,24 @@ class AssetController extends Controller
 
         return redirect()->route('dashboard.assets.index')->with('success', 'Asset berhasil dihapus.');
     }
+    
+    /**
+     * Delete photo
+     */
+    public function deletePhoto()
+    {
+        $photo_id = request('id');
 
+        $photo = AssetPhoto::find($photo_id);
+
+        // Delete photo
+        Storage::disk('public')->delete('asset/photos/' . $photo->photo);
+
+        // Delete photo
+        $photo->delete();
+
+        return response()->json(['success' => 'Photo deleted successfully.']);
+    }
     /**
      * Import data from excel
      */

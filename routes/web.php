@@ -59,6 +59,7 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::resource('roles', RoleController::class);
     Route::resource('warranties', WarrantyController::class);
   
+    Route::delete('assets/deletePhoto', [AssetController::class, 'deletePhoto'])->name('assets.deletePhoto');
     Route::get('assets/print-qr', [AssetController::class, 'printQR'])->name('assets.print-qr');
     Route::post('assets/import', [AssetController::class, 'import'])->name('assets.import');
     Route::resource('assets', AssetController::class);

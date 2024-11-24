@@ -277,7 +277,29 @@
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Tambah Data</button>
+                            <label for="photos">Foto</label>
+                            <input type="file" multiple name="photos[]" class="form-control" id="photos">
+                            {{-- Foreach images --}}
+                            <div class="row">
+                                @foreach ($asset->photos as $photo)
+                                    <div class="col-md-3 mt-3">
+                                        <img src="{{ Storage::url('asset/photos/' . $photo->photo) }}"
+                                            alt="{{ $photo->photo }}" width="200" class="img-fluid">
+                                        <button type="button" class="btn btn-danger btn-sm mt-2"
+                                            onclick="hapusFoto('{{ $photo->id }}')">
+                                            Hapus
+                                        </button>
+                                    </div>
+                                @endforeach
+                            </div>
+                            @error('photos')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Simpan Data</button>
                         </div>
                     </div>
                 </div>
@@ -288,6 +310,23 @@
 
 @push('script')
     @include('scripts.select2')
+    <script>
+        function hapusFoto(id) {
+            if (confirm('Apakah Anda Yakin Ingin Menghapus Foto Ini?')) {
+                $.ajax({
+                    type: 'DELETE',
+                    url: '{{ route('dashboard.assets.deletePhoto') }}',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        id: id
+                    },
+                    success: function(data) {
+                        location.reload();
+                    }
+                });
+            }
+        }
+    </script>
     <script>
         $(document).ready(function() {
             $('#thumbnail').on('change', function() {
