@@ -189,6 +189,17 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-header">Laporan Assets</li>
+
+                <li class="nav-item">
+                    <a href="{{ route('dashboard.report.mutation') }}"
+                        class="nav-link {{ request()->routeIs('dashboard.report.mutation') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-file"></i>
+                        <p>
+                            Mutasi
+                        </p>
+                    </a>
+                </li>
                 <li class="nav-header">SYSTEMS</li>
                 <li class="nav-item">
                     <a href="#"

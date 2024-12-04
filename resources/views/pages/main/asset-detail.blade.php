@@ -10,7 +10,7 @@
                     <div class="col-12 col-sm-6">
                         <h3 class="d-inline-block d-sm-none">{{ $asset->name }}</h3>
                         <div class="col-12">
-                            <img src="{{ Storage::url('asset/thumbnails/' . $asset->thumbnail) ?? asset('dist/img/prod-1.jpg') }}"
+                            <img src="{{ Storage::url($asset->thumbnail) ?? asset('dist/img/prod-1.jpg') }}"
                                 class="product-image" alt="Product Image">
                         </div>
                         {{-- <div class="col-12 product-image-thumbs">
@@ -38,7 +38,7 @@
                                 </tr>
                                 <tr>
                                     <th>Pengguna</th>
-                                    <td>{{ $asset->employee->name }}</td>
+                                    <td>{{ $asset->employee->name ?? '-' }}</td>
                                 </tr>
                                 <tr>
                                     <th>Lokasi</th>

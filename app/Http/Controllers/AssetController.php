@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Imports\AssetImport;
 use App\Models\Asset;
+use App\Models\AssetHistory;
 use App\Models\AssetPhoto;
 use App\Models\Category;
 use App\Models\Classes;
@@ -179,7 +180,37 @@ class AssetController extends Controller
      */
     public function show(Asset $asset)
     {
-        //
+        $categories = Category::all("id", "name");
+        $companies = Company::all();
+        $classes = Classes::all("id", "name", "from", "to");
+        $departments = Department::all("id", "name");
+        $employees = Employee::all("id", "name");
+        $locations = Location::all("id", "name");
+        $person_in_charges = PersonInCharge::all("id", "name");
+        $projects = Project::all("id", "name");
+        $statuses = Status::all("id", "name");
+        $unit_of_measurements = UnitOfMeasurement::all("id", "name");
+        $warranties = Warranty::all("id", "name");
+
+        $asset->load('category', 'company', 'class', 'department', 'employee', 'location', 'person_in_charge', 'project', 'status', 'unit_of_measurement', 'warranty');
+
+        // Buang prefix pada asset number
+        $asset->number = str_replace($asset->prefix, '', $asset->number);
+
+        return view('pages.dashboard.assets.show', compact(
+            'asset',
+            'categories',
+            'companies',
+            'classes',
+            'departments',
+            'employees',
+            'locations',
+            'person_in_charges',
+            'projects',
+            'statuses',
+            'unit_of_measurements',
+            'warranties',
+        ));
     }
 
     /**

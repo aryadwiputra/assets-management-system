@@ -18,6 +18,7 @@ use App\Http\Controllers\MutationController;
 use App\Http\Controllers\PersonInChargeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SettingController;
@@ -102,6 +103,9 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::post('sales/{sale}/upload-document', [SaleController::class, 'uploadDocument'])->name('sales.upload-document');
     Route::delete('sales/{sale}/delete-document/{file_id}', [SaleController::class, 'deleteDocument'])->name('sales.delete-document');
     Route::resource('sales', SaleController::class);
+
+    Route::get('/report/mutation', [ReportController::class, 'mutation'])->name('report.mutation');
+    Route::get('/report/mutation/print', [ReportController::class, 'printMutation'])->name('report.printMutation');
 
     Route::resource('settings', SettingController::class);
     Route::get('/log', LogController::class)->name('log');

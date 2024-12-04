@@ -109,14 +109,21 @@
                             <td>{{ $data->name }}</td>
                             <td>{{ $data->person_in_charge->name }}</td>
                             <td>
+                                <a href="{{ route('dashboard.assets.show', $data->id) }}" class="btn btn-success">
+                                    <i class="fas fa-eye"></i>
+                                </a>
                                 <a href="{{ route('dashboard.assets.edit', $data->id) }}"
-                                    class="btn btn-primary btn">Edit</a>
+                                    class="btn btn-primary btn">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </a>
                                 <form action="{{ route('dashboard.assets.destroy', $data->id) }}" method="post"
                                     class="delete-form d-inline">
                                     @csrf
 
                                     @method('delete')
-                                    <button type="button" class="btn btn-danger btn-delete-data">Hapus</button>
+                                    <button type="button" class="btn btn-danger btn-delete-data">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
                                 </form>
                             </td>
                         </tr>
