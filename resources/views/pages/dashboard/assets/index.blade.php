@@ -4,6 +4,7 @@
 
 @push('style')
     @include('style.datatable')
+    @include('style.select2')
 @endpush
 
 @section('content')
@@ -12,10 +13,64 @@
         <div class="d-flex justify-content-between">
             <h5>Data</h5>
             <div class="d-flex justify-content-between mb-2">
-                <a href="{{ route('dashboard.mutations.create') }}" class="btn btn-secondary">
-                    {{-- Icon right --}}
-                    <i class="fas fa-arrows-alt"></i> Mutasi
-                </a>
+                <button class="btn btn-secondary mx-2" id="bulk-mutation" disabled data-toggle="modal"
+                    data-target="#mutationModal">
+                    <i class="nav-icon fas fa-arrows-alt"></i>
+                    Bulk Mutasi
+                </button>
+                {{-- Modal --}}
+                <div class="modal fade" id="mutationModal" tabindex="-1" role="dialog" aria-labelledby="mutationModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="mutationModalLabel">Bulk Mutasi</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form id="bulk-add-mutation-form" action="{{ route('dashboard.mutations.store') }}"
+                                method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        {{-- To Location --}}
+                                        <label for="to_location">To Location</label>
+                                        <select class="form-control select2" id="to_location" name="to_location">
+                                            @foreach ($locations as $location)
+                                                <option value="{{ $location->id }}">{{ $location->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        {{-- PIC --}}
+                                        <label for="pic">PIC</label>
+                                        <select class="form-control select2" id="pic" name="to_pic">
+                                            @foreach ($pics as $person_in_charge)
+                                                <option value="{{ $person_in_charge->id }}">{{ $person_in_charge->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        {{-- Employee --}}
+                                        <label for="employee">Pengguna</label>
+                                        <select class="form-control select2" id="employee" name="to_employee">
+                                            @foreach ($employees as $employee)
+                                                <option value="{{ $employee->id }}">{{ $employee->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
                 <button type="button" class="btn btn-success mx-2" data-toggle="modal" data-target="#importModal">
                     <i class="fas fa-file-import"></i> Import Data
                 </button>
@@ -47,9 +102,6 @@
                         </div>
                     </div>
                 </div>
-                <button type="button" class="btn btn-info mx-2" id="print-qr-btn">
-                    <i class="fas fa-print"></i> Print QR
-                </button>
                 <a href="{{ route('dashboard.assets.create') }}" class="btn btn-primary">
                     Tambah Aset
                 </a>
@@ -109,21 +161,16 @@
                             <td>{{ $data->name }}</td>
                             <td>{{ $data->person_in_charge->name }}</td>
                             <td>
-                                <a href="{{ route('dashboard.assets.show', $data->id) }}" class="btn btn-success">
-                                    <i class="fas fa-eye"></i>
-                                </a>
+                                <a href="{{ route('dashboard.assets.mutation', $data->id) }}"
+                                    class="btn btn-secondary btn">Mutasi</a>
                                 <a href="{{ route('dashboard.assets.edit', $data->id) }}"
-                                    class="btn btn-primary btn">
-                                    <i class="fas fa-pencil-alt"></i>
-                                </a>
+                                    class="btn btn-primary btn">Edit</a>
                                 <form action="{{ route('dashboard.assets.destroy', $data->id) }}" method="post"
                                     class="delete-form d-inline">
                                     @csrf
 
                                     @method('delete')
-                                    <button type="button" class="btn btn-danger btn-delete-data">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
+                                    <button type="button" class="btn btn-danger btn-delete-data">Hapus</button>
                                 </form>
                             </td>
                         </tr>
@@ -138,17 +185,24 @@
 @push('script')
     @include('scripts.datatable')
 
+    @include('scripts.select2')
+
+    <script>
+        $(function() {
+            // Inisialisasi Select2
+            $('.select2').select2({
+                theme: 'bootstrap4'
+            });
+        });
+    </script>
+
     <script>
         $(function() {
             let table = $("#data-table").DataTable({
                 "responsive": true,
-                "lengthChange": true,
+                "lengthChange": false,
                 "autoWidth": true,
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-                "lengthMenu": [
-                    [10, 25, 50, 100, -1],
-                    [10, 25, 50, 100, "All"]
-                ]
             }).buttons().container().appendTo('#data-table_wrapper .col-md-6:eq(0)');
 
             // Select all checkboxes
@@ -172,25 +226,64 @@
                     }
                 })
             })
+        });
+    </script>
 
-            // Print QR button
-            $('#print-qr-btn').on('click', function() {
-                let selectedIds = [];
+    {{-- Script Bulk Mutation --}}
+    <script>
+        $(document).ready(function() {
+            // Fungsi untuk memeriksa apakah ada aset yang dipilih
+            function checkAssetSelection() {
+                let assetIds = [];
                 $('.asset-checkbox:checked').each(function() {
-                    selectedIds.push($(this).val());
+                    assetIds.push($(this).val());
                 });
 
-                if (selectedIds.length === 0) {
+                // Aktifkan atau nonaktifkan tombol berdasarkan jumlah aset yang dipilih
+                if (assetIds.length > 0) {
+                    $('#bulk-mutation').prop('disabled', false);
+                } else {
+                    $('#bulk-mutation').prop('disabled', true);
+                }
+            }
+
+            // Event listener untuk checkbox "Select All"
+            $('#select-all').on('change', function() {
+                $('.asset-checkbox').prop('checked', $(this).is(':checked'));
+                checkAssetSelection();
+            });
+
+            // Event listener untuk checkbox aset
+            $('.asset-checkbox').on('change', function() {
+                checkAssetSelection();
+            });
+
+            // Event listener untuk tombol Bulk Mutasi
+            $('#bulk-mutation').on('click', function(e) {
+                e.preventDefault();
+                let assetIds = [];
+                $('.asset-checkbox:checked').each(function() {
+                    assetIds.push($(this).val());
+                });
+
+                if (assetIds.length === 0) {
                     Swal.fire({
+                        title: 'Peringatan',
+                        text: 'Tidak ada aset yang dipilih.',
                         icon: 'warning',
-                        title: 'Tidak ada QR yang dipilih',
-                        text: 'Silakan pilih QR yang ingin Anda cetak.'
+                        confirmButtonText: 'OK'
                     });
                     return;
                 }
 
-                window.location.href = "{{ route('dashboard.assets.print-qr') }}?ids=" + selectedIds.join(
-                    ',');
+                // Append asset IDs as array
+                assetIds.forEach(function(assetId) {
+                    $('#bulk-add-mutation-form').append(
+                        '<input type="hidden" name="asset_ids[]" value="' + assetId + '">');
+                });
+
+                // Show modal
+                $('#mutationModal').modal('show');
             });
         });
     </script>

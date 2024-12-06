@@ -63,6 +63,7 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::delete('assets/deletePhoto', [AssetController::class, 'deletePhoto'])->name('assets.deletePhoto');
     Route::get('assets/print-qr', [AssetController::class, 'printQR'])->name('assets.print-qr');
     Route::post('assets/import', [AssetController::class, 'import'])->name('assets.import');
+    Route::get('assets/{asset}/mutation', [AssetController::class, 'mutation'])->name('assets.mutation');
     Route::resource('assets', AssetController::class);
 
     // Mutations
