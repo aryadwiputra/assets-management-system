@@ -4,7 +4,6 @@
 
 @push('style')
     @include('style.datatable')
-    @include('style.select2')
 @endpush
 
 @section('content')
@@ -102,6 +101,9 @@
                         </div>
                     </div>
                 </div>
+                <button type="button" class="btn btn-info mx-2" id="print-qr-btn">
+                    <i class="fas fa-print"></i> Print QR
+                </button>
                 <a href="{{ route('dashboard.assets.create') }}" class="btn btn-primary">
                     Tambah Aset
                 </a>
@@ -161,16 +163,20 @@
                             <td>{{ $data->name }}</td>
                             <td>{{ $data->person_in_charge->name }}</td>
                             <td>
-                                <a href="{{ route('dashboard.assets.mutation', $data->id) }}"
-                                    class="btn btn-secondary btn">Mutasi</a>
-                                <a href="{{ route('dashboard.assets.edit', $data->id) }}"
-                                    class="btn btn-primary btn">Edit</a>
+                                <a href="{{ route('dashboard.assets.show', $data->id) }}" class="btn btn-success">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{{ route('dashboard.assets.edit', $data->id) }}" class="btn btn-primary btn">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </a>
                                 <form action="{{ route('dashboard.assets.destroy', $data->id) }}" method="post"
                                     class="delete-form d-inline">
                                     @csrf
 
                                     @method('delete')
-                                    <button type="button" class="btn btn-danger btn-delete-data">Hapus</button>
+                                    <button type="button" class="btn btn-danger btn-delete-data">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
                                 </form>
                             </td>
                         </tr>
@@ -185,24 +191,17 @@
 @push('script')
     @include('scripts.datatable')
 
-    @include('scripts.select2')
-
-    <script>
-        $(function() {
-            // Inisialisasi Select2
-            $('.select2').select2({
-                theme: 'bootstrap4'
-            });
-        });
-    </script>
-
     <script>
         $(function() {
             let table = $("#data-table").DataTable({
                 "responsive": true,
-                "lengthChange": false,
+                "lengthChange": true,
                 "autoWidth": true,
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+                "lengthMenu": [
+                    [10, 25, 50, 100, -1],
+                    [10, 25, 50, 100, "All"]
+                ]
             }).buttons().container().appendTo('#data-table_wrapper .col-md-6:eq(0)');
 
             // Select all checkboxes
@@ -226,6 +225,26 @@
                     }
                 })
             })
+
+            // Print QR button
+            $('#print-qr-btn').on('click', function() {
+                let selectedIds = [];
+                $('.asset-checkbox:checked').each(function() {
+                    selectedIds.push($(this).val());
+                });
+
+                if (selectedIds.length === 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Tidak ada QR yang dipilih',
+                        text: 'Silakan pilih QR yang ingin Anda cetak.'
+                    });
+                    return;
+                }
+
+                window.location.href = "{{ route('dashboard.assets.print-qr') }}?ids=" + selectedIds.join(
+                    ',');
+            });
         });
     </script>
 

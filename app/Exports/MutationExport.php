@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Exports;
 
 use App\Models\Mutation;
@@ -19,8 +20,8 @@ class MutationExport implements FromCollection, WithHeadings, ShouldAutoSize
 
     public function collection()
     {
-        return Mutation::whereBetween('created_at', [$this->start_date, $this->end_date])
-            ->with('assets', 'location', 'user', 'pic')
+        return Mutation::whereBetween('created_at', [$this->start_date . ' 00:00:00', $this->end_date . ' 23:59:59'])
+            ->with('asset', 'fromLocation', 'toLocation', 'user', 'fromPic', 'toPic')
             ->get();
     }
 
@@ -28,15 +29,31 @@ class MutationExport implements FromCollection, WithHeadings, ShouldAutoSize
     {
         return [
             'ID Mutasi',
-            'Nama Mutasi',
+            'Nama Aset',
             'Tanggal Mutasi',
             'Lokasi Awal',
             'Lokasi Akhir',
             'Pengguna',
-            'PIC',
+            'PIC Awal',
+            'PIC Akhir',
             'Deskripsi',
-            'Komentar',
             'Status',
+        ];
+    }
+
+    public function map($mutation): array
+    {
+        return [
+            $mutation->id,
+            $mutation->asset->name ?? 'N/A',
+            $mutation->created_at->format('d M Y H:i:s'),
+            $mutation->fromLocation->name ?? 'N/A',
+            $mutation->toLocation->name ?? 'N/A',
+            $mutation->user->name ?? 'N/A',
+            $mutation->fromPic->name ?? 'N/A',
+            $mutation->toPic->name ?? 'N/A',
+            $mutation->description,
+            $mutation->status,
         ];
     }
 }
