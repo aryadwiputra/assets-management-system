@@ -144,7 +144,7 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="form-group">
                             <label for="serial_number">Nomor Seri</label>
                             <input type="text" name="serial_number" class="form-control"
@@ -168,6 +168,16 @@
                                 <input type="number" name="number" class="form-control"
                                     placeholder="Masukkan Nomor Aset" value="{{ $prefix }}">
                             </div>
+                            @error('number')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="number">Nomor ERP</label>
+                            <input type="text" name="erp_number" class="form-control"
+                                placeholder="Masukkan Nomor ERP" value="{{ $asset->erp_number }}">
                             @error('number')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror

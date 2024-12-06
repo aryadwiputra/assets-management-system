@@ -135,6 +135,7 @@
                         <th>Thumbnail</th>
                         <th>Lokasi</th>
                         <th>Kategori</th>
+                        <th>Nomor ERP</th>
                         <th>Nomor Aset</th>
                         <th>Nama</th>
                         <th>PIC</th>
@@ -159,6 +160,7 @@
                             </td>
                             <td>{{ $data->location->name }}</td>
                             <td>{{ $data->category->name }}</td>
+                            <td>{{ $data->erp_number }}</td>
                             <td>{{ $data->number }}</td>
                             <td>{{ $data->name }}</td>
                             <td>{{ $data->person_in_charge->name }}</td>
