@@ -46,6 +46,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->text('status_information')->nullable();
             $table->longText('thumbnail')->nullable();
+            $table->boolean('is_sale')->default(0);
             $table->timestamps();
         });
     }

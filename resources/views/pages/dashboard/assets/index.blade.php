@@ -12,6 +12,7 @@
         <div class="d-flex justify-content-between">
             <h5>Data</h5>
             <div class="d-flex justify-content-between mb-2">
+                {{-- Mutasi --}}
                 <button class="btn btn-secondary mx-2" id="bulk-mutation" disabled data-toggle="modal"
                     data-target="#mutationModal">
                     <i class="nav-icon fas fa-arrows-alt"></i>
@@ -70,12 +71,57 @@
                         </div>
                     </div>
                 </div>
+                {{-- Jual --}}
+                <button class="btn btn-danger mx-2" id="bulk-sale" disabled data-toggle="modal" data-target="#saleModal">
+                    <i class="nav-icon fas fa-balance-scale"></i>
+                    Bulk Jual
+                </button>
+                {{-- Modal --}}
+                <div class="modal fade" id="saleModal" tabindex="-1" role="dialog" aria-labelledby="saleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="saleModalLabel">Bulk Jual</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form id="bulk-add-sale-form" action="{{ route('dashboard.assets.sale.store') }}" method="POST"
+                                enctype="multipart/form-data">
+                                @csrf
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="date">Tanggal Dijual</label>
+                                        <input type="date" class="form-control" id="date" name="date"
+                                            value="{{ old('date') }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="price">Harga</label>
+                                        <input type="number" class="form-control" id="price" name="price"
+                                            value="{{ old('price') }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="buyer_name">Pembeli</label>
+                                        <input type="text" class="form-control" id="buyer_name" name="buyer_name"
+                                            value="{{ old('buyer_name') }}">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {{-- Import --}}
                 <button type="button" class="btn btn-success mx-2" data-toggle="modal" data-target="#importModal">
                     <i class="fas fa-file-import"></i> Import Data
                 </button>
                 {{-- Modal --}}
-                <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel"
-                    aria-hidden="true">
+                <div class="modal fade" id="importModal" tabindex="-1" role="dialog"
+                    aria-labelledby="importModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -305,6 +351,67 @@
 
                 // Show modal
                 $('#mutationModal').modal('show');
+            });
+        });
+    </script>
+
+
+
+    {{-- Script Bulk Jual --}}
+    <script>
+        $(document).ready(function() {
+            // Fungsi untuk memeriksa apakah ada aset yang dipilih
+            function checkAssetSelection() {
+                let assetIds = [];
+                $('.asset-checkbox:checked').each(function() {
+                    assetIds.push($(this).val());
+                });
+
+                // Aktifkan atau nonaktifkan tombol berdasarkan jumlah aset yang dipilih
+                if (assetIds.length > 0) {
+                    $('#bulk-sale').prop('disabled', false);
+                } else {
+                    $('#bulk-sale').prop('disabled', true);
+                }
+            }
+
+            // Event listener untuk checkbox "Select All"
+            $('#select-all').on('change', function() {
+                $('.asset-checkbox').prop('checked', $(this).is(':checked'));
+                checkAssetSelection();
+            });
+
+            // Event listener untuk checkbox aset
+            $('.asset-checkbox').on('change', function() {
+                checkAssetSelection();
+            });
+
+            // Event listener untuk tombol Bulk Mutasi
+            $('#bulk-sale').on('click', function(e) {
+                e.preventDefault();
+                let assetIds = [];
+                $('.asset-checkbox:checked').each(function() {
+                    assetIds.push($(this).val());
+                });
+
+                if (assetIds.length === 0) {
+                    Swal.fire({
+                        title: 'Peringatan',
+                        text: 'Tidak ada aset yang dipilih.',
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    });
+                    return;
+                }
+
+                // Append asset IDs as array
+                assetIds.forEach(function(assetId) {
+                    $('#bulk-add-sale-form').append(
+                        '<input type="hidden" name="asset_ids[]" value="' + assetId + '">');
+                });
+
+                // Show modal
+                $('#saleModal').modal('show');
             });
         });
     </script>

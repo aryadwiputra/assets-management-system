@@ -35,7 +35,7 @@ class AssetController extends Controller
      */
     public function index()
     {
-        $assets = Asset::with(['category', 'company', 'class', 'department', 'employee', 'location', 'person_in_charge', 'project', 'status', 'unit_of_measurement', 'warranty'])->get();
+        $assets = Asset::with(['category', 'company', 'class', 'department', 'employee', 'location', 'person_in_charge', 'project', 'status', 'unit_of_measurement', 'warranty'])->where('is_sale' , 0)->get();
 
         $locations = Location::all();
         $pics = PersonInCharge::all();
@@ -389,6 +389,40 @@ class AssetController extends Controller
         $mutations = $asset->mutations()->orderBy('created_at', 'desc')->get();
 
         return view('pages.dashboard.assets.mutation', compact('asset', 'mutations'));
+    }
+
+    /**
+     * Store New Sale Data
+     */
+    public function addSale(Asset $asset, Request $request)
+    {
+        $request->validate([
+            'asset_ids' => 'required|array',
+            'asset_ids.*' => 'exists:assets,id',
+            'date' => 'required',
+            'price' => 'required|numeric',
+            'buyer_name' => 'required',
+        ]);
+
+        $assetIds = $request->asset_ids;
+
+        foreach ($assetIds as $assetId) {
+            $asset = Asset::findOrFail($assetId);
+            
+            $asset->sale()->create([
+                'asset_id' => $asset->id,
+                'date' => $request->date,
+                'price' => $request->price,
+                'buyer_name' => $request->buyer_name,
+            ]);
+    
+            // Update asset is_sale to 1
+            $asset->update([
+                'is_sale' => 1,
+            ]);
+        }
+
+        return redirect()->route('dashboard.assets.index')->with('success', 'Asset berhasil dijual.');
     }
     
     /**

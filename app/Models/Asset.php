@@ -85,8 +85,8 @@ class Asset extends Model
         return $this->belongsToMany(Disposal::class, 'asset_disposal');
     }
 
-    public function sales()
+    public function sale()
     {
-        return $this->belongsToMany(Sale::class, 'asset_sale');
+        return $this->belongsTo(Sale::class);
     }
 }

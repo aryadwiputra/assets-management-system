@@ -13,28 +13,8 @@ class Sale extends Model
 
     protected $table = 'sales';
 
-    public function assets()
+    public function asset()
     {
-        return $this->belongsToMany(Asset::class, 'asset_sale');
-    }
-
-    public function pic()
-    {
-        return $this->belongsTo(PersonInCharge::class);
-    }
-
-    public function status()
-    {
-        return $this->belongsTo(Status::class);
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);   
-    }
-
-    public function project()
-    {
-        return $this->belongsTo(Project::class);
+        return $this->belongsTo(Asset::class);
     }
 }
