@@ -14,17 +14,14 @@ return new class extends Migration
         Schema::create('disposals', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('project_id');
-            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('pic_id');
-            $table->foreign('pic_id')->references('id')->on('person_in_charges')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('pic_id')->references('id')->on('person_in_charges')->onDelete('cascade');
             $table->unsignedBigInteger('status_id');
-            $table->foreign('status_id')->references('id')->on('statuses')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('name');
-            $table->string('status');
+            $table->foreign('status_id')->references('id')->on('statuses')->onDelete('cascade');
             $table->text('description')->nullable();
-            $table->text('comment')->nullable();
             $table->timestamps();
         });
     }

@@ -18,5 +18,11 @@ class EmployeeSeeder extends Seeder
             'department_id' => '1',
             'name' => 'Susi Susanti',
         ],]);
+
+        Employee::insert([[
+            'project_id' => '1',
+            'department_id' => '1',
+            'name' => 'Budi Hartono',
+        ],]);
     }
 }

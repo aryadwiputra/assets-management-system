@@ -18,5 +18,11 @@ class LocationSeeder extends Seeder
             "name"=> "Lantai 1",
             "description" => "Lantai 1",
         ]);
+
+        Location::insert([
+            "project_id"=> 1,
+            "name"=> "Lantai 2",
+            "description" => "Lantai 2",
+        ]);
     }
 }

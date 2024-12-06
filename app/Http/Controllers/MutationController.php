@@ -48,25 +48,47 @@ class MutationController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'project_id' => 'required',
+            'asset_ids' => 'required|array',
+            'asset_ids.*' => 'exists:assets,id',
             'to_location' => 'required',
-            'name' => 'required',
-            'pic_id' => 'required',
+            'to_pic' => 'required',
+            'to_employee' => 'nullable',
+            'description' => 'nullable',
         ]);
-
-        $mutation = Mutation::create([
-            'project_id' => $request->project_id,
-            'to_location' => $request->to_location,
-            'person_in_charge_id' => $request->person_in_charge_id,
-            'pic_id' => $request->pic_id,
-            'user_id' => Auth::user()->id,
-            'name' => $request->name,
-            'description' => $request->description,
-            'status'=> $request->status,
-            'comment'=> $request->comment
-        ]);
-
-        return redirect()->route('dashboard.mutations.show', $mutation->id)->with('success', 'Mutasi berhasil dibuat.');
+    
+        $assetIds = $request->asset_ids;
+        $toLocationId = $request->to_location;
+        $toPicId = $request->to_pic;
+        $toEmployeeId = $request->to_employee;
+        $status = 'Pending';
+        $description = $request->description;
+    
+        foreach ($assetIds as $assetId) {
+            $asset = Asset::findOrFail($assetId);
+    
+            // Buat entri baru di tabel asset_mutations
+            Mutation::create([
+                'asset_id' => $assetId,
+                'from_location' => $asset->location_id,
+                'to_location' => $toLocationId,
+                'from_pic' => $asset->pic_id,
+                'to_pic' => $toPicId,
+                'from_employee' => $asset->employee_id,
+                'to_employee' => $toEmployeeId,
+                'status' => $status,
+                'description' => $description,
+                'user_id' => Auth::user()->id,
+            ]);
+    
+            // Perbarui tabel assets dengan nilai baru untuk location_id dan pic_id
+            $asset->update([
+                'employee_id' => $toEmployeeId,
+                'location_id' => $toLocationId,
+                'pic_id' => $toPicId,
+            ]);
+        }
+    
+        return redirect()->route('dashboard.assets.index')->with('success', 'Mutasi berhasil dibuat.');
     }
 
     /**

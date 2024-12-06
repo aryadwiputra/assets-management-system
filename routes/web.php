@@ -18,6 +18,7 @@ use App\Http\Controllers\MutationController;
 use App\Http\Controllers\PersonInChargeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StatusController;
@@ -58,6 +59,7 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::resource('roles', RoleController::class);
     Route::resource('warranties', WarrantyController::class);
     Route::post('assets/import', [AssetController::class, 'import'])->name('assets.import');
+    Route::get('assets/{asset}/mutation', [AssetController::class, 'mutation'])->name('assets.mutation');
     Route::resource('assets', AssetController::class);
 
     // Mutations
@@ -86,6 +88,8 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::delete('disposals/{disposal}/delete-document/{file_id}', [DisposalController::class, 'deleteDocument'])->name('disposals.delete-document');
     Route::resource('disposals', DisposalController::class);
     Route::resource('settings', SettingController::class);
+
+    Route::get('/report', [ReportController::class, 'index'])->name('report.index');
 
     Route::get('/log', LogController::class)->name('log');
     Route::get('/log-activity', [LogActivityController::class, 'index'])->name('log-activity');

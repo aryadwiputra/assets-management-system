@@ -34,8 +34,15 @@ class AssetController extends Controller
     {
         $assets = Asset::with(['category', 'company', 'class', 'department', 'employee', 'location', 'person_in_charge', 'project', 'status', 'unit_of_measurement', 'warranty'])->get();
 
+        $locations = Location::all();
+        $pics = PersonInCharge::all();
+        $employees = Employee::all();
+
         return view('pages.dashboard.assets.index', compact(
             'assets',
+            'locations',
+            'pics',
+            'employees'
         ));
     }
 
@@ -157,7 +164,8 @@ class AssetController extends Controller
      */
     public function show(Asset $asset)
     {
-        //
+        $companies = Company::all();
+        return view('pages.dashboard.assets.show', compact('asset', 'companies'));
     }
 
     /**
@@ -302,6 +310,17 @@ class AssetController extends Controller
         $asset->delete();
 
         return redirect()->route('dashboard.assets.index')->with('success', 'Asset berhasil dihapus.');
+    }
+
+    /**
+     * Riwayat mutasi dari asset
+     */
+    public function mutation(Asset $asset)
+    {
+        // Ambil riwayat mutasi aset
+        $mutations = $asset->mutations()->orderBy('created_at', 'desc')->get();
+
+        return view('pages.dashboard.assets.mutation', compact('asset', 'mutations'));
     }
 
     /**
