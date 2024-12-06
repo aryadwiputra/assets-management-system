@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Asset;
+use App\Models\AssetHistory;
 use App\Models\Location;
 use App\Models\Mutation;
 use App\Models\MutationFile;
@@ -76,12 +77,12 @@ class MutationController extends Controller
     {
         $mutation->with(['project', 'pic', 'location', 'assets']);
 
-        // $available_assets = Asset::where('pic_id', $mutation->pic_id)->get();
-
         $available_assets = Asset::where('pic_id', $mutation->pic_id)
             ->whereDoesntHave('mutations', function ($query) use ($mutation) {
                 $query->where('mutation_id', $mutation->id);
+
             })
+            ->where('location_id', '!=', $mutation->to_location)
             ->get();
 
         return view('pages.dashboard.mutation.show', compact('mutation', 'available_assets'));
@@ -139,10 +140,52 @@ class MutationController extends Controller
     }
 
     /**
-     * Done status mutation
+     * Mark a mutation as done and update asset locations.
+     *
+     * @param  \App\Models\Mutation  $mutation
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function done(Mutation $mutation)
     {
+        // Ensure the mutation is not already done
+        if ($mutation->status === 'done') {
+            return redirect()->route('dashboard.mutations.show', $mutation->id)->with('warning', 'Mutasi sudah selesai.');
+        }
+
+        // Get the necessary data from the mutation
+        $toLocationId = $mutation->to_location;
+        $projectId = $mutation->project_id;
+        $userId = $mutation->user_id;
+        $picId = $mutation->pic_id;
+        $description = $mutation->description;
+        $comment = $mutation->comment;
+
+        // Update asset locations and create histories
+        foreach ($mutation->assets as $asset) {
+            $asset = Asset::findOrFail($asset->id);
+            $fromLocationId = $asset->location_id;
+
+            // Update asset location
+            $asset->location_id = $toLocationId;
+            $asset->save();
+
+            // Create history
+            AssetHistory::create([
+                'asset_id' => $asset->id,
+                'from_location_id' => $fromLocationId,
+                'to_location_id' => $toLocationId,
+                'project_id' => $projectId,
+                'user_id' => $userId,
+                'pic_id' => $picId,
+                'transaction_type' => 'mutasi',
+                'status_before' => $asset->status->name,
+                'status_after' => $asset->status->name,
+                'description' => $description,
+                'comment' => $comment,
+            ]);
+        }
+
+        // Mark mutation as done
         $mutation->update([
             'status' => 'done'
         ]);

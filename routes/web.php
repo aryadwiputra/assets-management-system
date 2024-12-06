@@ -18,7 +18,9 @@ use App\Http\Controllers\MutationController;
 use App\Http\Controllers\PersonInChargeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\UnitOfMeasurementController;
@@ -57,6 +59,9 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('warranties', WarrantyController::class);
+  
+    Route::delete('assets/deletePhoto', [AssetController::class, 'deletePhoto'])->name('assets.deletePhoto');
+    Route::get('assets/print-qr', [AssetController::class, 'printQR'])->name('assets.print-qr');
     Route::post('assets/import', [AssetController::class, 'import'])->name('assets.import');
     Route::resource('assets', AssetController::class);
 
@@ -85,8 +90,24 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::post('disposals/{disposal}/upload-document', [DisposalController::class, 'uploadDocument'])->name('disposals.upload-document');
     Route::delete('disposals/{disposal}/delete-document/{file_id}', [DisposalController::class, 'deleteDocument'])->name('disposals.delete-document');
     Route::resource('disposals', DisposalController::class);
-    Route::resource('settings', SettingController::class);
 
+    // Sales
+    Route::post('sales/add-asset', [SaleController::class, 'addAsset'])->name('sales.add-asset');
+    Route::delete('sales/remove-asset', [SaleController::class, 'removeAsset'])->name('sales.remove-asset');    
+    Route::post('sales/bulk-add-asset', [SaleController::class, 'bulkAddAsset'])->name('sales.bulk-add-asset');
+    Route::post('sales/bulk-remove-asset', [SaleController::class, 'bulkRemoveAsset'])->name('sales.bulk-remove-asset');
+    Route::post('sales/{sale}/cancel', [SaleController::class, 'cancel'])->name('sales.cancel'); 
+    Route::post('sales/{sale}/open', [SaleController::class, 'open'])->name('sales.open');
+    Route::get('sales/{sale}/print', [SaleController::class, 'print'])->name('sales.print');
+    Route::post('sales/{sale}/done', [SaleController::class, 'done'])->name('sales.done');
+    Route::post('sales/{sale}/upload-document', [SaleController::class, 'uploadDocument'])->name('sales.upload-document');
+    Route::delete('sales/{sale}/delete-document/{file_id}', [SaleController::class, 'deleteDocument'])->name('sales.delete-document');
+    Route::resource('sales', SaleController::class);
+
+    Route::get('/report/mutation', [ReportController::class, 'mutation'])->name('report.mutation');
+    Route::get('/report/mutation/print', [ReportController::class, 'printMutation'])->name('report.printMutation');
+
+    Route::resource('settings', SettingController::class);
     Route::get('/log', LogController::class)->name('log');
     Route::get('/log-activity', [LogActivityController::class, 'index'])->name('log-activity');
 });

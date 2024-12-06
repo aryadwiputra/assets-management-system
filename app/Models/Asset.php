@@ -34,6 +34,11 @@ class Asset extends Model
     {
         return $this->belongsTo(Employee::class);
     }
+    
+    public function histories()
+    {
+        return $this->hasMany(AssetHistory::class);
+    }
 
     public function location()
     {
@@ -43,6 +48,11 @@ class Asset extends Model
     public function person_in_charge()
     {
         return $this->belongsTo(PersonInCharge::class, 'pic_id');
+    }
+
+    public function photos()
+    {
+        return $this->hasMany(AssetPhoto::class);
     }
 
     public function project()
@@ -73,5 +83,10 @@ class Asset extends Model
     public function disposals()
     {
         return $this->belongsToMany(Disposal::class, 'asset_disposal');
+    }
+
+    public function sales()
+    {
+        return $this->belongsToMany(Sale::class, 'asset_sale');
     }
 }

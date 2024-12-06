@@ -5,10 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DisposalFile extends Model
+class AssetPhoto extends Model
 {
     use HasFactory;
 
     protected $guarded = ['id'];
 
+    public function asset()
+    {
+        return $this->belongsTo(Asset::class);
+    }
 }

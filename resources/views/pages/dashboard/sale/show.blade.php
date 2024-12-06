@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Detail Mutasi')
+@section('title', 'Detail Penjualan')
 
 @push('style')
     @include('style.datatable')
@@ -8,35 +8,40 @@
 
 @section('content')
     <div class="card">
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="card-header">
             <div class="d-flex align-items-center">
                 <h3 class="card-title">
-                    Detail Mutasi
+                    Detail Penjualan
                 </h3>
-                <a href="{{ route('dashboard.mutations.print', $mutation->id) }}" class="btn btn-primary ml-auto">
+                <a href="{{ route('dashboard.sales.print', $sale->id) }}" class="btn btn-primary ml-auto">
                     <i class="fas fa-print"></i> Cetak
                 </a>
-                @if ($mutation->status == 'open')
-                    <a href="{{ route('dashboard.mutations.edit', $mutation) }}" class="btn btn-success ml-2">
-                        <i class="fas fa-pencil-alt"></i> Ubah Mutasi
-                    </a>
-                @endif
+                <a href="{{ route('dashboard.sales.edit', $sale) }}" class="btn btn-success ml-2">
+                    <i class="fas fa-pencil-alt"></i>
+                </a>
                 {{-- If else status mutation open or close --}}
-                @if ($mutation->status == 'open')
-                    <form action="{{ route('dashboard.mutations.cancel', $mutation->id) }}" method="post"
+                @if ($sale->status == 'open')
+                    <form action="{{ route('dashboard.sales.cancel', $sale->id) }}" method="post"
                         id="form-cancel-mutation">
                         @csrf
                         <button class="btn btn-danger ml-2" type="button" id="button-cancel-mutation">
-                            <i class="fas fa-times"></i> Batalkan Mutasi
+                            <i class="fas fa-times"></i>
                         </button>
                     </form>
-                @elseif($mutation->status == 'cancel')
-                    <form action="{{ route('dashboard.mutations.open', $mutation->id) }}" method="post"
-                        id="form-open-mutation">
+                @elseif($sale->status == 'cancel')
+                    <form action="{{ route('dashboard.sales.open', $sale->id) }}" method="post" id="form-open-mutation">
                         @csrf
                         <button class="btn btn-primary ml-2" type="button" id="button-open-mutation">
                             <i class="fas fa-check"></i>
-                            Buka Mutasi
                         </button>
                     </form>
                 @endif
@@ -49,41 +54,37 @@
                         <tbody>
                             <tr>
                                 <th>Nama Dokumen</th>
-                                <td>{{ $mutation->name }}</td>
-                            </tr>
-                            <tr>
-                                <th>Lokasi Tujuan</th>
-                                <td>{{ $mutation->location->name }}</td>
+                                <td>{{ $sale->name }}</td>
                             </tr>
                             <tr>
                                 <th>Proyek</th>
-                                <td>{{ $mutation->project->name }}</td>
+                                <td>{{ $sale->project->name }}</td>
                             </tr>
                             <tr>
                                 <th>Penanggung Jawab</th>
-                                <td>{{ $mutation->pic->name }}</td>
+                                <td>{{ $sale->pic->name }}</td>
                             </tr>
                             <tr>
                                 <th>Deskripsi</th>
-                                <td>{{ $mutation->description }}</td>
+                                <td>{{ $sale->description }}</td>
                             </tr>
                             <tr>
                                 <th>Komentar</th>
-                                <td>{{ $mutation->comment }}</td>
+                                <td>{{ $sale->comment }}</td>
                             </tr>
                             <tr>
                                 <th>Status</th>
-                                <td>{{ strtoupper($mutation->status) }}</td>
+                                <td>{{ strtoupper($sale->status) }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                @if ($mutation->status != 'done')
+                @if ($sale->status == 'open')
                     <div class="col-md-12">
-                        <form action="{{ route('dashboard.mutations.done', $mutation->id) }}" method="post"
+                        <form action="{{ route('dashboard.sales.done', $sale->id) }}" method="post"
                             id="form-done-mutation">
                             @csrf
-                            <button type="submit" class="btn btn-success" id="button-done-mutation">Selesaikan Mutasi</button>
+                            <button type="submit" class="btn btn-success" id="button-done-mutation">Selesai</button>
                         </form>
                     </div>
                 @endif
@@ -120,9 +121,9 @@
                 <div class="tab-pane fade active show" id="custom-tabs-one-profile" role="tabpanel"
                     aria-labelledby="custom-tabs-one-profile-tab">
                     <div class="mb-3">
-                        <form action="{{ route('dashboard.mutations.bulk-add-asset') }}" method="post" id="bulk-add-form">
+                        <form action="{{ route('dashboard.sales.bulk-add-asset') }}" method="post" id="bulk-add-form">
                             @csrf
-                            <input type="hidden" name="mutation_id" value="{{ $mutation->id }}">
+                            <input type="hidden" name="sale_id" value="{{ $sale->id }}">
                             <button type="submit" class="btn btn-primary" id="bulk-add-button">
                                 <i class="fas fa-plus"></i> Bulk Add
                             </button>
@@ -147,10 +148,10 @@
                                     <td>{{ $data->description }}</td>
                                     <td>
                                         {{-- Button to add data with icon --}}
-                                        <form action="{{ route('dashboard.mutations.add-asset') }}" method="post"
+                                        <form action="{{ route('dashboard.sales.add-asset') }}" method="post"
                                             class="d-inline">
                                             @csrf
-                                            <input type="hidden" name="mutation_id" value="{{ $mutation->id }}">
+                                            <input type="hidden" name="sale_id" value="{{ $sale->id }}">
                                             <input type="hidden" name="asset_id" value="{{ $data->id }}">
                                             <button type="submit" class="btn btn-primary btn-sm">
                                                 <i class="fas fa-plus"></i>
@@ -165,10 +166,10 @@
                 <div class="tab-pane fade" id="custom-tabs-one-home" role="tabpanel"
                     aria-labelledby="custom-tabs-one-home-tab">
                     <div class="mb-3">
-                        <form action="{{ route('dashboard.mutations.bulk-remove-asset') }}" method="post"
+                        <form action="{{ route('dashboard.sales.bulk-remove-asset') }}" method="post"
                             id="bulk-delete-asset-form">
                             @csrf
-                            <input type="hidden" name="mutation_id" value="{{ $mutation->id }}">
+                            <input type="hidden" name="sale_id" value="{{ $sale->id }}">
                             <button type="button" class="btn btn-danger" id="bulk-delete-asset-button">
                                 <i class="fas fa-trash"></i> Bulk Delete
                             </button>
@@ -185,7 +186,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($mutation->assets as $item)
+                            @foreach ($sale->assets as $item)
                                 <tr>
                                     <td><input type="checkbox" class="asset-checkbox-delete"
                                             value="{{ $item->id }}">
@@ -195,11 +196,11 @@
                                     <td>{{ $item->slug }}</td>
                                     <td>
                                         {{-- Button to remove data with icon --}}
-                                        <form action="{{ route('dashboard.mutations.remove-asset') }}" method="post"
+                                        <form action="{{ route('dashboard.sales.remove-asset') }}" method="post"
                                             class="d-inline">
                                             @csrf
                                             @method('delete')
-                                            <input type="hidden" name="mutation_id" value="{{ $mutation->id }}">
+                                            <input type="hidden" name="sale_id" value="{{ $sale->id }}">
                                             <input type="hidden" name="asset_id" value="{{ $item->id }}">
                                             <button type="submit" class="btn btn-danger btn-sm">
                                                 <i class="fas fa-trash"></i>
@@ -232,7 +233,7 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="{{ route('dashboard.mutations.upload-document', $mutation->id) }}"
+                                        <form action="{{ route('dashboard.sales.upload-document', $sale->id) }}"
                                             method="post" enctype="multipart/form-data">
                                             @csrf
                                             <div class="form-group">
@@ -260,26 +261,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($mutation->files as $document)
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $document->file_name }}</td>
-                                    {{-- Show url path to download directy --}}
-                                    <td><a href="{{ Storage::url('asset/document/' . $document->file_name) }}"
-                                            target="_blank">{{ $document->file_name }}</a></td>
-                                    <td>
-                                        <form
-                                            action="{{ route('dashboard.mutations.delete-document', [$mutation->id, $document->id]) }}"
-                                            method="post" class="d-inline" id="form-delete-document">
-                                            @csrf
-                                            @method('delete')
-                                            <button type="submit" class="btn btn-danger btn-sm button-delete-document">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
                         </tbody>
                     </table>
                 </div>

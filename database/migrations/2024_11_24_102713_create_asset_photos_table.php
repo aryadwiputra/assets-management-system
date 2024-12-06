@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('disposal_files', function (Blueprint $table) {
+        Schema::create('asset_photos', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('disposal_id');
-            $table->foreign('disposal_id')->references('id')->on('disposals')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('file_name');
+            $table->unsignedBigInteger('asset_id');
+            $table->foreign('asset_id')->references('id')->on('assets')->onDelete('cascade');
+            $table->string('photo');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('disposal_files');
+        Schema::dropIfExists('asset_photos');
     }
 };

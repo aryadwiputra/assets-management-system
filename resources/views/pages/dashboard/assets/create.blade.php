@@ -244,10 +244,19 @@
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="thumbnail">Thumbnail</label>
+                            <label for="thumbnail">Thumbnail<span class="text-danger">*</span></label>
                             <input type="file" name="thumbnail" class="form-control" id="thumbnail">
                             <img id="thumbnail-preview" alt="" class="img-fluid mt-3" width="300">
                             @error('thumbnail')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="photos">Foto</label>
+                            <input type="file" multiple name="photos[]" class="form-control" id="photos">
+                            @error('photos')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
