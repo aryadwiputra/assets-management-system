@@ -80,9 +80,9 @@ class Asset extends Model
         return $this->hasMany(Mutation::class, 'asset_id');
     }
 
-    public function disposals()
+    public function disposal()
     {
-        return $this->belongsToMany(Disposal::class, 'asset_disposal');
+        return $this->hasMany(Disposal::class);
     }
 
     public function sale()

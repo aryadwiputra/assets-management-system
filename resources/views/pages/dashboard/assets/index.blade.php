@@ -114,6 +114,63 @@
                             </form>
                         </div>
                     </div>
+                </div>{{-- Jual --}}
+                <button class="btn btn-danger mx-2" id="bulk-disposal" disabled data-toggle="modal"
+                    data-target="#disposalModal">
+                    <i class="nav-icon fas fa-arrow-circle-left"></i>
+                    Bulk Disposal
+                </button>
+                {{-- Modal --}}
+                <div class="modal fade" id="disposalModal" tabindex="-1" role="dialog"
+                    aria-labelledby="disposalModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="disposalModalLabel">Bulk Jual</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form id="bulk-add-disposal-form" action="{{ route('dashboard.assets.disposal.store') }}"
+                                method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="project_id">Proyek</label>
+                                        <select class="form-control" id="project_id" name="project_id">
+                                            @foreach ($projects as $project)
+                                                <option value="{{ $project->id }}">{{ $project->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="pic_id">PIC</label>
+                                        <select class="form-control" id="pic_id" name="pic_id">
+                                            @foreach ($pics as $person_in_charge)
+                                                <option value="{{ $person_in_charge->id }}">{{ $person_in_charge->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="status">Status</label>
+                                        <select name="status" id="status" class="form-control">
+                                            <option value="pending">Pending</option>
+                                            <option value="reject">Ditolak</option>
+                                            <option value="approve">Disetujui</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="description">Deskripsi</label>
+                                        <textarea class="form-control" name="description" id="description" cols="10" rows="5"></textarea>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
                 {{-- Import --}}
                 <button type="button" class="btn btn-success mx-2" data-toggle="modal" data-target="#importModal">
@@ -355,8 +412,6 @@
         });
     </script>
 
-
-
     {{-- Script Bulk Jual --}}
     <script>
         $(document).ready(function() {
@@ -412,6 +467,65 @@
 
                 // Show modal
                 $('#saleModal').modal('show');
+            });
+        });
+    </script>
+
+    {{-- Script Bulk Jual --}}
+    <script>
+        $(document).ready(function() {
+            // Fungsi untuk memeriksa apakah ada aset yang dipilih
+            function checkAssetSelection() {
+                let assetIds = [];
+                $('.asset-checkbox:checked').each(function() {
+                    assetIds.push($(this).val());
+                });
+
+                // Aktifkan atau nonaktifkan tombol berdasarkan jumlah aset yang dipilih
+                if (assetIds.length > 0) {
+                    $('#bulk-disposal').prop('disabled', false);
+                } else {
+                    $('#bulk-disposal').prop('disabled', true);
+                }
+            }
+
+            // Event listener untuk checkbox "Select All"
+            $('#select-all').on('change', function() {
+                $('.asset-checkbox').prop('checked', $(this).is(':checked'));
+                checkAssetSelection();
+            });
+
+            // Event listener untuk checkbox aset
+            $('.asset-checkbox').on('change', function() {
+                checkAssetSelection();
+            });
+
+            // Event listener untuk tombol Bulk Mutasi
+            $('#bulk-disposal').on('click', function(e) {
+                e.preventDefault();
+                let assetIds = [];
+                $('.asset-checkbox:checked').each(function() {
+                    assetIds.push($(this).val());
+                });
+
+                if (assetIds.length === 0) {
+                    Swal.fire({
+                        title: 'Peringatan',
+                        text: 'Tidak ada aset yang dipilih.',
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    });
+                    return;
+                }
+
+                // Append asset IDs as array
+                assetIds.forEach(function(assetId) {
+                    $('#bulk-add-disposal-form').append(
+                        '<input type="hidden" name="asset_ids[]" value="' + assetId + '">');
+                });
+
+                // Show modal
+                $('#disposalModal').modal('show');
             });
         });
     </script>

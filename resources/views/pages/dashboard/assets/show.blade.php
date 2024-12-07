@@ -62,6 +62,14 @@
                                 href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home"
                                 aria-selected="true">Pembelian</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tabs-mutation-tab" data-toggle="pill" href="#tabs-mutation"
+                                role="tab" aria-controls="tabs-mutation" aria-selected="true">Riwayat Mutasi</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tabs-disposal-tab" data-toggle="pill" href="#tabs-disposal"
+                                role="tab" aria-controls="tabs-disposal" aria-selected="true">Riwayat Disposal</a>
+                        </li>
                     </ul>
                 </div>
 
@@ -385,10 +393,69 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel"
-                            aria-labelledby="custom-tabs-one-messages-tab">
-                            <div class="mb-3">
-                            </div>
+                        <div class="tab-pane fade" id="tabs-mutation" role="tabpanel" aria-labelledby="tabs-mutation">
+                            <table class="table table-bordered" id="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tanggal Mutasi</th>
+                                        <th>Lokasi Awal</th>
+                                        <th>Lokasi Tujuan</th>
+                                        <th>PIC Awal</th>
+                                        <th>PIC Tujuan</th>
+                                        <th>Pengguna Awal</th>
+                                        <th>Pengguna Tujuan</th>
+                                        <th>Status</th>
+                                        <th>Deskripsi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($asset->mutations as $mutation)
+                                        <tr>
+                                            <td>{{ $mutation->created_at->format('d M Y H:i') }}</td>
+                                            <td>{{ $mutation->fromLocation->name }}</td>
+                                            <td>{{ $mutation->toLocation->name }}</td>
+                                            <td>{{ $mutation->fromPic->name }}</td>
+                                            <td>{{ $mutation->toPic->name }}</td>
+                                            <td>{{ $mutation->fromEmployee->name }}</td>
+                                            <td>{{ $mutation->toEmployee->name }}</td>
+                                            <td>{{ $mutation->status }}</td>
+                                            <td>{{ $mutation->description ?? '-' }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="tabs-disposal" role="tabpanel" aria-labelledby="tabs-disposal">
+                            <table class="table table-bordered" id="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tanggal Mutasi</th>
+                                        <th>Lokasi Awal</th>
+                                        <th>Lokasi Tujuan</th>
+                                        <th>PIC Awal</th>
+                                        <th>PIC Tujuan</th>
+                                        <th>Pengguna Awal</th>
+                                        <th>Pengguna Tujuan</th>
+                                        <th>Status</th>
+                                        <th>Deskripsi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($asset->disposal as $disposal)
+                                        <tr>
+                                            <td>{{ $mutation->created_at->format('d M Y H:i') }}</td>
+                                            <td>{{ $mutation->fromLocation->name }}</td>
+                                            <td>{{ $mutation->toLocation->name }}</td>
+                                            <td>{{ $mutation->fromPic->name }}</td>
+                                            <td>{{ $mutation->toPic->name }}</td>
+                                            <td>{{ $mutation->fromEmployee->name }}</td>
+                                            <td>{{ $mutation->toEmployee->name }}</td>
+                                            <td>{{ $mutation->status }}</td>
+                                            <td>{{ $mutation->description ?? '-' }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

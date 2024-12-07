@@ -11,24 +11,9 @@ class Disposal extends Model
 
     protected $guarded = ['id'];
     
-    public function assets()
+    public function asset()
     {
-        return $this->belongsToMany(Asset::class, 'asset_disposal');
-    }
-    
-    public function files()
-    {
-        return $this->hasMany(DisposalFile::class);
-    }
-
-    public function pic()
-    {
-        return $this->belongsTo(PersonInCharge::class);
-    }
-
-    public function status()
-    {
-        return $this->belongsTo(Status::class);
+        return $this->belongsTo(Asset::class);
     }
 
     public function user()

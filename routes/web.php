@@ -65,6 +65,7 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::post('assets/import', [AssetController::class, 'import'])->name('assets.import');
     Route::get('assets/{asset}/mutation', [AssetController::class, 'mutation'])->name('assets.mutation');
     Route::post('assets/sale/store', [AssetController::class, 'addSale'])->name('assets.sale.store');
+    Route::post('assets/disposal/store', [AssetController::class, 'addDisposal'])->name('assets.disposal.store');
     Route::resource('assets', AssetController::class);
 
     // Mutations

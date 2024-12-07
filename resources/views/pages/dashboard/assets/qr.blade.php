@@ -1,60 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Codes</title>
+    <title>QR Code Label</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f9f9f9;
         }
 
-        .qr-code {
+        .label {
+            display: flex;
+            align-items: center;
             border: 1px solid #000;
             padding: 10px;
-            margin: 10px;
-            width: 200px;
-            display: inline-block;
+            background-color: #fff;
+            width: 400px;
+        }
+
+        .label .qr-code {
+            flex: 1;
             text-align: center;
         }
 
-        .qr-code h2 {
-            margin: 0 0 10px;
+        .label .qr-code img {
+            width: 100px;
+            height: 100px;
+        }
+
+        .label .details {
+            flex: 2;
+            padding-left: 15px;
+            text-align: left;
+        }
+
+        .label .details h1 {
             font-size: 16px;
+            margin: 0 0 10px;
         }
 
-        .qr-code img {
-            max-width: 100%;
-            height: auto;
+        .label .details p {
+            margin: 5px 0;
+            font-size: 14px;
         }
 
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin: 20px;
-        }
-
-        h1 {
-            text-align: center;
-            margin: 50px 0;
+        .label .details .asset-code {
+            font-weight: bold;
+            font-size: 16px;
         }
     </style>
 </head>
-
 <body>
-    <h1>QR Codes</h1>
-    <div class="container">
-        @foreach ($assets as $asset)
-            <div class="qr-code">
-                <h2>{{ $asset->name }}</h2>
-                <img src="{{ public_path('storage/asset/qr/' . $asset->slug . '.png') }}" alt="QR Code">
-            </div>
-        @endforeach
+    @foreach ($assets as $asset)
+    <div class="label">
+        <div class="qr-code">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=PropertyOfCitanusaGroup" alt="QR Code">
+        </div>
+        <div class="details">
+            <h1>Property Of</h1>
+            <p>Citanusa Group</p>
+            <p class="asset-code">ASSET CODE<br>IT0824XXX</p>
+        </div>
     </div>
+    @endforeach
 </body>
-
 </html>

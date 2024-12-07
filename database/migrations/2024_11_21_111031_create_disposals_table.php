@@ -19,8 +19,9 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('pic_id');
             $table->foreign('pic_id')->references('id')->on('person_in_charges')->onDelete('cascade');
-            $table->unsignedBigInteger('status_id');
-            $table->foreign('status_id')->references('id')->on('statuses')->onDelete('cascade');
+            $table->unsignedBigInteger('asset_id');
+            $table->foreign('asset_id')->references('id')->on('assets')->onDelete('cascade');
+            $table->string('status');
             $table->text('description')->nullable();
             $table->timestamps();
         });
