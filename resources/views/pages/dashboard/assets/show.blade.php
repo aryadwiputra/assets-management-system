@@ -429,13 +429,9 @@
                             <table class="table table-bordered" id="data-table">
                                 <thead>
                                     <tr>
-                                        <th>Tanggal Mutasi</th>
-                                        <th>Lokasi Awal</th>
-                                        <th>Lokasi Tujuan</th>
-                                        <th>PIC Awal</th>
-                                        <th>PIC Tujuan</th>
-                                        <th>Pengguna Awal</th>
-                                        <th>Pengguna Tujuan</th>
+                                        <th>Tanggal Disposisi</th>
+                                        <th>Project</th>
+                                        <th>PIC</th>
                                         <th>Status</th>
                                         <th>Deskripsi</th>
                                     </tr>
@@ -443,15 +439,11 @@
                                 <tbody>
                                     @foreach ($asset->disposal as $disposal)
                                         <tr>
-                                            <td>{{ $mutation->created_at->format('d M Y H:i') }}</td>
-                                            <td>{{ $mutation->fromLocation->name }}</td>
-                                            <td>{{ $mutation->toLocation->name }}</td>
-                                            <td>{{ $mutation->fromPic->name }}</td>
-                                            <td>{{ $mutation->toPic->name }}</td>
-                                            <td>{{ $mutation->fromEmployee->name }}</td>
-                                            <td>{{ $mutation->toEmployee->name }}</td>
-                                            <td>{{ $mutation->status }}</td>
-                                            <td>{{ $mutation->description ?? '-' }}</td>
+                                            <td>{{ $disposal->created_at->format('d M Y H:i') }}</td>
+                                            <td>{{ $disposal->project->name }}</td>
+                                            <td>{{ $disposal->pic->name }}</td>
+                                            <td>{{ $disposal->status }}</td>
+                                            <td>{{ $disposal->description ?? '-' }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

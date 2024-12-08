@@ -16,6 +16,11 @@ class Disposal extends Model
         return $this->belongsTo(Asset::class);
     }
 
+    public function pic()
+    {
+        return $this->belongsTo(PersonInCharge::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);   
