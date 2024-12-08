@@ -89,4 +89,14 @@ class Asset extends Model
     {
         return $this->belongsTo(Sale::class);
     }
+
+    public function repair_car()
+    {
+        return $this->hasMany(AssetRepairCar::class);
+    }
+
+    public function repair_electronic()
+    {
+        return $this->hasMany(AssetRepairElectronic::class);
+    }
 }

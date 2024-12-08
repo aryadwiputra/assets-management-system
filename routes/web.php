@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AssetClassController;
 use App\Http\Controllers\AssetController;
+use App\Http\Controllers\AssetRepairCarController;
 use App\Http\Controllers\AssetStatusController;
 use App\Http\Controllers\AssetUserController;
 use App\Http\Controllers\CategoryController;
@@ -66,6 +67,7 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::get('assets/{asset}/mutation', [AssetController::class, 'mutation'])->name('assets.mutation');
     Route::post('assets/sale/store', [AssetController::class, 'addSale'])->name('assets.sale.store');
     Route::post('assets/disposal/store', [AssetController::class, 'addDisposal'])->name('assets.disposal.store');
+    Route::post('assets/repair-car/store', [AssetRepairCarController::class, 'store'])->name('assets.repair-car.store');
     Route::resource('assets', AssetController::class);
 
     // Mutations

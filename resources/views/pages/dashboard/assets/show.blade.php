@@ -49,6 +49,16 @@
             </div>
         </div>
         <div class="col-md-9">
+            {{-- If Errors Any --}}
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <div class="card card-tabs">
                 <div class="card-header p-0">
                     <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
@@ -69,6 +79,11 @@
                         <li class="nav-item">
                             <a class="nav-link" id="tabs-disposal-tab" data-toggle="pill" href="#tabs-disposal"
                                 role="tab" aria-controls="tabs-disposal" aria-selected="true">Riwayat Disposal</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tabs-repair-cars-tab" data-toggle="pill" href="#tabs-repair-cars"
+                                role="tab" aria-controls="tabs-repair-cars" aria-selected="true">Riwayat Perbaikan
+                                Mobil</a>
                         </li>
                     </ul>
                 </div>
@@ -449,9 +464,110 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="tab-pane fade" id="tabs-repair-cars" role="tabpanel"
+                            aria-labelledby="tabs-repair-cars">
+                            <button type="button" class="btn btn-primary mb-2" data-toggle="modal"
+                                data-target="#modal-repair-car">Tambah Data</button>
+                            {{-- Modal --}}
+                            <div class="modal fade" id="modal-repair-car" tabindex="-1" role="dialog"
+                                aria-labelledby="modal-repair-car" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="mutationModalLabel">Tambah Data Servis Mobil</h5>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="{{ route('dashboard.assets.repair-car.store') }}"
+                                                method="post">
+                                                @csrf
+                                                <input type="hidden" name="asset_id" value="{{ $asset->id }}">
+                                                <div class="form-group">
+                                                    <label for="plate_number">Nomor Kendaraan</label>
+                                                    <input type="text" class="form-control" id="plate_number"
+                                                        name="plate_number" placeholder="Nomor Kendaraan">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="date">Tanggal Perbaikan</label>
+                                                    <input type="date" class="form-control" id="date"
+                                                        name="date">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="kilometers">Kilometer Terakhir</label>
+                                                    <input type="number" class="form-control" id="kilometers"
+                                                        name="kilometers">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="service_name">Nama Servis</label>
+                                                    <input type="text" class="form-control" id="service_name"
+                                                        name="service_name">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="vendor">Vendor</label>
+                                                    <input type="text" class="form-control" id="vendor"
+                                                        name="vendor">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="price">Biaya Perbaikan</label>
+                                                    <input type="number" class="form-control" id="price"
+                                                        name="price">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="quantity">Kuantitas</label>
+                                                    <input type="number" class="form-control" id="quantity"
+                                                        name="quantity">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="unit">Satuan</label>
+                                                    <input type="text" class="form-control" id="unit"
+                                                        name="unit">
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Simpan Data</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <table class="table table-bordered" id="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Tanggal Perbaikan</th>
+                                    <th>Plat Nomor</th>
+                                    <th>Nama Servis</th>
+                                    <th>Nama Vendor</th>
+                                    <th>Kilometer Terakhir</th>
+                                    <th>Kuantitas</th>
+                                    <th>Satuan</th>
+                                    <th>Harga</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($asset->repair_car as $repair_car)
+                                    <tr>
+                                        {{-- <td>{{ $repair_car->date->format('d M Y H:i') }}</td> --}}
+                                        <td>{{ $repair_car->date }}</td>
+                                        <td>{{ $repair_car->plate_number }}</td>
+                                        <td>{{ $repair_car->service_name }}</td>
+                                        <td>{{ $repair_car->vendor }}</td>
+                                        <td>{{ $repair_car->kilometers }}</td>
+                                        <td>{{ $repair_car->quantity }}</td>
+                                        <td>{{ $repair_car->unit }}</td>
+                                        <td>{{ $repair_car->price }}</td>
+                                        <td>{{ $repair_car->total }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 @endsection

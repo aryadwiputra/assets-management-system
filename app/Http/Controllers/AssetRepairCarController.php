@@ -1,0 +1,42 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Asset;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class AssetRepairCarController extends Controller
+{
+    public function store(Request $request){
+        $request->validate([
+            'asset_id'=> 'required',
+            'plate_number'=> 'required',
+            'service_name'=> 'required',
+            'vendor'=> 'required',
+            'kilometers'=> 'required',
+            'quantity'=> 'required',
+            'unit'=> 'required',
+            'price'=> 'required',
+            'date'=> 'required',
+        ]);
+
+        $asset = Asset::find($request->asset_id);
+
+        $total = $request->price * $request->quantity;
+        $asset->repair_car()->create([
+            'asset_id'=> $request->asset_id,
+            'user_id'=> Auth::user()->id,
+            'plate_number'=> $request->plate_number,
+            'service_name'=> $request->service_name,
+            'vendor'=> $request->vendor,
+            'kilometers'=> $request->kilometers,
+            'quantity'=> $request->quantity,
+            'unit'=> $request->unit,
+            'price'=> $request->price,
+            'date'=> $request->date,
+            'total'=> $total
+        ]);
+        return redirect()->back()->with('success', 'Data Berhasil Disimpan');
+    }
+}
