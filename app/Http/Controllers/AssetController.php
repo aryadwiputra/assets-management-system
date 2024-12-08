@@ -20,6 +20,7 @@ use App\Models\Warranty;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -35,10 +36,19 @@ class AssetController extends Controller
      */
     public function index()
     {
-        $assets = Asset::with(['category', 'company', 'class', 'department', 'employee', 'location', 'person_in_charge', 'project', 'status', 'unit_of_measurement', 'warranty'])->get();
+        $assets = Asset::with(['category', 'company', 'class', 'department', 'employee', 'location', 'person_in_charge', 'project', 'status', 'unit_of_measurement', 'warranty'])->where('is_sale' , 0)->where('is_disposal', 0)->get();
+
+        $locations = Location::all();
+        $pics = PersonInCharge::all();
+        $employees = Employee::all();
+        $projects = Project::all();
 
         return view('pages.dashboard.assets.index', compact(
             'assets',
+            'locations',
+            'pics',
+            'employees',
+            'projects'
         ));
     }
 
@@ -135,6 +145,7 @@ class AssetController extends Controller
             'pic_id' => $request->pic_id,
             'unit_of_measurement_id' => $request->unit_of_measurement_id,
             'warranty_id' => $request->warranty_id,
+            'erp_number' => $request->erp_number,
             'number' => $prefix . $request->number,
             'name' => $request->name,
             'serial_number' => $request->serial_number,
@@ -321,6 +332,7 @@ class AssetController extends Controller
             'unit_of_measurement_id' => $request->unit_of_measurement_id,
             'warranty_id' => $request->warranty_id,
             'name' => $request->name,
+            'erp_number' => $request->erp_number,
             'number' => $prefix . $request->number,
             'serial_number' => $request->serial_number,
             'slug' => $slug,
@@ -369,6 +381,88 @@ class AssetController extends Controller
         $asset->delete();
 
         return redirect()->route('dashboard.assets.index')->with('success', 'Asset berhasil dihapus.');
+    }
+
+    /**
+     * Riwayat mutasi dari asset
+     */
+    public function mutation(Asset $asset)
+    {
+        // Ambil riwayat mutasi aset
+        $mutations = $asset->mutations()->orderBy('created_at', 'desc')->get();
+
+        return view('pages.dashboard.assets.mutation', compact('asset', 'mutations'));
+    }
+
+    /**
+     * Store New Sale Data
+     */
+    public function addSale(Asset $asset, Request $request)
+    {
+        $request->validate([
+            'asset_ids' => 'required|array',
+            'asset_ids.*' => 'exists:assets,id',
+            'date' => 'required',
+            'price' => 'required|numeric',
+            'buyer_name' => 'required',
+        ]);
+
+        $assetIds = $request->asset_ids;
+
+        foreach ($assetIds as $assetId) {
+            $asset = Asset::findOrFail($assetId);
+            
+            $asset->sale()->create([
+                'asset_id' => $asset->id,
+                'date' => $request->date,
+                'price' => $request->price,
+                'buyer_name' => $request->buyer_name,
+            ]);
+    
+            // Update asset is_sale to 1
+            $asset->update([
+                'is_sale' => 1,
+            ]);
+        }
+
+        return redirect()->route('dashboard.assets.index')->with('success', 'Asset berhasil dijual.');
+    }
+
+    /**
+     * Store New Disposal Data
+     */
+    public function addDisposal(Asset $asset, Request $request)
+    {
+        $request->validate([
+            'asset_ids' => 'required|array',
+            'asset_ids.*' => 'exists:assets,id',
+            'project_id' => 'required',
+            'pic_id' => 'required',
+            'status' => 'required',
+            'description' => 'required',
+        ]);
+
+        $assetIds = $request->asset_ids;
+
+        foreach ($assetIds as $assetId) {
+            $asset = Asset::findOrFail($assetId);
+            
+            $asset->disposal()->create([
+                'asset_id' => $asset->id,
+                'project_id' => $request->project_id,
+                'user_id' => Auth::user()->id,
+                'pic_id' => $request->pic_id,
+                'status' => $request->status,
+                'description' => $request->description,
+            ]);
+    
+            // Update asset is_disposal to 1
+            $asset->update([
+                'is_disposal' => 1,
+            ]);
+        }
+
+        return redirect()->route('dashboard.assets.index')->with('success', 'Asset berhasil dilakukan disposal.');
     }
     
     /**
@@ -462,16 +556,17 @@ class AssetController extends Controller
                     'pic_id' => isset($value[8]) ? $value[8] : null,
                     'unit_of_measurement_id' => isset($value[9]) ? $value[9] : null,
                     'warranty_id' => isset($value[10]) ? $value[10] : null,
-                    'number' => isset($value[11]) ? $value[11] : null,
-                    'name' => isset($value[12]) ? $value[12] : null,
-                    'serial_number' => isset($value[13]) ? $value[13] : null,
+                    'erp_number' => isset($value[11]) ? $value[11] : null,
+                    'number' => isset($value[12]) ? $value[12] : null,
+                    'name' => isset($value[13]) ? $value[13] : null,
+                    'serial_number' => isset($value[14]) ? $value[14] : null,
                     'slug' => $slug,
-                    'price' => isset($value[15]) ? $value[15] : null,
-                    'purchase_date' => isset($value[16]) ? $this->convertExcelDate($value[16]) : null,
-                    'origin_of_purchase' => isset($value[17]) ? $value[17] : null,
-                    'purchase_number' => isset($value[18]) ? $value[18] : null,
-                    'description' => isset($value[19]) ? $value[19] : null,
-                    'status_information' => isset($value[20]) ? $value[20] : null,
+                    'price' => isset($value[16]) ? $value[16] : null,
+                    'purchase_date' => isset($value[17]) ? $this->convertExcelDate($value[17]) : null,
+                    'origin_of_purchase' => isset($value[18]) ? $value[18] : null,
+                    'purchase_number' => isset($value[19]) ? $value[19] : null,
+                    'description' => isset($value[20]) ? $value[20] : null,
+                    'status_information' => isset($value[21]) ? $value[21] : null,
                     'thumbnail' => $thumbnailPath,
                     'thumbnail_extension' => $thumbnailExtension,
                     'thumbnail_path' => $thumbnailPath,

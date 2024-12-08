@@ -13,18 +13,11 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('project_id');
-            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade')->onUpdate('cascade');
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->unsignedBigInteger('pic_id');
-            $table->foreign('pic_id')->references('id')->on('person_in_charges')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('name');
+            $table->unsignedBigInteger('asset_id');
+            $table->foreign('asset_id')->references('id')->on('assets')->onDelete('cascade');
             $table->date('date');
             $table->integer('price');
             $table->string('buyer_name');
-            $table->string('buyer_contact');
-            $table->longText('notes')->nullable();
             $table->timestamps();
         });
     }

@@ -77,16 +77,16 @@ class Asset extends Model
     
     public function mutations()
     {
-        return $this->belongsToMany(Mutation::class, 'asset_mutation');
+        return $this->hasMany(Mutation::class, 'asset_id');
     }
 
-    public function disposals()
+    public function disposal()
     {
-        return $this->belongsToMany(Disposal::class, 'asset_disposal');
+        return $this->hasMany(Disposal::class);
     }
 
-    public function sales()
+    public function sale()
     {
-        return $this->belongsToMany(Sale::class, 'asset_sale');
+        return $this->belongsTo(Sale::class);
     }
 }

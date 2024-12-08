@@ -127,12 +127,22 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="form-group">
                             <label for="serial_number">Nomor Seri</label>
                             <input type="text" name="serial_number" class="form-control"
                                 value="{{ old('serial_number') }}" placeholder="Masukkan Nomor Seri" id="serial_number">
                             @error('serial_number')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="number">Nomor ERP</label>
+                            <input type="text" name="erp_number" class="form-control" placeholder="Masukkan Nomor ERP"
+                                value="{{ old('erp_number') }}">
+                            @error('number')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>

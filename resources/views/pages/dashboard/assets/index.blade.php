@@ -12,16 +12,173 @@
         <div class="d-flex justify-content-between">
             <h5>Data</h5>
             <div class="d-flex justify-content-between mb-2">
-                <a href="{{ route('dashboard.mutations.create') }}" class="btn btn-secondary">
-                    {{-- Icon right --}}
-                    <i class="fas fa-arrows-alt"></i> Mutasi
-                </a>
+                {{-- Mutasi --}}
+                <button class="btn btn-secondary mx-2" id="bulk-mutation" disabled data-toggle="modal"
+                    data-target="#mutationModal">
+                    <i class="nav-icon fas fa-arrows-alt"></i>
+                    Bulk Mutasi
+                </button>
+                {{-- Modal --}}
+                <div class="modal fade" id="mutationModal" tabindex="-1" role="dialog" aria-labelledby="mutationModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="mutationModalLabel">Bulk Mutasi</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form id="bulk-add-mutation-form" action="{{ route('dashboard.mutations.store') }}"
+                                method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        {{-- To Location --}}
+                                        <label for="to_location">To Location</label>
+                                        <select class="form-control select2" id="to_location" name="to_location">
+                                            @foreach ($locations as $location)
+                                                <option value="{{ $location->id }}">{{ $location->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        {{-- PIC --}}
+                                        <label for="pic">PIC</label>
+                                        <select class="form-control select2" id="pic" name="to_pic">
+                                            @foreach ($pics as $person_in_charge)
+                                                <option value="{{ $person_in_charge->id }}">{{ $person_in_charge->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        {{-- Employee --}}
+                                        <label for="employee">Pengguna</label>
+                                        <select class="form-control select2" id="employee" name="to_employee">
+                                            @foreach ($employees as $employee)
+                                                <option value="{{ $employee->id }}">{{ $employee->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {{-- Jual --}}
+                <button class="btn btn-danger mx-2" id="bulk-sale" disabled data-toggle="modal" data-target="#saleModal">
+                    <i class="nav-icon fas fa-balance-scale"></i>
+                    Bulk Jual
+                </button>
+                {{-- Modal --}}
+                <div class="modal fade" id="saleModal" tabindex="-1" role="dialog" aria-labelledby="saleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="saleModalLabel">Bulk Jual</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form id="bulk-add-sale-form" action="{{ route('dashboard.assets.sale.store') }}" method="POST"
+                                enctype="multipart/form-data">
+                                @csrf
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="date">Tanggal Dijual</label>
+                                        <input type="date" class="form-control" id="date" name="date"
+                                            value="{{ old('date') }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="price">Harga</label>
+                                        <input type="number" class="form-control" id="price" name="price"
+                                            value="{{ old('price') }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="buyer_name">Pembeli</label>
+                                        <input type="text" class="form-control" id="buyer_name" name="buyer_name"
+                                            value="{{ old('buyer_name') }}">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>{{-- Jual --}}
+                <button class="btn btn-danger mx-2" id="bulk-disposal" disabled data-toggle="modal"
+                    data-target="#disposalModal">
+                    <i class="nav-icon fas fa-arrow-circle-left"></i>
+                    Bulk Disposal
+                </button>
+                {{-- Modal --}}
+                <div class="modal fade" id="disposalModal" tabindex="-1" role="dialog"
+                    aria-labelledby="disposalModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="disposalModalLabel">Bulk Jual</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form id="bulk-add-disposal-form" action="{{ route('dashboard.assets.disposal.store') }}"
+                                method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="project_id">Proyek</label>
+                                        <select class="form-control" id="project_id" name="project_id">
+                                            @foreach ($projects as $project)
+                                                <option value="{{ $project->id }}">{{ $project->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="pic_id">PIC</label>
+                                        <select class="form-control" id="pic_id" name="pic_id">
+                                            @foreach ($pics as $person_in_charge)
+                                                <option value="{{ $person_in_charge->id }}">{{ $person_in_charge->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="status">Status</label>
+                                        <select name="status" id="status" class="form-control">
+                                            <option value="pending">Pending</option>
+                                            <option value="reject">Ditolak</option>
+                                            <option value="approve">Disetujui</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="description">Deskripsi</label>
+                                        <textarea class="form-control" name="description" id="description" cols="10" rows="5"></textarea>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {{-- Import --}}
                 <button type="button" class="btn btn-success mx-2" data-toggle="modal" data-target="#importModal">
                     <i class="fas fa-file-import"></i> Import Data
                 </button>
                 {{-- Modal --}}
-                <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel"
-                    aria-hidden="true">
+                <div class="modal fade" id="importModal" tabindex="-1" role="dialog"
+                    aria-labelledby="importModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -81,6 +238,7 @@
                         <th>Thumbnail</th>
                         <th>Lokasi</th>
                         <th>Kategori</th>
+                        <th>Nomor ERP</th>
                         <th>Nomor Aset</th>
                         <th>Nama</th>
                         <th>PIC</th>
@@ -105,6 +263,7 @@
                             </td>
                             <td>{{ $data->location->name }}</td>
                             <td>{{ $data->category->name }}</td>
+                            <td>{{ $data->erp_number }}</td>
                             <td>{{ $data->number }}</td>
                             <td>{{ $data->name }}</td>
                             <td>{{ $data->person_in_charge->name }}</td>
@@ -112,8 +271,7 @@
                                 <a href="{{ route('dashboard.assets.show', $data->id) }}" class="btn btn-success">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                <a href="{{ route('dashboard.assets.edit', $data->id) }}"
-                                    class="btn btn-primary btn">
+                                <a href="{{ route('dashboard.assets.edit', $data->id) }}" class="btn btn-primary btn">
                                     <i class="fas fa-pencil-alt"></i>
                                 </a>
                                 <form action="{{ route('dashboard.assets.destroy', $data->id) }}" method="post"
@@ -191,6 +349,183 @@
 
                 window.location.href = "{{ route('dashboard.assets.print-qr') }}?ids=" + selectedIds.join(
                     ',');
+            });
+        });
+    </script>
+
+    {{-- Script Bulk Mutation --}}
+    <script>
+        $(document).ready(function() {
+            // Fungsi untuk memeriksa apakah ada aset yang dipilih
+            function checkAssetSelection() {
+                let assetIds = [];
+                $('.asset-checkbox:checked').each(function() {
+                    assetIds.push($(this).val());
+                });
+
+                // Aktifkan atau nonaktifkan tombol berdasarkan jumlah aset yang dipilih
+                if (assetIds.length > 0) {
+                    $('#bulk-mutation').prop('disabled', false);
+                } else {
+                    $('#bulk-mutation').prop('disabled', true);
+                }
+            }
+
+            // Event listener untuk checkbox "Select All"
+            $('#select-all').on('change', function() {
+                $('.asset-checkbox').prop('checked', $(this).is(':checked'));
+                checkAssetSelection();
+            });
+
+            // Event listener untuk checkbox aset
+            $('.asset-checkbox').on('change', function() {
+                checkAssetSelection();
+            });
+
+            // Event listener untuk tombol Bulk Mutasi
+            $('#bulk-mutation').on('click', function(e) {
+                e.preventDefault();
+                let assetIds = [];
+                $('.asset-checkbox:checked').each(function() {
+                    assetIds.push($(this).val());
+                });
+
+                if (assetIds.length === 0) {
+                    Swal.fire({
+                        title: 'Peringatan',
+                        text: 'Tidak ada aset yang dipilih.',
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    });
+                    return;
+                }
+
+                // Append asset IDs as array
+                assetIds.forEach(function(assetId) {
+                    $('#bulk-add-mutation-form').append(
+                        '<input type="hidden" name="asset_ids[]" value="' + assetId + '">');
+                });
+
+                // Show modal
+                $('#mutationModal').modal('show');
+            });
+        });
+    </script>
+
+    {{-- Script Bulk Jual --}}
+    <script>
+        $(document).ready(function() {
+            // Fungsi untuk memeriksa apakah ada aset yang dipilih
+            function checkAssetSelection() {
+                let assetIds = [];
+                $('.asset-checkbox:checked').each(function() {
+                    assetIds.push($(this).val());
+                });
+
+                // Aktifkan atau nonaktifkan tombol berdasarkan jumlah aset yang dipilih
+                if (assetIds.length > 0) {
+                    $('#bulk-sale').prop('disabled', false);
+                } else {
+                    $('#bulk-sale').prop('disabled', true);
+                }
+            }
+
+            // Event listener untuk checkbox "Select All"
+            $('#select-all').on('change', function() {
+                $('.asset-checkbox').prop('checked', $(this).is(':checked'));
+                checkAssetSelection();
+            });
+
+            // Event listener untuk checkbox aset
+            $('.asset-checkbox').on('change', function() {
+                checkAssetSelection();
+            });
+
+            // Event listener untuk tombol Bulk Mutasi
+            $('#bulk-sale').on('click', function(e) {
+                e.preventDefault();
+                let assetIds = [];
+                $('.asset-checkbox:checked').each(function() {
+                    assetIds.push($(this).val());
+                });
+
+                if (assetIds.length === 0) {
+                    Swal.fire({
+                        title: 'Peringatan',
+                        text: 'Tidak ada aset yang dipilih.',
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    });
+                    return;
+                }
+
+                // Append asset IDs as array
+                assetIds.forEach(function(assetId) {
+                    $('#bulk-add-sale-form').append(
+                        '<input type="hidden" name="asset_ids[]" value="' + assetId + '">');
+                });
+
+                // Show modal
+                $('#saleModal').modal('show');
+            });
+        });
+    </script>
+
+    {{-- Script Bulk Jual --}}
+    <script>
+        $(document).ready(function() {
+            // Fungsi untuk memeriksa apakah ada aset yang dipilih
+            function checkAssetSelection() {
+                let assetIds = [];
+                $('.asset-checkbox:checked').each(function() {
+                    assetIds.push($(this).val());
+                });
+
+                // Aktifkan atau nonaktifkan tombol berdasarkan jumlah aset yang dipilih
+                if (assetIds.length > 0) {
+                    $('#bulk-disposal').prop('disabled', false);
+                } else {
+                    $('#bulk-disposal').prop('disabled', true);
+                }
+            }
+
+            // Event listener untuk checkbox "Select All"
+            $('#select-all').on('change', function() {
+                $('.asset-checkbox').prop('checked', $(this).is(':checked'));
+                checkAssetSelection();
+            });
+
+            // Event listener untuk checkbox aset
+            $('.asset-checkbox').on('change', function() {
+                checkAssetSelection();
+            });
+
+            // Event listener untuk tombol Bulk Mutasi
+            $('#bulk-disposal').on('click', function(e) {
+                e.preventDefault();
+                let assetIds = [];
+                $('.asset-checkbox:checked').each(function() {
+                    assetIds.push($(this).val());
+                });
+
+                if (assetIds.length === 0) {
+                    Swal.fire({
+                        title: 'Peringatan',
+                        text: 'Tidak ada aset yang dipilih.',
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    });
+                    return;
+                }
+
+                // Append asset IDs as array
+                assetIds.forEach(function(assetId) {
+                    $('#bulk-add-disposal-form').append(
+                        '<input type="hidden" name="asset_ids[]" value="' + assetId + '">');
+                });
+
+                // Show modal
+                $('#disposalModal').modal('show');
             });
         });
     </script>

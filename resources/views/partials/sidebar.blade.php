@@ -160,7 +160,7 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-header">Transactions Assets</li>
+                {{-- <li class="nav-header">Transactions Assets</li>
 
                 <li class="nav-item">
                     <a href="{{ route('dashboard.mutations.index') }}"
@@ -188,7 +188,7 @@
                             Dijual
                         </p>
                     </a>
-                </li>
+                </li> --}}
                 <li class="nav-header">Laporan Assets</li>
 
                 <li class="nav-item">
@@ -196,7 +196,7 @@
                         class="nav-link {{ request()->routeIs('dashboard.report.mutation') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-file"></i>
                         <p>
-                            Mutasi
+                            Laporan Transaksi
                         </p>
                     </a>
                 </li>
