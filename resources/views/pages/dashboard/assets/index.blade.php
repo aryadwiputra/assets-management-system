@@ -147,7 +147,8 @@
                                         <label for="pic_id">PIC</label>
                                         <select class="form-control" id="pic_id" name="pic_id">
                                             @foreach ($pics as $person_in_charge)
-                                                <option value="{{ $person_in_charge->id }}">{{ $person_in_charge->name }}</option>
+                                                <option value="{{ $person_in_charge->id }}">{{ $person_in_charge->name }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -162,6 +163,66 @@
                                     <div class="form-group">
                                         <label for="description">Deskripsi</label>
                                         <textarea class="form-control" name="description" id="description" cols="10" rows="5"></textarea>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Peminjaman --}}
+                <button class="btn btn-secondary mx-2" id="bulk-borrow" disabled data-toggle="modal"
+                    data-target="#borrowModal">
+                    <i class="nav-icon fas fa-arrows-alt"></i>
+                    Bulk Peminjaman
+                </button>
+                {{-- Modal --}}
+                <div class="modal fade" id="borrowModal" tabindex="-1" role="dialog"
+                    aria-labelledby="borrowModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="borrowModalLabel">Bulk Mutasi</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form id="bulk-add-borrow-form" action="{{ route('dashboard.mutations.store') }}"
+                                method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        {{-- To Location --}}
+                                        <label for="to_location">To Location</label>
+                                        <select class="form-control select2" id="to_location" name="to_location">
+                                            @foreach ($locations as $location)
+                                                <option value="{{ $location->id }}">{{ $location->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        {{-- PIC --}}
+                                        <label for="pic">PIC</label>
+                                        <select class="form-control select2" id="pic" name="to_pic">
+                                            @foreach ($pics as $person_in_charge)
+                                                <option value="{{ $person_in_charge->id }}">{{ $person_in_charge->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        {{-- Employee --}}
+                                        <label for="employee">Pengguna</label>
+                                        <select class="form-control select2" id="employee" name="to_employee">
+                                            @foreach ($employees as $employee)
+                                                <option value="{{ $employee->id }}">{{ $employee->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="modal-footer">

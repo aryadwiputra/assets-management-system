@@ -68,6 +68,8 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::post('assets/sale/store', [AssetController::class, 'addSale'])->name('assets.sale.store');
     Route::post('assets/disposal/store', [AssetController::class, 'addDisposal'])->name('assets.disposal.store');
     Route::post('assets/repair-car/store', [AssetRepairCarController::class, 'store'])->name('assets.repair-car.store');
+    Route::get('/assets/repair-car/{id}', [App\Http\Controllers\AssetRepairCarController::class, 'show'])->name('dashboard.assets.repair-car.show');
+    Route::put('/assets/repair-car/{id}', [App\Http\Controllers\AssetRepairCarController::class, 'update'])->name('dashboard.assets.repair-car.update');
     Route::resource('assets', AssetController::class);
 
     // Mutations

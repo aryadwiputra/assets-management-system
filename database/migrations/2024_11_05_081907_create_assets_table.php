@@ -48,6 +48,7 @@ return new class extends Migration
             $table->longText('thumbnail')->nullable();
             $table->boolean('is_sale')->default(0);
             $table->boolean('is_disposal')->default(0);
+            $table->boolean('is_borrow')->default(0);
             $table->timestamps();
         });
     }

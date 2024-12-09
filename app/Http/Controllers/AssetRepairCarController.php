@@ -39,4 +39,55 @@ class AssetRepairCarController extends Controller
         ]);
         return redirect()->back()->with('success', 'Data Berhasil Disimpan');
     }
+
+    public function show($id)
+    {
+        $asset = Asset::find($id);
+
+        $repairCar = $asset->repair_car()->find($id);
+        if (!$repairCar) {
+            return response()->json(['success' => false, 'message' => 'Data tidak ditemukan'], 404);
+        }
+    
+        return response()->json(['success' => true, 'data' => $repairCar]);
+    }
+    
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'asset_id' => 'required',
+            'plate_number' => 'required',
+            'service_name' => 'required',
+            'vendor' => 'required',
+            'kilometers' => 'required',
+            'quantity' => 'required',
+            'unit' => 'required',
+            'price' => 'required',
+            'date' => 'required',
+        ]);
+        
+        $asset = Asset::find($id);
+    
+        $repairCar = $asset->repair_car()->find($id);
+        if (!$repairCar) {
+            return response()->json(['success' => false, 'message' => 'Data tidak ditemukan'], 404);
+        }
+    
+        $total = $request->price * $request->quantity;
+        $repairCar->update([
+            'asset_id' => $request->asset_id,
+            'user_id' => Auth::user()->id,
+            'plate_number' => $request->plate_number,
+            'service_name' => $request->service_name,
+            'vendor' => $request->vendor,
+            'kilometers' => $request->kilometers,
+            'quantity' => $request->quantity,
+            'unit' => $request->unit,
+            'price' => $request->price,
+            'date' => $request->date,
+            'total' => $total
+        ]);
+    
+        return response()->json(['success' => true, 'message' => 'Data berhasil diperbarui']);
+    }
 }

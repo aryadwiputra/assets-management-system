@@ -531,43 +531,175 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <table class="table table-bordered" id="data-table">
-                            <thead>
-                                <tr>
-                                    <th>Tanggal Perbaikan</th>
-                                    <th>Plat Nomor</th>
-                                    <th>Nama Servis</th>
-                                    <th>Nama Vendor</th>
-                                    <th>Kilometer Terakhir</th>
-                                    <th>Kuantitas</th>
-                                    <th>Satuan</th>
-                                    <th>Harga</th>
-                                    <th>Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($asset->repair_car as $repair_car)
+                            {{-- Modal Edit --}}
+                            {{-- Modal Edit --}}
+                            <div class="modal fade" id="modal-edit-repair-car" tabindex="-1" role="dialog"
+                                aria-labelledby="modal-edit-repair-car" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editModalLabel">Edit Data Servis Mobil</h5>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="edit-repair-car-form" method="post">
+                                                @csrf
+                                                @method('PUT')
+                                                <input type="hidden" name="asset_id" id="edit_asset_id">
+                                                <div class="form-group">
+                                                    <label for="edit_plate_number">Nomor Kendaraan</label>
+                                                    <input type="text" class="form-control" id="edit_plate_number"
+                                                        name="plate_number" placeholder="Nomor Kendaraan">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="edit_date">Tanggal Perbaikan</label>
+                                                    <input type="date" class="form-control" id="edit_date"
+                                                        name="date">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="edit_kilometers">Kilometer Terakhir</label>
+                                                    <input type="number" class="form-control" id="edit_kilometers"
+                                                        name="kilometers">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="edit_service_name">Nama Servis</label>
+                                                    <input type="text" class="form-control" id="edit_service_name"
+                                                        name="service_name">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="edit_vendor">Vendor</label>
+                                                    <input type="text" class="form-control" id="edit_vendor"
+                                                        name="vendor">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="edit_price">Biaya Perbaikan</label>
+                                                    <input type="number" class="form-control" id="edit_price"
+                                                        name="price">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="edit_quantity">Kuantitas</label>
+                                                    <input type="number" class="form-control" id="edit_quantity"
+                                                        name="quantity">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="edit_unit">Satuan</label>
+                                                    <input type="text" class="form-control" id="edit_unit"
+                                                        name="unit">
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <table class="table table-bordered" id="data-table">
+                                <thead>
                                     <tr>
-                                        {{-- <td>{{ $repair_car->date->format('d M Y H:i') }}</td> --}}
-                                        <td>{{ $repair_car->date }}</td>
-                                        <td>{{ $repair_car->plate_number }}</td>
-                                        <td>{{ $repair_car->service_name }}</td>
-                                        <td>{{ $repair_car->vendor }}</td>
-                                        <td>{{ $repair_car->kilometers }}</td>
-                                        <td>{{ $repair_car->quantity }}</td>
-                                        <td>{{ $repair_car->unit }}</td>
-                                        <td>{{ $repair_car->price }}</td>
-                                        <td>{{ $repair_car->total }}</td>
+                                        <th>Tanggal Perbaikan</th>
+                                        <th>Plat Nomor</th>
+                                        <th>Nama Servis</th>
+                                        <th>Nama Vendor</th>
+                                        <th>Kilometer Terakhir</th>
+                                        <th>Kuantitas</th>
+                                        <th>Satuan</th>
+                                        <th>Harga</th>
+                                        <th>Total</th>
+                                        <th>Aksi</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach ($asset->repair_car as $repair_car)
+                                        <tr>
+                                            {{-- <td>{{ $repair_car->date->format('d M Y H:i') }}</td> --}}
+                                            <td>{{ $repair_car->date }}</td>
+                                            <td>{{ $repair_car->plate_number }}</td>
+                                            <td>{{ $repair_car->service_name }}</td>
+                                            <td>{{ $repair_car->vendor }}</td>
+                                            <td>{{ $repair_car->kilometers }}</td>
+                                            <td>{{ $repair_car->quantity }}</td>
+                                            <td>{{ $repair_car->unit }}</td>
+                                            <td>{{ $repair_car->price }}</td>
+                                            <td>{{ $repair_car->total }}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-info edit-repair-car"
+                                                    data-id="{{ $repair_car->id }}">Edit</button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    </div>
 @endsection
+
+@push('script')
+    <script>
+        $(document).ready(function() {
+            // Handle edit button click
+            $('.edit-repair-car').click(function() {
+                var repairCarId = $(this).data('id');
+                $.ajax({
+                    url: '/dashboard/assets/repair-car/' + repairCarId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            var data = response.data;
+                            $('#edit_asset_id').val(data.asset_id);
+                            $('#edit_plate_number').val(data.plate_number);
+                            $('#edit_date').val(data.date);
+                            $('#edit_kilometers').val(data.kilometers);
+                            $('#edit_service_name').val(data.service_name);
+                            $('#edit_vendor').val(data.vendor);
+                            $('#edit_price').val(data.price);
+                            $('#edit_quantity').val(data.quantity);
+                            $('#edit_unit').val(data.unit);
+                            $('#edit-repair-car-form').attr('action',
+                                '/dashboard/assets/repair-car/' + repairCarId);
+                            $('#modal-edit-repair-car').modal('show');
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('Error fetching data');
+                    }
+                });
+            });
+
+            // Handle form submission
+            $('#edit-repair-car-form').submit(function(e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+                var url = $(this).attr('action');
+                $.ajax({
+                    url: url,
+                    type: 'PUT',
+                    data: formData,
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            alert(response.message);
+                            $('#modal-edit-repair-car').modal('hide');
+                            location.reload(); // Refresh the page to reflect changes
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('Error updating data');
+                    }
+                });
+            });
+        });
+    </script>
+@endpush
