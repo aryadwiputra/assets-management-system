@@ -85,6 +85,12 @@
                                 role="tab" aria-controls="tabs-repair-cars" aria-selected="true">Riwayat Perbaikan
                                 Mobil</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tabs-repair-electronic-tab" data-toggle="pill"
+                                href="#tabs-repair-electronic" role="tab" aria-controls="tabs-repair-electronic"
+                                aria-selected="true">Riwayat Perbaikan
+                                Elektronik</a>
+                        </li>
                     </ul>
                 </div>
 
@@ -634,6 +640,152 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="tab-pane fade" id="tabs-repair-electronic" role="tabpanel"
+                            aria-labelledby="tabs-repair-electronic">
+                            <button type="button" class="btn btn-primary mb-2" data-toggle="modal"
+                                data-target="#modal-repair-electronic">Tambah Data</button>
+                            {{-- Modal --}}
+                            <div class="modal fade" id="modal-repair-electronic" tabindex="-1" role="dialog"
+                                aria-labelledby="modal-repair-electronic" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="mutationModalLabel">Tambah Data Servis Elektronik
+                                            </h5>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="{{ route('dashboard.assets.repair-electronic.store') }}"
+                                                method="post">
+                                                @csrf
+                                                <input type="hidden" name="asset_id" value="{{ $asset->id }}">
+                                                <div class="form-group">
+                                                    <label for="date">Tanggal Perbaikan</label>
+                                                    <input type="date" class="form-control" id="date"
+                                                        name="date">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="service_name">Nama Servis</label>
+                                                    <input type="text" class="form-control" id="service_name"
+                                                        name="service_name">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="vendor">Vendor</label>
+                                                    <input type="text" class="form-control" id="vendor"
+                                                        name="vendor">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="price">Biaya Perbaikan</label>
+                                                    <input type="number" class="form-control" id="price"
+                                                        name="price">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="quantity">Kuantitas</label>
+                                                    <input type="number" class="form-control" id="quantity"
+                                                        name="quantity">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="unit">Satuan</label>
+                                                    <input type="text" class="form-control" id="unit"
+                                                        name="unit">
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Simpan Data</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Modal Edit --}}
+                            <div class="modal fade" id="modal-edit-repair-electronic" tabindex="-1" role="dialog"
+                                aria-labelledby="modal-edit-repair-electronic" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editModalLabel">Edit Data Servis Elektronik</h5>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="edit-repair-electronic-form" method="post">
+                                                @csrf
+                                                @method('PUT')
+                                                <input type="hidden" name="asset_id" id="electronic_edit_asset_id">
+                                                <div class="form-group">
+                                                    <label for="edit_date">Tanggal Perbaikan</label>
+                                                    <input type="date" class="form-control" id="electronic_edit_date"
+                                                        name="date">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="edit_service_name">Nama Servis</label>
+                                                    <input type="text" class="form-control"
+                                                        id="electronic_edit_service_name" name="service_name">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="edit_vendor">Vendor</label>
+                                                    <input type="text" class="form-control"
+                                                        id="electronic_edit_vendor" name="vendor">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="edit_price">Biaya Perbaikan</label>
+                                                    <input type="number" class="form-control" id="electronic_edit_price"
+                                                        name="price">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="edit_quantity">Kuantitas</label>
+                                                    <input type="number" class="form-control"
+                                                        id="electronic_edit_quantity" name="quantity">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="edit_unit">Satuan</label>
+                                                    <input type="text" class="form-control" id="electronic_edit_unit"
+                                                        name="unit">
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <table class="table table-bordered" id="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tanggal Perbaikan</th>
+                                        <th>Nama Servis</th>
+                                        <th>Nama Vendor</th>
+                                        <th>Kuantitas</th>
+                                        <th>Satuan</th>
+                                        <th>Harga</th>
+                                        <th>Total</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($asset->repair_electronic as $repair_car)
+                                        <tr>
+                                            {{-- <td>{{ $repair_car->date->format('d M Y H:i') }}</td> --}}
+                                            <td>{{ $repair_car->date }}</td>
+                                            <td>{{ $repair_car->service_name }}</td>
+                                            <td>{{ $repair_car->vendor }}</td>
+                                            <td>{{ $repair_car->quantity }}</td>
+                                            <td>{{ $repair_car->unit }}</td>
+                                            <td>{{ $repair_car->price }}</td>
+                                            <td>{{ $repair_car->total }}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-info edit-repair-electronic"
+                                                    data-id="{{ $repair_car->id }}">Edit</button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -690,6 +842,66 @@
                         if (response.success) {
                             alert(response.message);
                             $('#modal-edit-repair-car').modal('hide');
+                            location.reload(); // Refresh the page to reflect changes
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('Error updating data');
+                    }
+                });
+            });
+        });
+    </script>
+
+
+    <script>
+        $(document).ready(function() {
+            // Handle edit button click
+            $('.edit-repair-electronic').click(function() {
+                var repairElectronicId = $(this).data('id');
+                $.ajax({
+                    url: '/dashboard/assets/repair-electronic/' + repairElectronicId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            var data = response.data;
+                            $('#electronic_edit_asset_id').val(data.asset_id);
+                            $('#electronic_edit_date').val(data.date);
+                            $('#electronic_edit_service_name').val(data.service_name);
+                            $('#electronic_edit_vendor').val(data.vendor);
+                            $('#electronic_edit_price').val(data.price);
+                            $('#electronic_edit_quantity').val(data.quantity);
+                            $('#electronic_edit_unit').val(data.unit);
+                            $('#electronic_edit-repair-electronic-form').attr('action',
+                                '/dashboard/assets/repair-electronic/' + repairElectronicId);
+                            $('#modal-edit-repair-electronic').modal('show');
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('Error fetching data');
+                    }
+                });
+            });
+
+            // Handle form submission
+            $('#edit-repair-electronic-form').submit(function(e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+                var url = $(this).attr('action');
+                $.ajax({
+                    url: url,
+                    type: 'PUT',
+                    data: formData,
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            alert(response.message);
+                            $('#modal-edit-repair-electronic').modal('hide');
                             location.reload(); // Refresh the page to reflect changes
                         } else {
                             alert(response.message);

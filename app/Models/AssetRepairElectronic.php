@@ -9,7 +9,7 @@ class AssetRepairElectronic extends Model
 {
     use HasFactory;
 
-    protected $table = 'asset_repair_electronic';
+    protected $table = 'asset_repair_electronics';
 
     protected $guarded = ['id'];
 

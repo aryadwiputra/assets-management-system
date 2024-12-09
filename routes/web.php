@@ -3,6 +3,7 @@
 use App\Http\Controllers\AssetClassController;
 use App\Http\Controllers\AssetController;
 use App\Http\Controllers\AssetRepairCarController;
+use App\Http\Controllers\AssetRepairElectronicController;
 use App\Http\Controllers\AssetStatusController;
 use App\Http\Controllers\AssetUserController;
 use App\Http\Controllers\CategoryController;
@@ -70,6 +71,9 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::post('assets/repair-car/store', [AssetRepairCarController::class, 'store'])->name('assets.repair-car.store');
     Route::get('/assets/repair-car/{id}', [App\Http\Controllers\AssetRepairCarController::class, 'show'])->name('dashboard.assets.repair-car.show');
     Route::put('/assets/repair-car/{id}', [App\Http\Controllers\AssetRepairCarController::class, 'update'])->name('dashboard.assets.repair-car.update');
+    Route::post('assets/repair-electronic/store', [AssetRepairElectronicController::class, 'store'])->name('assets.repair-electronic.store');
+    Route::get('/assets/repair-electronic/{id}', [App\Http\Controllers\AssetRepairElectronicController::class, 'show'])->name('dashboard.assets.repair-electronic.show');
+    Route::put('/assets/repair-electronic/{id}', [App\Http\Controllers\AssetRepairElectronicController::class, 'update'])->name('dashboard.assets.repair-electronic.update');
     Route::resource('assets', AssetController::class);
 
     // Mutations
