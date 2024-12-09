@@ -152,20 +152,46 @@
                 <li class="nav-header">Manage Assets</li>
 
                 <li class="nav-item">
-                    <a href="{{ route('dashboard.assets.index') }}"
-                        class="nav-link {{ request()->routeIs('dashboard.assets.*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-box"></i>
-                        <p>
-                            Data Assets
-                        </p>
-                    </a>
-                    <a href="{{ route('dashboard.assets.borrow.index') }}"
-                        class="nav-link {{ request()->routeIs('dashboard.assets.borrow.*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-hand-paper"></i>
-                        <p>
-                            Peminjaman Asset
-                        </p>
-                    </a>
+                    @if (request()->routeIs('dashboard.assets.index'))
+                        <a href="{{ route('dashboard.assets.index') }}" class="nav-link active">
+                            <i class="nav-icon fas fa-box"></i>
+                            <p>
+                                Data Assets
+                            </p>
+                        </a>
+                        <a href="{{ route('dashboard.assets.borrow.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-hand-paper"></i>
+                            <p>
+                                Peminjaman Asset
+                            </p>
+                        </a>
+                    @elseif (request()->routeIs('dashboard.assets.borrow.*'))
+                        <a href="{{ route('dashboard.assets.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-box"></i>
+                            <p>
+                                Data Assets
+                            </p>
+                        </a>
+                        <a href="{{ route('dashboard.assets.borrow.index') }}" class="nav-link active">
+                            <i class="nav-icon fas fa-hand-paper"></i>
+                            <p>
+                                Peminjaman Asset
+                            </p>
+                        </a>
+                    @else
+                        <a href="{{ route('dashboard.assets.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-box"></i>
+                            <p>
+                                Data Assets
+                            </p>
+                        </a>
+                        <a href="{{ route('dashboard.assets.borrow.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-hand-paper"></i>
+                            <p>
+                                Peminjaman Asset
+                            </p>
+                        </a>
+                    @endif
                 </li>
                 {{-- <li class="nav-header">Transactions Assets</li>
 
