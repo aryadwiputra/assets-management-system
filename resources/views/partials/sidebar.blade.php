@@ -159,6 +159,13 @@
                             Data Assets
                         </p>
                     </a>
+                    <a href="{{ route('dashboard.assets.borrow.index') }}"
+                        class="nav-link {{ request()->routeIs('dashboard.assets.borrow.*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-hand-paper"></i>
+                        <p>
+                            Peminjaman Asset
+                        </p>
+                    </a>
                 </li>
                 {{-- <li class="nav-header">Transactions Assets</li>
 

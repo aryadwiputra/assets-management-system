@@ -72,8 +72,18 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::get('/assets/repair-car/{id}', [App\Http\Controllers\AssetRepairCarController::class, 'show'])->name('dashboard.assets.repair-car.show');
     Route::put('/assets/repair-car/{id}', [App\Http\Controllers\AssetRepairCarController::class, 'update'])->name('dashboard.assets.repair-car.update');
     Route::post('assets/repair-electronic/store', [AssetRepairElectronicController::class, 'store'])->name('assets.repair-electronic.store');
-    Route::get('/assets/repair-electronic/{id}', [App\Http\Controllers\AssetRepairElectronicController::class, 'show'])->name('dashboard.assets.repair-electronic.show');
-    Route::put('/assets/repair-electronic/{id}', [App\Http\Controllers\AssetRepairElectronicController::class, 'update'])->name('dashboard.assets.repair-electronic.update');
+    Route::get('/assets/repair-electronic/{id}', [App\Http\Controllers\AssetRepairElectronicController::class, 'show'])->name('assets.repair-electronic.show');
+    Route::put('/assets/repair-electronic/{id}', [App\Http\Controllers\AssetRepairElectronicController::class, 'update'])->name('assets.repair-electronic.update');
+
+
+    Route::get('/assets/borrow', [App\Http\Controllers\AssetBorrowingController::class, 'index'])->name('assets.borrow.index'); 
+    Route::get('/assets/borrow/create', [App\Http\Controllers\AssetBorrowingController::class, 'create'])->name('assets.borrow.create');
+    Route::post('/assets/borrow', [App\Http\Controllers\AssetBorrowingController::class, 'store'])->name('assets.borrow.store');
+    Route::get('/assets/borrow/{id}', [App\Http\Controllers\AssetBorrowingController::class, 'show'])->name('assets.borrow.show');
+    Route::get('/assets/borrow/edit/{id}', [App\Http\Controllers\AssetBorrowingController::class, 'edit'])->name('assets.borrow.edit');
+    Route::put('/assets/borrow/{id}', [App\Http\Controllers\AssetBorrowingController::class, 'update'])->name('assets.borrow.update');
+    Route::delete('/assets/borrow/{id}', [App\Http\Controllers\AssetBorrowingController::class, 'destroy'])->name('assets.borrow.destroy');
+
     Route::resource('assets', AssetController::class);
 
     // Mutations

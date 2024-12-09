@@ -17,12 +17,10 @@ return new class extends Migration
             $table->foreign('asset_id')->references('id')->on('assets')->onDelete('cascade');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->unsignedBigInteger('from_pic');
-            $table->foreign('from_pic')->references('id')->on('person_in_charges')->onDelete('cascade');
-            $table->unsignedBigInteger('to_pic');
-            $table->foreign('to_pic')->references('id')->on('person_in_charges')->onDelete('cascade');
-            $table->unsignedBigInteger('employee');
-            $table->foreign('employee')->references('id')->on('employees')->onDelete('cascade');
+            $table->unsignedBigInteger('employee_id');
+            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
+            $table->date('from_date');
+            $table->date('to_date');
             $table->string('status');
             $table->text('description')->nullable();
             $table->timestamps();

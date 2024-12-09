@@ -90,6 +90,11 @@ class Asset extends Model
         return $this->belongsTo(Sale::class);
     }
 
+    public function borrow()
+    {
+        return $this->hasMany(AssetBorrowing::class);
+    }
+
     public function repair_car()
     {
         return $this->hasMany(AssetRepairCar::class);
