@@ -127,6 +127,12 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
 
     Route::get('/report/mutation', [ReportController::class, 'mutation'])->name('report.mutation');
     Route::get('/report/mutation/print', [ReportController::class, 'printMutation'])->name('report.printMutation');
+    Route::get('/report/borrow', [ReportController::class, 'borrow'])->name('report.borrow');
+    Route::get('/report/borrow/print', [ReportController::class, 'printBorrow'])->name('report.printBorrow');
+    Route::get('/report/repair-car', [ReportController::class, 'repair_car'])->name('report.repair.car');
+    Route::get('/report/repair-car/print', [ReportController::class, 'printRepairCar'])->name('report.printRepairCar');
+    Route::get('/report/repair-electronic', [ReportController::class, 'repair_electronic'])->name('report.repair.electronic');
+    Route::get('/report/repair-electronic/print', [ReportController::class, 'printRepairElectronic'])->name('report.printRepairElectronic');
 
     Route::resource('settings', SettingController::class);
     Route::get('/log', LogController::class)->name('log');

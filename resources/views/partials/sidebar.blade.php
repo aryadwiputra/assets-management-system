@@ -233,6 +233,33 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('dashboard.report.borrow') }}"
+                        class="nav-link {{ request()->routeIs('dashboard.report.borrow') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-file"></i>
+                        <p>
+                            Laporan Peminjaman
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('dashboard.report.repair.car') }}"
+                        class="nav-link {{ request()->routeIs('dashboard.report.repair.car') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-file"></i>
+                        <p>
+                            Laporan Perbaikan Mobil
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('dashboard.report.repair.electronic') }}"
+                        class="nav-link {{ request()->routeIs('dashboard.report.repair.electronic') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-file"></i>
+                        <p>
+                            Laporan Perbaikan Elektronik
+                        </p>
+                    </a>
+                </li>
                 <li class="nav-header">SYSTEMS</li>
                 <li class="nav-item">
                     <a href="#"
