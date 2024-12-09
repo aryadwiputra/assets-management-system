@@ -143,4 +143,11 @@ class AssetBorrowingController extends Controller
 
         return redirect()->route('dashboard.assets.borrow.index')->with('success', 'Pengajuan pinjam asset berhasil dihapus.');
     }
+
+    public function cron_job()
+    {
+        $assets = Asset::where('is_borrow', 1)->get();
+
+        // Cek apakah tanggal to_date sudah lewat   
+    }
 }
